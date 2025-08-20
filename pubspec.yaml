@@ -24,8 +24,11 @@ dependencies:
   firebase_crashlytics: ^3.0.15
   firebase_performance: ^0.9.0+14
   google_fonts: ^4.0.1
+  http: ^1.1.0
   # An exact version pin will be provided by the Flutter SDK
   intl: any
+  video_player: ^2.7.0
+  chewie: ^1.7.0
   meta: ^1.7.0
   package_info_plus: ^3.0.3
   path_provider: ^2.0.11

@@ -174,6 +174,12 @@ class Demos {
         category: GalleryDemoCategory.study,
         studyId: 'starter',
       ),
+      'lms': GalleryDemo(
+        title: 'LMS',
+        subtitle: 'A video learning platform', // A placeholder description
+        category: GalleryDemoCategory.study,
+        studyId: 'lms',
+      ),
     };
   }
 

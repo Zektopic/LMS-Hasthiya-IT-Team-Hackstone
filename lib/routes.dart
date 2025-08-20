@@ -19,6 +19,8 @@ import 'package:gallery/studies/reply/app.dart' as reply;
 import 'package:gallery/studies/reply/routes.dart' as reply_routes;
 import 'package:gallery/studies/shrine/app.dart' deferred as shrine;
 import 'package:gallery/studies/shrine/routes.dart' as shrine_routes;
+import 'package:gallery/studies/lms/app.dart' deferred as lms;
+import 'package:gallery/studies/lms/routes.dart' as lms_routes;
 import 'package:gallery/studies/starter/app.dart' as starter_app;
 import 'package:gallery/studies/starter/routes.dart' as starter_app_routes;
 
@@ -104,6 +106,15 @@ class RouteConfiguration {
       r'^' + starter_app_routes.defaultRoute,
       (context, match) => const StudyWrapper(
         study: starter_app.StarterApp(),
+      ),
+      openInSecondScreen: true,
+    ),
+    Path(
+      r'^' + lms_routes.homeRoute,
+      (context, match) => StudyWrapper(
+        study: DeferredWidget(lms.loadLibrary,
+            // ignore: prefer_const_constructors
+            () => lms.LmsApp()),
       ),
       openInSecondScreen: true,
     ),
