@@ -34,7 +34,7 @@ jobs:
 
       # Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
-        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4
+        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb
         with:
           ruby-version: "2.6"
           bundler-cache: true
