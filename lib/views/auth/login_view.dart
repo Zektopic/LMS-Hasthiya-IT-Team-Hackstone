@@ -31,26 +31,28 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
         child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.school_rounded,
-                      size: 64,
-                      color: AppTheme.primaryColor,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.school_rounded,
+                        size: 64,
+                        color: AppTheme.primaryColor,
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 32),
                 const Text(
                   'Welcome Back',
@@ -132,6 +134,7 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

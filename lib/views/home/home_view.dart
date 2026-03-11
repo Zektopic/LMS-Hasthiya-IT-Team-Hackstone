@@ -18,17 +18,21 @@ class HomeView extends StatelessWidget {
             onPressed: () => context.read<AuthViewModel>().logout(),
             icon: const Icon(Icons.logout_rounded),
           ),
+          const SizedBox(width: 16),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Welcome, Explorer!',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Welcome, Explorer!',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
             const SizedBox(height: 8),
             const Text(
               'Continue your learning journey today.',
@@ -72,6 +76,8 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
@@ -150,4 +156,5 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
+}
 }
