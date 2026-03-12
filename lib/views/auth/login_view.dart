@@ -72,6 +72,8 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(height: 48),
                 TextField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Email Address',
                     prefixIcon: Icon(Icons.email_outlined),
@@ -81,6 +83,15 @@ class _LoginViewState extends State<LoginView> {
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (_) {
+                    if (!authViewModel.isLoading) {
+                      authViewModel.login(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
+                    }
+                  },
                   decoration: const InputDecoration(
                     labelText: 'Password',
                     prefixIcon: Icon(Icons.lock_outline),
