@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.18.1
   video_player: ^2.7.0
   chewie: ^1.7.0
+  package_info_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
