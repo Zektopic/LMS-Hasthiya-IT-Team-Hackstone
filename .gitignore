@@ -76,3 +76,10 @@ test_goldens/failures/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+# App specific ignores
+new_gallery/build/
+new_gallery/.dart_tool/
+new_gallery/.pub-cache/
+new_gallery/.pub/
+new_gallery/ios/
+new_gallery/android/
