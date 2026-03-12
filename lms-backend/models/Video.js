@@ -18,6 +18,7 @@ const VideoSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+    index: -1, // ⚡ Bolt: Added descending index to optimize sorting in getAllVideos
   },
 });
 

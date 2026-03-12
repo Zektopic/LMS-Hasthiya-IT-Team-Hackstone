@@ -1,0 +1,3 @@
+## 2024-05-17 - Missing Mongoose Indexes
+**Learning:** The models in `lms-backend` (`User.js` and `Video.js`) have fields that are frequently queried or sorted by (e.g., `email` in User via `findOne`, `createdAt` in Video via `find().sort()`), but they lack explicit database indexes. While Mongoose creates indexes for `unique: true` fields like `email`, adding an explicit index on fields used for sorting, such as `createdAt` in `Video.js`, is a crucial performance optimization. Without it, MongoDB has to scan all documents and perform an in-memory sort, which scales poorly and becomes a bottleneck as the dataset grows.
+**Action:** I will add an index to the `createdAt` field in the `Video` model to optimize the `getAllVideos` query which sorts by `createdAt: -1`.
