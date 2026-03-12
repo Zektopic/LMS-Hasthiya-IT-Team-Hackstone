@@ -1,119 +1,44 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-import 'package:dual_screen/dual_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:gallery/constants.dart';
-import 'package:gallery/data/gallery_options.dart';
-import 'package:gallery/pages/backdrop.dart';
-import 'package:gallery/pages/splash.dart';
-import 'package:gallery/routes.dart';
-import 'package:gallery/themes/gallery_theme_data.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'firebase_options.dart';
-import 'layout/adaptive.dart';
-
-export 'package:gallery/data/demos.dart' show pumpDeferredLibraries;
+import 'package:provider/provider.dart';
+import 'core/app_theme.dart';
+import 'viewmodels/auth_viewmodel.dart';
+import 'views/auth/login_view.dart';
+import 'views/home/home_view.dart';
 
 void main() async {
-  GoogleFonts.config.allowRuntimeFetching = false;
-
-  if (defaultTargetPlatform != TargetPlatform.linux &&
-      defaultTargetPlatform != TargetPlatform.windows) {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
-
-  runApp(const GalleryApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // NOTE: Firebase initialization commented out because flutterfire configure
+  // has not generated the firebase_options.dart file yet.
+  /*
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  */
+  
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+      ],
+      child: const HasthiyaLMS(),
+    ),
+  );
 }
 
-class GalleryApp extends StatelessWidget {
-  const GalleryApp({
-    super.key,
-    this.initialRoute,
-    this.isTestMode = false,
-  });
-
-  final String? initialRoute;
-  final bool isTestMode;
+class HasthiyaLMS extends StatelessWidget {
+  const HasthiyaLMS({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ModelBinding(
-      initialModel: GalleryOptions(
-        themeMode: ThemeMode.system,
-        textScaleFactor: systemTextScaleFactorOption,
-        customTextDirection: CustomTextDirection.localeBased,
-        locale: null,
-        timeDilation: timeDilation,
-        platform: defaultTargetPlatform,
-        isTestMode: isTestMode,
-      ),
-      child: Builder(
-        builder: (context) {
-          final options = GalleryOptions.of(context);
-          final hasHinge = MediaQuery.of(context).hinge?.bounds != null;
-          return MaterialApp(
-            restorationScopeId: 'rootGallery',
-            title: 'Flutter Gallery',
-            debugShowCheckedModeBanner: false,
-            themeMode: options.themeMode,
-            theme: GalleryThemeData.lightThemeData.copyWith(
-              platform: options.platform,
-            ),
-            darkTheme: GalleryThemeData.darkThemeData.copyWith(
-              platform: options.platform,
-            ),
-            localizationsDelegates: const [
-              ...GalleryLocalizations.localizationsDelegates,
-              LocaleNamesLocalizationsDelegate()
-            ],
-            initialRoute: initialRoute,
-            supportedLocales: GalleryLocalizations.supportedLocales,
-            locale: options.locale,
-            localeListResolutionCallback: (locales, supportedLocales) {
-              deviceLocale = locales?.first;
-              return basicLocaleListResolution(locales, supportedLocales);
-            },
-            onGenerateRoute: (settings) =>
-                RouteConfiguration.onGenerateRoute(settings, hasHinge),
-          );
+    return MaterialApp(
+      title: 'Hasthiya LMS',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.darkTheme,
+      home: Consumer<AuthViewModel>(
+        builder: (context, auth, _) {
+          return auth.isAuthenticated ? const HomeView() : const LoginView();
         },
-      ),
-    );
-  }
-}
-
-class RootPage extends StatelessWidget {
-  const RootPage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ApplyTextOptions(
-      child: SplashPage(
-        child: Backdrop(
-          isDesktop: isDisplayDesktop(context),
-        ),
       ),
     );
   }
