@@ -13,9 +13,15 @@ import 'package:path/path.dart' as path;
 
 /// Load fonts to make sure they show up in golden tests.
 Future<void> loadFonts() async {
-  await _load(await loadFontsFromManifest()
-    ..addAll(loadGoogleFonts())
-    ..addAll(loadFontsFromTestingDir()));
+  final fontData = await Future.wait([
+    loadFontsFromManifest(),
+    loadGoogleFonts(),
+    loadFontsFromTestingDir(),
+  ]);
+
+  await _load(fontData[0]
+    ..addAll(fontData[1])
+    ..addAll(fontData[2]));
 }
 
 Future<Map<String?, List<Future<ByteData>>>> loadFontsFromManifest() async {
@@ -37,7 +43,7 @@ Future<Map<String?, List<Future<ByteData>>>> loadFontsFromManifest() async {
   return fontFamilyToData;
 }
 
-Map<String, List<Future<ByteData>>> loadFontsFromTestingDir() {
+Future<Map<String, List<Future<ByteData>>>> loadFontsFromTestingDir() async {
   final fontFamilyToData = <String, List<Future<ByteData>>>{};
   final currentDir = path.dirname(Platform.script.path);
   final fontsDirectory = path.join(
@@ -46,7 +52,7 @@ Map<String, List<Future<ByteData>>> loadFontsFromTestingDir() {
     'testing',
     'fonts',
   );
-  for (var file in Directory(fontsDirectory).listSync()) {
+  await for (final file in Directory(fontsDirectory).list()) {
     if (file is File) {
       final fontFamily =
           path.basenameWithoutExtension(file.path).split('-').first;
@@ -57,12 +63,11 @@ Map<String, List<Future<ByteData>>> loadFontsFromTestingDir() {
   return fontFamilyToData;
 }
 
-Map<String, List<Future<ByteData>>> loadGoogleFonts() {
+Future<Map<String, List<Future<ByteData>>>> loadGoogleFonts() async {
   final currentDir = path.dirname(Platform.script.path);
   final googleFontsDirectory = path.join(currentDir, 'fonts', 'google_fonts');
   final fontFamilyToData = <String, List<Future<ByteData>>>{};
-  final files = Directory(googleFontsDirectory).listSync();
-  for (final file in files) {
+  await for (final file in Directory(googleFontsDirectory).list()) {
     if (file is File) {
       final fileName = path.basenameWithoutExtension(file.path);
       final googleFontName = GoogleFontsFamilyWithVariant(
