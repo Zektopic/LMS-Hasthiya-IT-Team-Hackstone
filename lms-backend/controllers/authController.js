@@ -21,9 +21,6 @@ exports.register = async (req, res) => {
       role: role || 'Superadmin', // Default to Superadmin if not provided
     });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
     await user.save();
 
     const payload = {
