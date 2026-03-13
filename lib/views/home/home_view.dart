@@ -17,6 +17,7 @@ class HomeView extends StatelessWidget {
           IconButton(
             onPressed: () => context.read<AuthViewModel>().logout(),
             icon: const Icon(Icons.logout_rounded),
+            tooltip: 'Log out',
           ),
           const SizedBox(width: 16),
         ],
