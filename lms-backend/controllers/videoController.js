@@ -34,7 +34,9 @@ exports.createVideo = async (req, res) => {
 // @access  Private (Superadmin)
 exports.getAllVideos = async (req, res) => {
   try {
-    const videos = await Video.find().sort({ createdAt: -1 });
+    // ⚡ Bolt: Added .lean() to return plain JS objects instead of Mongoose documents,
+    // reducing memory overhead and improving query execution speed for read-only operations.
+    const videos = await Video.find().sort({ createdAt: -1 }).lean();
     res.json(videos);
   } catch (err) {
     console.error(err.message);
@@ -47,7 +49,9 @@ exports.getAllVideos = async (req, res) => {
 // @access  Private (Superadmin)
 exports.getVideoById = async (req, res) => {
   try {
-    const video = await Video.findById(req.params.id);
+    // ⚡ Bolt: Added .lean() to return a plain JS object instead of a Mongoose document,
+    // reducing memory overhead and improving query execution speed for read-only operations.
+    const video = await Video.findById(req.params.id).lean();
     if (!video) {
       return res.status(404).json({ msg: 'Video not found' });
     }
