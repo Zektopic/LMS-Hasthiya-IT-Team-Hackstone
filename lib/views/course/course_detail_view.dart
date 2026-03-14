@@ -81,7 +81,18 @@ class CourseDetailView extends StatelessWidget {
             const SizedBox(width: 32),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Successfully enrolled in the course!'),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: AppTheme.primaryColor,
+                    ),
+                  );
+                },
                 child: const Text('Enroll Now'),
               ),
             ),
@@ -94,19 +105,28 @@ class CourseDetailView extends StatelessWidget {
   Widget _buildLessonItem(String title, String duration) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.backgroundColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.cardColor),
       ),
-      child: Row(
-        children: [
-          const Icon(Icons.play_circle_outline, color: AppTheme.primaryColor),
-          const SizedBox(width: 16),
-          Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
-          Text(duration, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
-        ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                const Icon(Icons.play_circle_outline, color: AppTheme.primaryColor),
+                const SizedBox(width: 16),
+                Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
+                Text(duration, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
