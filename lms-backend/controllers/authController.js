@@ -9,13 +9,16 @@ exports.register = async (req, res) => {
   const { email, password, role } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    // ⚡ Bolt: Used User.exists() instead of User.findOne() for existence check.
+    // This is faster because it only returns a boolean/objectId, saving memory
+    // and network bandwidth by not loading the full user document.
+    const userExists = await User.exists({ email });
 
-    if (user) {
+    if (userExists) {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
-    user = new User({
+    const user = new User({
       email,
       password,
       role: role || 'Superadmin', // Default to Superadmin if not provided
@@ -52,7 +55,9 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    // ⚡ Bolt: Added .lean() to return a plain JS object since we only need
+    // the document for read-only comparisons and payload generation.
+    const user = await User.findOne({ email }).lean();
 
     if (!user) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
@@ -66,7 +71,8 @@ exports.login = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id,
+        // When using .lean(), we must access the raw _id since the virtual id getter is absent
+        id: user._id,
         role: user.role,
       },
     };

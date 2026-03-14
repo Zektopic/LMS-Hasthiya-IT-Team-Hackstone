@@ -77,17 +77,18 @@ exports.updateVideo = async (req, res) => {
     if (description) videoFields.description = description;
 
     try {
-        let video = await Video.findById(req.params.id);
+        // ⚡ Bolt: Combined findById and findByIdAndUpdate into a single atomic operation
+        // and added .lean() to return a plain JS object, saving a database roundtrip
+        // and reducing memory overhead.
+        const video = await Video.findByIdAndUpdate(
+            req.params.id,
+            { $set: videoFields },
+            { new: true }
+        ).lean();
 
         if (!video) {
             return res.status(404).json({ msg: 'Video not found' });
         }
-
-        video = await Video.findByIdAndUpdate(
-            req.params.id,
-            { $set: videoFields },
-            { new: true }
-        );
 
         res.json(video);
     } catch (err) {
@@ -101,7 +102,10 @@ exports.updateVideo = async (req, res) => {
 // @access  Private (Superadmin)
 exports.deleteVideo = async (req, res) => {
     try {
-        const video = await Video.findById(req.params.id);
+        // ⚡ Bolt: Combined findById and findByIdAndDelete into a single atomic operation
+        // and added .lean() to avoid instantiating a full Mongoose document just to
+        // read the videoUrl property, saving a database roundtrip and memory.
+        const video = await Video.findByIdAndDelete(req.params.id).lean();
 
         if (!video) {
             return res.status(404).json({ msg: 'Video not found' });
@@ -114,8 +118,6 @@ exports.deleteVideo = async (req, res) => {
                 // We can still proceed to delete the DB record, but log the file error
             }
         });
-
-        await Video.findByIdAndDelete(req.params.id);
 
         res.json({ msg: 'Video removed' });
     } catch (err) {
