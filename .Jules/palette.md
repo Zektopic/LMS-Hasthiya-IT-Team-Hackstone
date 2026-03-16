@@ -4,3 +4,6 @@
 ## 2026-03-14 - [Interactive List Items with InkWell]
 **Learning:** In Flutter, static `Container` widgets used as list items lack visual tap feedback and implicit button accessibility semantics. A pattern was observed where actionable lesson items appeared static when tapped.
 **Action:** Always wrap actionable list items in `Material` and `InkWell` (with `onTap` defined). This automatically adds the standard ripple visual feedback and exposes the element to screen readers as a semantic button without requiring manual ARIA-like attributes.
+## 2026-03-16 - [Group Information in Cards for Accessibility]
+**Learning:** Found that visual cards displaying statistics or ratings (like a star icon next to a number) are read separately by screen readers, leading to a disjointed user experience (e.g. reading 'star' then '4.8').
+**Action:** Use `Semantics` with `excludeSemantics: true` around the grouped widgets, and provide a single, clean `label` (e.g. 'Rating: 4.8 stars') to ensure screen readers announce the combined information cohesively.

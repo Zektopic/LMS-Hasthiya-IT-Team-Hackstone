@@ -104,14 +104,18 @@ class HomeView extends StatelessWidget {
           color: AppTheme.cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 12),
-            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text(title, style: const TextStyle(color: AppTheme.textSecondary)),
-          ],
+        child: Semantics(
+          label: '$value $title',
+          excludeSemantics: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: color, size: 32),
+              const SizedBox(height: 12),
+              Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              Text(title, style: const TextStyle(color: AppTheme.textSecondary)),
+            ],
+          ),
         ),
       ),
     );
@@ -148,12 +152,16 @@ class HomeView extends StatelessWidget {
                   children: [
                     Text(title, style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 16),
-                        const SizedBox(width: 4),
-                        Text(rating, style: const TextStyle(fontSize: 12)),
-                      ],
+                    Semantics(
+                      label: 'Rating: $rating stars',
+                      excludeSemantics: true,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                          const SizedBox(width: 4),
+                          Text(rating, style: const TextStyle(fontSize: 12)),
+                        ],
+                      ),
                     ),
                   ],
                 ),
