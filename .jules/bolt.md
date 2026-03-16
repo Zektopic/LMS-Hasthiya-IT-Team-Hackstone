@@ -9,3 +9,7 @@
 ## 2024-05-19 - Mongoose Redundant Queries (Read-before-Write)
 **Learning:** In the `lms-backend`, performing a `findById` to check for existence followed by a `findByIdAndUpdate` or `findByIdAndDelete` is an anti-pattern that doubles the number of database roundtrips. Mongoose's `findByIdAndUpdate`/`findByIdAndDelete` methods return `null` if the document is not found, making the initial `findById` completely redundant. Additionally, `.lean()` can be applied to these update/delete operations if the returned document is only going to be serialized to JSON, saving significant memory.
 **Action:** Consolidate `findById` + `findByIdAndUpdate`/`findByIdAndDelete` into a single atomic operation and attach `.lean()` whenever the returned document does not need to be saved again or its virtuals accessed. Use `Model.exists()` instead of `Model.findOne()` when only checking for existence (e.g. during user registration).
+
+## 2024-05-20 - Synchronous JWT Verification
+**Learning:** In the `lms-backend`, `jwt.verify` was being used synchronously in `authMiddleware.js`. Synchronous execution of CPU-bound cryptographic operations blocks the Node.js single-threaded event loop, preventing the server from handling other incoming requests simultaneously and reducing overall throughput and responsiveness under high concurrency.
+**Action:** Always use the asynchronous callback version of `jwt.verify` (and similar CPU-intensive functions like `bcrypt.compare` or `jwt.sign`) in Node.js backends to avoid blocking the event loop.

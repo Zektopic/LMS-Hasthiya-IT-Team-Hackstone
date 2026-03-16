@@ -10,14 +10,17 @@ function authMiddleware(req, res, next) {
   }
 
   // Verify token
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  // ⚡ Bolt: Using asynchronous jwt.verify with a callback instead of the synchronous version
+  // to avoid blocking the Node.js event loop during CPU-intensive cryptographic operations,
+  // thereby improving throughput and responsiveness under high concurrency.
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(401).json({ msg: 'Token is not valid' });
+    }
     req.user = decoded.user;
     next();
-  } catch (err) {
-    console.error(err.message);
-    res.status(401).json({ msg: 'Token is not valid' });
-  }
+  });
 }
 
 function isSuperadmin(req, res, next) {
