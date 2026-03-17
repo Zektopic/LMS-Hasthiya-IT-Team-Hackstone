@@ -10,9 +10,6 @@ function authMiddleware(req, res, next) {
   }
 
   // Verify token
-  // ⚡ Bolt: Using asynchronous jwt.verify with a callback instead of the synchronous version
-  // to avoid blocking the Node.js event loop during CPU-intensive cryptographic operations,
-  // thereby improving throughput and responsiveness under high concurrency.
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.error(err.message);
