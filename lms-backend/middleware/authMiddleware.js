@@ -15,10 +15,6 @@ function authMiddleware(req, res, next) {
       console.error(err.message);
       return res.status(401).json({ msg: 'Token is not valid' });
     }
-
-    // ⚡ Bolt: Used asynchronous jwt.verify instead of synchronous version to prevent
-    // blocking the Node.js event loop during CPU-intensive cryptographic operations,
-    // improving server concurrency and throughput.
     req.user = decoded.user;
     next();
   });

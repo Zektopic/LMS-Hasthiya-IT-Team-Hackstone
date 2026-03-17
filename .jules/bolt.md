@@ -13,3 +13,6 @@
 ## 2024-05-20 - Asynchronous JWT Verification
 **Learning:** The synchronous `jwt.verify` method from the `jsonwebtoken` library blocks the Node.js event loop while executing CPU-intensive cryptographic operations. In a middleware function like `authMiddleware` that is invoked on almost every API request, this causes significant performance degradation and reduces server concurrency under load.
 **Action:** Always use the asynchronous callback version of `jwt.verify` (and similar computationally expensive functions) to prevent blocking the main thread and improve application throughput.
+## 2024-05-20 - Synchronous JWT Verification
+**Learning:** In the `lms-backend`, `jwt.verify` was being used synchronously in `authMiddleware.js`. Synchronous execution of CPU-bound cryptographic operations blocks the Node.js single-threaded event loop, preventing the server from handling other incoming requests simultaneously and reducing overall throughput and responsiveness under high concurrency.
+**Action:** Always use the asynchronous callback version of `jwt.verify` (and similar CPU-intensive functions like `bcrypt.compare` or `jwt.sign`) in Node.js backends to avoid blocking the event loop.

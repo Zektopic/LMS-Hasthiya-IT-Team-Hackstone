@@ -19,7 +19,8 @@ class CourseDetailView extends StatelessWidget {
               title: Text(course.title),
               background: Container(
                 color: AppTheme.primaryColor.withOpacity(0.2),
-                child: const Icon(Icons.play_circle_fill, size: 80, color: Colors.white24),
+                child: const Icon(Icons.play_circle_fill,
+                    size: 80, color: Colors.white24),
               ),
             ),
           ),
@@ -32,25 +33,45 @@ class CourseDetailView extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppTheme.primaryColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text('Bestseller', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                        child: const Text('Bestseller',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(width: 12),
-                      const Icon(Icons.star, color: Colors.amber, size: 18),
-                      const SizedBox(width: 4),
-                      Text(course.rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Semantics(
+                        label: 'Rating: ${course.rating} stars',
+                        excludeSemantics: true,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 18),
+                            const SizedBox(width: 4),
+                            Text(course.rating.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Text('Description', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const Text('Description',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text(course.description, style: const TextStyle(color: AppTheme.textSecondary, height: 1.5)),
+                  Text(course.description,
+                      style: const TextStyle(
+                          color: AppTheme.textSecondary, height: 1.5)),
                   const SizedBox(height: 32),
-                  const Text('Course Content', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const Text('Course Content',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
                   // Dummy lesson list
                   _buildLessonItem('Welcome to the course', '05:00'),
@@ -70,13 +91,21 @@ class CourseDetailView extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Total Price', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
-                Text('\$49.99', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              ],
+            Semantics(
+              label: 'Total Price: \$49.99',
+              excludeSemantics: true,
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Total Price',
+                      style: TextStyle(
+                          color: AppTheme.textSecondary, fontSize: 12)),
+                  Text('\$49.99',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                ],
+              ),
             ),
             const SizedBox(width: 32),
             Expanded(
@@ -84,7 +113,8 @@ class CourseDetailView extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('Successfully enrolled in the course!'),
+                      content:
+                          const Text('Successfully enrolled in the course!'),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -119,10 +149,15 @@ class CourseDetailView extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(Icons.play_circle_outline, color: AppTheme.primaryColor),
+                const Icon(Icons.play_circle_outline,
+                    color: AppTheme.primaryColor),
                 const SizedBox(width: 16),
-                Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
-                Text(duration, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                Expanded(
+                    child: Text(title,
+                        style: const TextStyle(fontWeight: FontWeight.w500))),
+                Text(duration,
+                    style: const TextStyle(
+                        color: AppTheme.textSecondary, fontSize: 12)),
               ],
             ),
           ),
