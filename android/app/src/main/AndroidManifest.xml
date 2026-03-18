@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:label="Hackston LMS"
-        android:name="io.flutter.embedding.android.FlutterPlayStoreSplitApplication"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
