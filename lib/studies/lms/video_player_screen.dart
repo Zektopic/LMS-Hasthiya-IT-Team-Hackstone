@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:hasthiya_lms/studies/lms/data_service.dart';
+import 'package:hackston_lms/studies/lms/data_service.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final Video video;

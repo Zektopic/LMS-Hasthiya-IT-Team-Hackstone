@@ -16,18 +16,18 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
       ],
-      child: const HasthiyaLMS(),
+      child: const HackstonLMS(),
     ),
   );
 }
 
-class HasthiyaLMS extends StatelessWidget {
-  const HasthiyaLMS({super.key});
+class HackstonLMS extends StatelessWidget {
+  const HackstonLMS({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hasthiya LMS',
+      title: 'Hackston LMS',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       home: Consumer<AuthViewModel>(

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:hasthiya_lms/pages/about.dart';
+import 'package:hackston_lms/pages/about.dart';
 
 void main() {
   test('getVersionNumber returns correct version string', () async {

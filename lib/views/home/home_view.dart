@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hasthiya LMS'),
+        title: const Text('Hackston LMS'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hasthiya_lms/studies/shrine/model/product.dart';
-import 'package:hasthiya_lms/studies/shrine/model/products_repository.dart';
+import 'package:hackston_lms/studies/shrine/model/product.dart';
+import 'package:hackston_lms/studies/shrine/model/products_repository.dart';
 
 void main() {
   group('ProductsRepository', () {

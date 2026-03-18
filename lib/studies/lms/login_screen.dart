@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hasthiya_lms/studies/lms/data_service.dart';
+import 'package:hackston_lms/studies/lms/data_service.dart';
 
 class LmsLoginScreen extends StatefulWidget {
   const LmsLoginScreen({super.key});
