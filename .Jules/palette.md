@@ -1,9 +1,3 @@
-## 2024-05-15 - [Keyboard Navigation in Flutter Forms]
-**Learning:** Found that basic `TextField`s in Flutter do not automatically provide a great keyboard UX out of the box. Specifically, users need `textInputAction: TextInputAction.next` on intermediate fields to jump to the next one quickly, and `textInputAction: TextInputAction.done` with `onSubmitted` on the final field to let them submit directly from the keyboard instead of requiring a tap on the submit button. `keyboardType` should also be set correctly (like `TextInputType.emailAddress`) so the OS can display the optimal virtual keyboard (e.g. showing `@` prominently).
-**Action:** Always verify keyboard navigation and add `textInputAction` and `onSubmitted` handlers to any form in a Flutter application for a smoother typing experience, particularly on mobile devices.
-## 2026-03-14 - [Interactive List Items with InkWell]
-**Learning:** In Flutter, static `Container` widgets used as list items lack visual tap feedback and implicit button accessibility semantics. A pattern was observed where actionable lesson items appeared static when tapped.
-**Action:** Always wrap actionable list items in `Material` and `InkWell` (with `onTap` defined). This automatically adds the standard ripple visual feedback and exposes the element to screen readers as a semantic button without requiring manual ARIA-like attributes.
-## 2026-03-16 - [Group Information in Cards for Accessibility]
-**Learning:** Found that visual cards displaying statistics or ratings (like a star icon next to a number) are read separately by screen readers, leading to a disjointed user experience (e.g. reading 'star' then '4.8').
-**Action:** Use `Semantics` with `excludeSemantics: true` around the grouped widgets, and provide a single, clean `label` (e.g. 'Rating: 4.8 stars') to ensure screen readers announce the combined information cohesively.
+## 2024-05-17 - Flutter Text Input UX
+**Learning:** For optimal keyboard UX in Flutter forms, `textInputAction: TextInputAction.next` should be set on intermediate fields, and `TextInputAction.done` with `onSubmitted` should be set on the final field. Appropriate `keyboardType`s should be used as well. This is an excellent pattern for accessibility and general UX.
+**Action:** Apply this pattern to all form inputs in Flutter apps.
