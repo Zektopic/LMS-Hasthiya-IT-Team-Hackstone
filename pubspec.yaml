@@ -22,6 +22,7 @@ dependencies:
   video_player: ^2.7.0
   chewie: ^1.7.0
   package_info_plus: ^9.0.0
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
