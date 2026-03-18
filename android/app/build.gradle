@@ -32,6 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace "io.flutter.demo.gallery"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
