@@ -6,6 +6,8 @@ class Course {
   final String description;
   final String thumbnailUrl;
   final double rating;
+  final String category;
+  final int studentCount;
   final List<Lesson> lessons;
 
   Course({
@@ -14,6 +16,8 @@ class Course {
     required this.description,
     required this.thumbnailUrl,
     required this.rating,
+    this.category = 'General',
+    this.studentCount = 0,
     required this.lessons,
   });
 
@@ -25,8 +29,11 @@ class Course {
       description: data?['description'] ?? '',
       thumbnailUrl: data?['thumbnailUrl'] ?? '',
       rating: (data?['rating'] ?? 0.0).toDouble(),
+      category: data?['category'] ?? 'General',
+      studentCount: data?['studentCount'] ?? 0,
       lessons: (data?['lessons'] as List<dynamic>?)
-              ?.map((lessonData) => Lesson.fromJson(lessonData as Map<String, dynamic>))
+              ?.map((lessonData) =>
+                  Lesson.fromJson(lessonData as Map<String, dynamic>))
               .toList() ??
           [],
     );

@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'core/app_theme.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'views/auth/login_view.dart';
-import 'views/home/home_view.dart';
+import 'views/home/main_shell.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp();
-  
+
+  // Set system UI style for immersive dark theme
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarColor: AppTheme.surfaceColor,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -32,7 +44,12 @@ class HackstonLMS extends StatelessWidget {
       theme: AppTheme.darkTheme,
       home: Consumer<AuthViewModel>(
         builder: (context, auth, _) {
-          return auth.isAuthenticated ? const HomeView() : const LoginView();
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 400),
+            child: auth.isAuthenticated
+                ? const MainShell(key: ValueKey('home'))
+                : const LoginView(key: ValueKey('login')),
+          );
         },
       ),
     );

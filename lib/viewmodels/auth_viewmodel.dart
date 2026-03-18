@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthViewModel extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
 
@@ -10,19 +12,48 @@ class AuthViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   String? _token;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  
+  String? get token => _token;
+
+  User? get currentUser => _auth.currentUser;
+  String get displayName => currentUser?.displayName ?? 'Learner';
+  String get email => currentUser?.email ?? '';
+  String? get photoUrl => currentUser?.photoURL;
+
   AuthViewModel() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    _auth.authStateChanges().listen((User? user) {
       if (user == null) {
         _isAuthenticated = false;
         _token = null;
       } else {
         _isAuthenticated = true;
-        _token = user.uid; // Using uid as token for internal checks
+        _token = user.uid;
       }
       notifyListeners();
     });
+  }
+
+  String _parseFirebaseError(dynamic e) {
+    if (e is FirebaseAuthException) {
+      switch (e.code) {
+        case 'user-not-found':
+          return 'No account found with this email.';
+        case 'wrong-password':
+          return 'Incorrect password. Please try again.';
+        case 'email-already-in-use':
+          return 'An account already exists with this email.';
+        case 'weak-password':
+          return 'Password is too weak. Use at least 6 characters.';
+        case 'invalid-email':
+          return 'Please enter a valid email address.';
+        case 'too-many-requests':
+          return 'Too many attempts. Please try again later.';
+        case 'invalid-credential':
+          return 'Invalid email or password.';
+        default:
+          return e.message ?? 'Authentication failed.';
+      }
+    }
+    return 'Something went wrong. Please try again.';
   }
 
   Future<void> login(String email, String password) async {
@@ -30,35 +61,37 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // authStateChanges will handle state updates
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      rethrow;
+      throw _parseFirebaseError(e);
     }
 
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> register(String email, String password) async {
+  Future<void> register(String email, String password, {String? name}) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // authStateChanges will handle state updates
+      if (name != null && name.isNotEmpty) {
+        await credential.user?.updateDisplayName(name);
+        await credential.user?.reload();
+      }
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      rethrow;
+      throw _parseFirebaseError(e);
     }
 
     _isLoading = false;
@@ -70,24 +103,41 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn.instance.authenticate();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      rethrow;
+      throw _parseFirebaseError(e);
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> resetPassword(String email) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      throw _parseFirebaseError(e);
     }
 
     _isLoading = false;
@@ -96,8 +146,8 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await _googleSignIn.signOut();
+      await GoogleSignIn.instance.signOut();
     } catch (_) {}
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
   }
 }

@@ -5,12 +5,16 @@ class Video {
   final String title;
   final String description;
   final String videoUrl;
+  final String? thumbnailUrl;
+  final String? duration;
 
   Video({
     required this.id,
     required this.title,
     required this.description,
     required this.videoUrl,
+    this.thumbnailUrl,
+    this.duration,
   });
 
   factory Video.fromJson(Map<String, dynamic> json) {
@@ -19,6 +23,8 @@ class Video {
       title: json['title'] ?? 'Untitled',
       description: json['description'] ?? '',
       videoUrl: json['videoUrl'] ?? '',
+      thumbnailUrl: json['thumbnailUrl'],
+      duration: json['duration'],
     );
   }
 
@@ -29,6 +35,8 @@ class Video {
       title: data?['title'] ?? 'Untitled',
       description: data?['description'] ?? '',
       videoUrl: data?['videoUrl'] ?? '',
+      thumbnailUrl: data?['thumbnailUrl'],
+      duration: data?['duration'],
     );
   }
 }
