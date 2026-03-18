@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthViewModel extends ChangeNotifier {
   bool _isAuthenticated = false;
@@ -7,20 +8,43 @@ class AuthViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  String? _token;
+  String? get token => _token;
+  
+  AuthViewModel() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        _isAuthenticated = false;
+        _token = null;
+      } else {
+        _isAuthenticated = true;
+        _token = user.uid; // Using uid as token for internal checks
+      }
+      notifyListeners();
+    });
+  }
+
   Future<void> login(String email, String password) async {
     _isLoading = true;
     notifyListeners();
 
-    // Simulate login for now
-    await Future.delayed(const Duration(seconds: 2));
-    _isAuthenticated = true;
-    
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // authStateChanges will handle state updates
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+
     _isLoading = false;
     notifyListeners();
   }
 
-  void logout() {
-    _isAuthenticated = false;
-    notifyListeners();
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

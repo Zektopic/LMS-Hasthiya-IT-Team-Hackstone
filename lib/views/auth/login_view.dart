@@ -15,6 +15,24 @@ class _LoginViewState extends State<LoginView> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
+  Future<void> _handleLogin(AuthViewModel authViewModel) async {
+    try {
+      await authViewModel.login(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
@@ -87,10 +105,7 @@ class _LoginViewState extends State<LoginView> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) {
                     if (!authViewModel.isLoading) {
-                      authViewModel.login(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
+                      _handleLogin(authViewModel);
                     }
                   },
                   decoration: InputDecoration(
@@ -125,12 +140,7 @@ class _LoginViewState extends State<LoginView> {
                   child: ElevatedButton(
                     onPressed: authViewModel.isLoading
                         ? null
-                        : () {
-                            authViewModel.login(
-                              _emailController.text,
-                              _passwordController.text,
-                            );
-                          },
+                        : () => _handleLogin(authViewModel),
                     child: authViewModel.isLoading
                         ? const SizedBox(
                             height: 20,
