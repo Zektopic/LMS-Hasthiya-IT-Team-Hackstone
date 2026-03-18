@@ -25,4 +25,4 @@ plugins {
     id "com.google.firebase.firebase-perf" version "1.4.2" apply false
 }
 
-include ":app", ":crane"
+include ":app"
