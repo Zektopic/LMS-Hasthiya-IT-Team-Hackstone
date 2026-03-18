@@ -7,7 +7,7 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:label="Flutter Gallery"
+        android:label="Hackston LMS"
         android:name="io.flutter.embedding.android.FlutterPlayStoreSplitApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
