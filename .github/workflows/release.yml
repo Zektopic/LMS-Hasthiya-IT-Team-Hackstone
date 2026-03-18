@@ -31,16 +31,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-version
     steps:
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00
         with:
-          java-version: "11"
+          java-version: "17"
           distribution: temurin
 
-      - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+      - name: Clone Flutter repository with stable channel
+        uses: subosito/flutter-action@0ca7a949e71ae44c8e688a51c5e7e93b2c87e295
         with:
-          channel: master
+          channel: stable
 
       - name: Checkout code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
@@ -60,10 +60,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-version
     steps:
-      - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+      - name: Clone Flutter repository with stable channel
+        uses: subosito/flutter-action@0ca7a949e71ae44c8e688a51c5e7e93b2c87e295
         with:
-          channel: master
+          channel: stable
 
       - name: Checkout code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
@@ -101,7 +101,7 @@ jobs:
           path: artifacts/web
 
       - name: Create release and upload assets
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe
         with:
           tag_name: ${{ needs.get-version.outputs.version }}
           name: Release ${{ needs.get-version.outputs.version }}
