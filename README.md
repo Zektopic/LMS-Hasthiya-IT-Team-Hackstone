@@ -1,4 +1,4 @@
-# Hasthiya LMS 🎓
+# Hackston LMS 🎓
 
 A full-fledged, premium Learning Management System built with **Flutter** and **Firebase**.
 

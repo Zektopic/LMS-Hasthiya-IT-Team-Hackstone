@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hasthiya_lms/studies/lms/data_service.dart';
-import 'package:hasthiya_lms/studies/lms/routes.dart' as routes;
-import 'package:hasthiya_lms/studies/lms/video_list_screen.dart';
-import 'package:hasthiya_lms/studies/lms/video_player_screen.dart';
-import 'package:hasthiya_lms/studies/lms/login_screen.dart';
+import 'package:hackston_lms/studies/lms/data_service.dart';
+import 'package:hackston_lms/studies/lms/routes.dart' as routes;
+import 'package:hackston_lms/studies/lms/video_list_screen.dart';
+import 'package:hackston_lms/studies/lms/video_player_screen.dart';
+import 'package:hackston_lms/studies/lms/login_screen.dart';
 
 class LmsApp extends StatelessWidget {
   const LmsApp({super.key});
