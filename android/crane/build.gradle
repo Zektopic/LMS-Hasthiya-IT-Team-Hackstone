@@ -19,7 +19,8 @@ if (flutterVersionName == null) {
 apply plugin: "com.android.dynamic-feature"
 
 android {
-    compileSdkVersion 31
+    namespace "com.example.gallery.crane"
+    compileSdkVersion 35
 
     sourceSets {
         applicationVariants.all { variant ->
@@ -30,7 +31,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
