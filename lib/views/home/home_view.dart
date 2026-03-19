@@ -39,8 +39,9 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
 
     final results = await Future.wait([
-      _videoService.getVideos(),
-      _courseService.getRecommendedCourses(),
+      // Optimization: Limit the number of documents fetched for the home page
+      _videoService.getVideos(limit: 5),
+      _courseService.getRecommendedCourses(limit: 5),
     ]);
 
     if (!mounted) return;

@@ -5,9 +5,14 @@ import '../models/video.dart';
 class VideoService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<List<Video>> getVideos() async {
+  // Optimization: Added optional limit parameter to prevent unbounded reads
+  Future<List<Video>> getVideos({int? limit}) async {
     try {
-      final snapshot = await _db.collection('videos').get();
+      Query<Map<String, dynamic>> query = _db.collection('videos');
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+      final snapshot = await query.get();
       return snapshot.docs.map((doc) => Video.fromFirestore(doc)).toList();
     } catch (e) {
       debugPrint('Error fetching videos: $e');

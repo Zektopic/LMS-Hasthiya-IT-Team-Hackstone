@@ -4,9 +4,14 @@ import '../models/course.dart';
 class CourseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<List<Course>> getRecommendedCourses() async {
+  // Optimization: Added optional limit parameter to prevent unbounded reads
+  Future<List<Course>> getRecommendedCourses({int? limit}) async {
     try {
-      final snapshot = await _db.collection('courses').get();
+      Query<Map<String, dynamic>> query = _db.collection('courses');
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+      final snapshot = await query.get();
       return snapshot.docs.map((doc) => Course.fromFirestore(doc)).toList();
     } catch (e) {
       print('Error fetching courses: $e');

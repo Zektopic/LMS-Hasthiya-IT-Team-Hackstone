@@ -16,3 +16,7 @@
 ## 2024-05-20 - Synchronous JWT Verification
 **Learning:** In the `lms-backend`, `jwt.verify` was being used synchronously in `authMiddleware.js`. Synchronous execution of CPU-bound cryptographic operations blocks the Node.js single-threaded event loop, preventing the server from handling other incoming requests simultaneously and reducing overall throughput and responsiveness under high concurrency.
 **Action:** Always use the asynchronous callback version of `jwt.verify` (and similar CPU-intensive functions like `bcrypt.compare` or `jwt.sign`) in Node.js backends to avoid blocking the event loop.
+
+## 2024-05-21 - Firestore Unbounded Reads
+**Learning:** In the Flutter frontend, data fetching methods like `getVideos` and `getRecommendedCourses` in `VideoService` and `CourseService` retrieved all documents from their respective collections by default. In UI views like `HomeView` that only display a subset (e.g. the first 5 items), this resulted in downloading the entire collection from Firestore only to discard most of it client-side. This anti-pattern drastically increases payload sizes, slows down UI rendering, increases memory footprint, and inflates Firestore read costs unnecessarily.
+**Action:** Always include an optional `limit` parameter in Firestore read queries (e.g. `Future<List<Video>> getVideos({int? limit})`) and apply it using `.limit(limit)`. Pass this limit from the UI layer when the view only requires a fixed number of items (like a homepage preview section) to ensure fetching remains bounded and efficient.
