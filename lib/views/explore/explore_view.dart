@@ -130,6 +130,7 @@ class _ExploreViewState extends State<ExploreView> {
                         prefixIcon: const Icon(Icons.search_rounded),
                         suffixIcon: _searchController.text.isNotEmpty
                             ? IconButton(
+                                tooltip: 'Clear search',
                                 icon: const Icon(Icons.clear_rounded),
                                 onPressed: () {
                                   _searchController.clear();

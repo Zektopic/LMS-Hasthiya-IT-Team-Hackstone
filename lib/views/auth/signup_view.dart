@@ -175,6 +175,9 @@ class _SignupViewState extends State<SignupView>
                                   labelText: 'Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
+                                    tooltip: _isPasswordVisible
+                                        ? 'Hide password'
+                                        : 'Show password',
                                     icon: Icon(
                                       _isPasswordVisible
                                           ? Icons.visibility_off_outlined

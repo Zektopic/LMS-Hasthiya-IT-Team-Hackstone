@@ -92,6 +92,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                           borderRadius: 12,
                           padding: EdgeInsets.zero,
                           child: IconButton(
+                            tooltip: 'Navigate back',
                             onPressed: () => Navigator.pop(context),
                             icon: const Icon(Icons.arrow_back_rounded,
                                 color: Colors.white),
