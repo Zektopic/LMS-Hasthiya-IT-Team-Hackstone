@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/app_theme.dart';
 import '../../core/glass_widgets.dart';
@@ -27,6 +28,7 @@ class _ExploreViewState extends State<ExploreView> {
   List<Course> _filteredCourses = [];
   bool _isLoading = true;
   String _selectedCategory = 'All';
+  Timer? _debounce;
 
   static const List<String> _categories = [
     'All',
@@ -41,13 +43,23 @@ class _ExploreViewState extends State<ExploreView> {
   void initState() {
     super.initState();
     _loadData();
-    _searchController.addListener(_filterContent);
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
+  }
+
+  // Optimization: Debounce search input to prevent expensive filtering and full widget tree rebuilds on every keystroke
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      _filterContent();
+    });
   }
 
   Future<void> _loadData() async {
@@ -122,26 +134,32 @@ class _ExploreViewState extends State<ExploreView> {
                   GlassCard(
                     borderRadius: 16,
                     padding: EdgeInsets.zero,
-                    child: TextField(
-                      controller: _searchController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: 'Search courses and videos...',
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear_rounded),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  _filterContent();
-                                },
-                              )
-                            : null,
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        filled: false,
-                      ),
+                    // Optimization: Use ValueListenableBuilder to localize TextField rebuilds (e.g., toggling the clear icon) instead of rebuilding the entire view
+                    child: ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: _searchController,
+                      builder: (context, value, child) {
+                        return TextField(
+                          controller: _searchController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: 'Search courses and videos...',
+                            prefixIcon: const Icon(Icons.search_rounded),
+                            suffixIcon: value.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear_rounded),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      _filterContent();
+                                    },
+                                  )
+                                : null,
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            filled: false,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -170,12 +188,13 @@ class _ExploreViewState extends State<ExploreView> {
                                     : null,
                                 color: isSelected
                                     ? null
-                                    : Colors.white.withValues(alpha:0.08),
+                                    : Colors.white.withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(20),
                                 border: isSelected
                                     ? null
                                     : Border.all(
-                                        color: Colors.white.withValues(alpha:0.1)),
+                                        color: Colors.white
+                                            .withValues(alpha: 0.1)),
                               ),
                               child: Text(
                                 category,
@@ -235,8 +254,8 @@ class _ExploreViewState extends State<ExploreView> {
             ),
           ),
           ..._filteredCourses.asMap().entries.map((entry) {
-            final colors =
-                AppTheme.cardGradients[entry.key % AppTheme.cardGradients.length];
+            final colors = AppTheme
+                .cardGradients[entry.key % AppTheme.cardGradients.length];
             return _buildCourseCard(entry.value, colors);
           }),
           const SizedBox(height: 24),
@@ -250,8 +269,8 @@ class _ExploreViewState extends State<ExploreView> {
             ),
           ),
           ..._filteredVideos.asMap().entries.map((entry) {
-            final colors =
-                AppTheme.cardGradients[entry.key % AppTheme.cardGradients.length];
+            final colors = AppTheme
+                .cardGradients[entry.key % AppTheme.cardGradients.length];
             return _buildVideoCard(entry.value, colors);
           }),
         ],
@@ -359,8 +378,7 @@ class _ExploreViewState extends State<ExploreView> {
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (_) => VideoPlayerView(video: video)),
+              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
