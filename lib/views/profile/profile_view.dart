@@ -95,8 +95,7 @@ class ProfileView extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () => _showLogoutDialog(context, auth),
-                  icon: const Icon(Icons.logout_rounded,
-                      color: AppTheme.error),
+                  icon: const Icon(Icons.logout_rounded, color: AppTheme.error),
                   label: const Text(
                     'Sign Out',
                     style: TextStyle(color: AppTheme.error),
@@ -104,17 +103,15 @@ class ProfileView extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: BorderSide(
-                        color: AppTheme.error.withValues(alpha:0.3)),
+                      color: AppTheme.error.withValues(alpha: 0.3),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               const Text(
                 'Hackston LMS v1.0.0',
-                style: TextStyle(
-                  color: AppTheme.textMuted,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -140,7 +137,7 @@ class ProfileView extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withValues(alpha:0.35),
+            color: AppTheme.primaryColor.withValues(alpha: 0.35),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -188,13 +185,13 @@ class ProfileView extends StatelessWidget {
           Container(
             width: 1,
             height: 36,
-            color: Colors.white.withValues(alpha:0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           _buildStatItem('0h', 'Learning'),
           Container(
             width: 1,
             height: 36,
-            color: Colors.white.withValues(alpha:0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           _buildStatItem('0', 'Certificates'),
         ],
@@ -207,18 +204,12 @@ class ProfileView extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            color: AppTheme.textSecondary,
-            fontSize: 13,
-          ),
+          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
         ),
       ],
     );
@@ -253,20 +244,27 @@ class ProfileView extends StatelessWidget {
                       borderRadius: index == 0 && items.length == 1
                           ? BorderRadius.circular(16)
                           : index == 0
-                              ? const BorderRadius.vertical(
-                                  top: Radius.circular(16))
-                              : index == items.length - 1
-                                  ? const BorderRadius.vertical(
-                                      bottom: Radius.circular(16))
-                                  : BorderRadius.zero,
+                          ? const BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            )
+                          : index == items.length - 1
+                          ? const BorderRadius.vertical(
+                              bottom: Radius.circular(16),
+                            )
+                          : BorderRadius.zero,
                       onTap: item.onTap,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 16),
+                          horizontal: 18,
+                          vertical: 16,
+                        ),
                         child: Row(
                           children: [
-                            Icon(item.icon,
-                                color: AppTheme.textSecondary, size: 22),
+                            Icon(
+                              item.icon,
+                              color: AppTheme.textSecondary,
+                              size: 22,
+                            ),
                             const SizedBox(width: 14),
                             Expanded(
                               child: Text(
@@ -276,8 +274,11 @@ class ProfileView extends StatelessWidget {
                             ),
                             if (item.trailing != null) item.trailing!,
                             if (item.trailing == null)
-                              const Icon(Icons.chevron_right_rounded,
-                                  color: AppTheme.textMuted, size: 22),
+                              const Icon(
+                                Icons.chevron_right_rounded,
+                                color: AppTheme.textMuted,
+                                size: 22,
+                              ),
                           ],
                         ),
                       ),
@@ -287,7 +288,7 @@ class ProfileView extends StatelessWidget {
                     Divider(
                       height: 1,
                       indent: 54,
-                      color: Colors.white.withValues(alpha:0.06),
+                      color: Colors.white.withValues(alpha: 0.06),
                     ),
                 ],
               );
@@ -319,8 +320,10 @@ class ProfileView extends StatelessWidget {
               Navigator.pop(ctx);
               auth.logout();
             },
-            child: const Text('Sign Out',
-                style: TextStyle(color: AppTheme.error)),
+            child: const Text(
+              'Sign Out',
+              style: TextStyle(color: AppTheme.error),
+            ),
           ),
         ],
       ),

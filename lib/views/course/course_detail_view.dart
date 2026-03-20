@@ -26,8 +26,8 @@ class CourseDetailView extends StatelessWidget {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final colors = AppTheme.cardGradients[
-        course.title.length % AppTheme.cardGradients.length];
+    final colors = AppTheme
+        .cardGradients[course.title.length % AppTheme.cardGradients.length];
 
     return SliverAppBar(
       expandedHeight: 260,
@@ -41,6 +41,7 @@ class CourseDetailView extends StatelessWidget {
           child: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+            tooltip: 'Back',
           ),
         ),
       ),
@@ -71,7 +72,7 @@ class CourseDetailView extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    AppTheme.backgroundDark.withValues(alpha:0.8),
+                    AppTheme.backgroundDark.withValues(alpha: 0.8),
                   ],
                 ),
               ),
@@ -82,7 +83,7 @@ class CourseDetailView extends StatelessWidget {
               child: Icon(
                 Icons.auto_stories_rounded,
                 size: 160,
-                color: Colors.white.withValues(alpha:0.08),
+                color: Colors.white.withValues(alpha: 0.08),
               ),
             ),
             Positioned(
@@ -182,8 +183,11 @@ class CourseDetailView extends StatelessWidget {
               child: const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.video_library_rounded,
-                        color: AppTheme.textMuted, size: 36),
+                    Icon(
+                      Icons.video_library_rounded,
+                      color: AppTheme.textMuted,
+                      size: 36,
+                    ),
                     SizedBox(height: 12),
                     Text(
                       'Lessons coming soon',
@@ -194,8 +198,9 @@ class CourseDetailView extends StatelessWidget {
               ),
             )
           else
-            ...course.lessons.asMap().entries.map((entry) =>
-                _buildLessonItem(entry.key + 1, entry.value)),
+            ...course.lessons.asMap().entries.map(
+              (entry) => _buildLessonItem(entry.key + 1, entry.value),
+            ),
           const SizedBox(height: 80),
         ],
       ),
@@ -210,9 +215,9 @@ class CourseDetailView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha:0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha:0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -253,7 +258,7 @@ class CourseDetailView extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withValues(alpha:0.15),
+                      color: AppTheme.primaryColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
@@ -312,9 +317,9 @@ class CourseDetailView extends StatelessWidget {
             16 + MediaQuery.of(context).padding.bottom,
           ),
           decoration: BoxDecoration(
-            color: AppTheme.surfaceColor.withValues(alpha:0.9),
+            color: AppTheme.surfaceColor.withValues(alpha: 0.9),
             border: Border(
-              top: BorderSide(color: Colors.white.withValues(alpha:0.06)),
+              top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
             ),
           ),
           child: Row(
@@ -353,18 +358,20 @@ class CourseDetailView extends StatelessWidget {
                       content: const Text('Enrolled successfully!'),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       backgroundColor: AppTheme.success,
                     ),
                   );
                 },
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 16),
+                  horizontal: 28,
+                  vertical: 16,
+                ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.school_rounded,
-                        color: Colors.white, size: 20),
+                    Icon(Icons.school_rounded, color: Colors.white, size: 20),
                     SizedBox(width: 8),
                     Text(
                       'Enroll Now',

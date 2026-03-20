@@ -73,14 +73,16 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = query.isEmpty ||
+        final matchesSearch =
+            query.isEmpty ||
             v.title.toLowerCase().contains(query) ||
             v.description.toLowerCase().contains(query);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = query.isEmpty ||
+        final matchesSearch =
+            query.isEmpty ||
             c.title.toLowerCase().contains(query) ||
             c.description.toLowerCase().contains(query);
         final matchesCategory =
@@ -135,6 +137,7 @@ class _ExploreViewState extends State<ExploreView> {
                                   _searchController.clear();
                                   _filterContent();
                                 },
+                                tooltip: 'Clear search',
                               )
                             : null,
                         border: InputBorder.none,
@@ -163,19 +166,24 @@ class _ExploreViewState extends State<ExploreView> {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 8),
+                                horizontal: 18,
+                                vertical: 8,
+                              ),
                               decoration: BoxDecoration(
                                 gradient: isSelected
                                     ? AppTheme.primaryGradient
                                     : null,
                                 color: isSelected
                                     ? null
-                                    : Colors.white.withValues(alpha:0.08),
+                                    : Colors.white.withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(20),
                                 border: isSelected
                                     ? null
                                     : Border.all(
-                                        color: Colors.white.withValues(alpha:0.1)),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                      ),
                               ),
                               child: Text(
                                 category,
@@ -203,7 +211,9 @@ class _ExploreViewState extends State<ExploreView> {
               child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(
-                          color: AppTheme.primaryColor))
+                        color: AppTheme.primaryColor,
+                      ),
+                    )
                   : RefreshIndicator(
                       onRefresh: _loadData,
                       color: AppTheme.primaryColor,
@@ -235,8 +245,8 @@ class _ExploreViewState extends State<ExploreView> {
             ),
           ),
           ..._filteredCourses.asMap().entries.map((entry) {
-            final colors =
-                AppTheme.cardGradients[entry.key % AppTheme.cardGradients.length];
+            final colors = AppTheme
+                .cardGradients[entry.key % AppTheme.cardGradients.length];
             return _buildCourseCard(entry.value, colors);
           }),
           const SizedBox(height: 24),
@@ -250,8 +260,8 @@ class _ExploreViewState extends State<ExploreView> {
             ),
           ),
           ..._filteredVideos.asMap().entries.map((entry) {
-            final colors =
-                AppTheme.cardGradients[entry.key % AppTheme.cardGradients.length];
+            final colors = AppTheme
+                .cardGradients[entry.key % AppTheme.cardGradients.length];
             return _buildVideoCard(entry.value, colors);
           }),
         ],
@@ -272,7 +282,8 @@ class _ExploreViewState extends State<ExploreView> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => CourseDetailView(course: course)),
+                builder: (_) => CourseDetailView(course: course),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -292,13 +303,17 @@ class _ExploreViewState extends State<ExploreView> {
                               imageUrl: course.thumbnailUrl,
                               fit: BoxFit.cover,
                               errorWidget: (_, __, ___) => const Icon(
-                                  Icons.auto_stories_rounded,
-                                  color: Colors.white,
-                                  size: 28),
+                                Icons.auto_stories_rounded,
+                                color: Colors.white,
+                                size: 28,
+                              ),
                             ),
                           )
-                        : const Icon(Icons.auto_stories_rounded,
-                            color: Colors.white, size: 28),
+                        : const Icon(
+                            Icons.auto_stories_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -308,37 +323,51 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           course.title,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.star_rounded,
-                                color: Colors.amber, size: 16),
+                            const Icon(
+                              Icons.star_rounded,
+                              color: Colors.amber,
+                              size: 16,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               course.rating.toStringAsFixed(1),
                               style: const TextStyle(
-                                  color: AppTheme.textSecondary, fontSize: 13),
+                                color: AppTheme.textSecondary,
+                                fontSize: 13,
+                              ),
                             ),
                             const SizedBox(width: 12),
-                            Icon(Icons.play_lesson_rounded,
-                                color: AppTheme.textMuted, size: 16),
+                            Icon(
+                              Icons.play_lesson_rounded,
+                              color: AppTheme.textMuted,
+                              size: 16,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               '${course.lessons.length} lessons',
                               style: const TextStyle(
-                                  color: AppTheme.textSecondary, fontSize: 13),
+                                color: AppTheme.textSecondary,
+                                fontSize: 13,
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right_rounded,
-                      color: AppTheme.textMuted),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppTheme.textMuted,
+                  ),
                 ],
               ),
             ),
@@ -359,8 +388,7 @@ class _ExploreViewState extends State<ExploreView> {
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (_) => VideoPlayerView(video: video)),
+              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -373,8 +401,11 @@ class _ExploreViewState extends State<ExploreView> {
                       gradient: LinearGradient(colors: colors),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: const Icon(Icons.play_arrow_rounded,
-                        color: Colors.white, size: 28),
+                    child: const Icon(
+                      Icons.play_arrow_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -384,7 +415,9 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           video.title,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -392,15 +425,19 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           video.description,
                           style: const TextStyle(
-                              color: AppTheme.textSecondary, fontSize: 13),
+                            color: AppTheme.textSecondary,
+                            fontSize: 13,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right_rounded,
-                      color: AppTheme.textMuted),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppTheme.textMuted,
+                  ),
                 ],
               ),
             ),
