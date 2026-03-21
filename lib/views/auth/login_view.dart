@@ -30,17 +30,11 @@ class _LoginViewState extends State<LoginView>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _fadeAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOut,
-    );
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.06),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOutCubic,
-    ));
+    _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
     _animController.forward();
   }
 
@@ -102,7 +96,9 @@ class _LoginViewState extends State<LoginView>
                   position: _slideAnim,
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 32),
+                      horizontal: 24,
+                      vertical: 32,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -154,14 +150,18 @@ class _LoginViewState extends State<LoginView>
                                   labelText: 'Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
+                                    tooltip: _isPasswordVisible
+                                        ? 'Hide password'
+                                        : 'Show password',
                                     icon: Icon(
                                       _isPasswordVisible
                                           ? Icons.visibility_off_outlined
                                           : Icons.visibility_outlined,
                                     ),
-                                    onPressed: () => setState(() =>
-                                        _isPasswordVisible =
-                                            !_isPasswordVisible),
+                                    onPressed: () => setState(
+                                      () => _isPasswordVisible =
+                                          !_isPasswordVisible,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -209,13 +209,15 @@ class _LoginViewState extends State<LoginView>
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted.withValues(
+                                        alpha: 0.3,
+                                      ),
                                     ),
                                   ),
                                   const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
                                     child: Text(
                                       'or continue with',
                                       style: TextStyle(
@@ -226,8 +228,9 @@ class _LoginViewState extends State<LoginView>
                                   ),
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted.withValues(
+                                        alpha: 0.3,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -237,15 +240,18 @@ class _LoginViewState extends State<LoginView>
                                 onPressed: auth.isLoading
                                     ? null
                                     : () => _handleGoogleSignIn(auth),
-                                icon: const Text('G',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                icon: const Text(
+                                  'G',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 label: const Text('Continue with Google'),
                                 style: OutlinedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                 ),
                               ),
                             ],
@@ -263,7 +269,8 @@ class _LoginViewState extends State<LoginView>
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const SignupView()),
+                                  builder: (_) => const SignupView(),
+                                ),
                               ),
                               child: const Text('Sign Up'),
                             ),

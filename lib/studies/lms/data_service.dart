@@ -33,10 +33,7 @@ class LmsDataService {
     final response = await http.post(
       Uri.parse('$baseUrl/api/auth/login'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
+      body: jsonEncode({'email': email, 'password': password}),
     );
 
     if (response.statusCode == 200) {
@@ -66,7 +63,8 @@ class LmsDataService {
       return videoJson.map((json) => Video.fromJson(json)).toList();
     } else {
       throw Exception(
-          'Failed to load videos. Status code: ${response.statusCode}');
+        'Failed to load videos. Status code: ${response.statusCode}',
+      );
     }
   }
 }
