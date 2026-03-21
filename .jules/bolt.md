@@ -24,3 +24,7 @@
 ## 2024-05-22 - Flutter TextInput Rebuilds & Debouncing
 **Learning:** In Flutter, adding a listener directly to a `TextEditingController` that calls `setState` on every keystroke causes full widget tree rebuilds, which degrades performance and UI responsiveness during typing. Specifically, in `ExploreView`, this led to expensive and redundant linear searches over all videos and courses on each key press.
 **Action:** Always wrap `TextField` dynamic UI components (like a clear button) in a `ValueListenableBuilder` tied to the controller to localize rebuilds. Additionally, implement a `Timer` to debounce the search callback logic (e.g., 300ms) to prevent unnecessary processing and state updates while the user is actively typing.
+
+## 2024-05-23 - Flutter List Virtualization
+**Learning:** In Flutter, rendering large collections using a standard `ListView` with eagerly built children (like `..._filteredCourses.map(...)`) causes all list items to be instantiated immediately. This can lead to severe UI stuttering, dropped frames, and excessive memory consumption as the dataset grows, especially when list items contain complex UI trees or images.
+**Action:** Always use virtualization components like `ListView.builder` or `CustomScrollView` with `SliverList.builder` for unbounded or potentially large lists to ensure widgets are only built dynamically as they become visible in the viewport.

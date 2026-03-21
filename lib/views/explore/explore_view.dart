@@ -242,46 +242,61 @@ class _ExploreViewState extends State<ExploreView> {
 
     if (!hasContent) return _buildEmptyState();
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      children: [
+    return CustomScrollView(
+      slivers: [
         if (_filteredCourses.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.only(bottom: 12),
-            child: Text(
-              'Courses',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 12, left: 20, right: 20),
+              child: Text(
+                'Courses',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
-          ..._filteredCourses.asMap().entries.map((entry) {
-            final colors = AppTheme
-                .cardGradients[entry.key % AppTheme.cardGradients.length];
-            return _buildCourseCard(entry.value, colors);
-          }),
-          const SizedBox(height: 24),
+          SliverList.builder(
+            itemCount: _filteredCourses.length,
+            itemBuilder: (context, index) {
+              final course = _filteredCourses[index];
+              final colors = AppTheme
+                  .cardGradients[index % AppTheme.cardGradients.length];
+              return _buildCourseCard(course, colors);
+            },
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 24),
+          ),
         ],
         if (_filteredVideos.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.only(bottom: 12),
-            child: Text(
-              'Videos',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 12, left: 20, right: 20),
+              child: Text(
+                'Videos',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
-          ..._filteredVideos.asMap().entries.map((entry) {
-            final colors = AppTheme
-                .cardGradients[entry.key % AppTheme.cardGradients.length];
-            return _buildVideoCard(entry.value, colors);
-          }),
+          SliverList.builder(
+            itemCount: _filteredVideos.length,
+            itemBuilder: (context, index) {
+              final video = _filteredVideos[index];
+              final colors = AppTheme
+                  .cardGradients[index % AppTheme.cardGradients.length];
+              return _buildVideoCard(video, colors);
+            },
+          ),
         ],
-        const SizedBox(height: 20),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 20),
+        ),
       ],
     );
   }
 
   Widget _buildCourseCard(Course course, List<Color> colors) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
         child: Material(
@@ -369,7 +384,7 @@ class _ExploreViewState extends State<ExploreView> {
 
   Widget _buildVideoCard(Video video, List<Color> colors) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
         child: Material(
