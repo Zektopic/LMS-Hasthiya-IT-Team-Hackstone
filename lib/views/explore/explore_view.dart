@@ -347,26 +347,30 @@ class _ExploreViewState extends State<ExploreView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(Icons.star_rounded,
-                                color: Colors.amber, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              course.rating.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  color: AppTheme.textSecondary, fontSize: 13),
-                            ),
-                            const SizedBox(width: 12),
-                            Icon(Icons.play_lesson_rounded,
-                                color: AppTheme.textMuted, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${course.lessons.length} lessons',
-                              style: const TextStyle(
-                                  color: AppTheme.textSecondary, fontSize: 13),
-                            ),
-                          ],
+                        Semantics(
+                          excludeSemantics: true,
+                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.star_rounded,
+                                  color: Colors.amber, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                course.rating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                    color: AppTheme.textSecondary, fontSize: 13),
+                              ),
+                              const SizedBox(width: 12),
+                              Icon(Icons.play_lesson_rounded,
+                                  color: AppTheme.textMuted, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${course.lessons.length} lessons',
+                                style: const TextStyle(
+                                    color: AppTheme.textSecondary, fontSize: 13),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

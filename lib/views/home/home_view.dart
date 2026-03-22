@@ -364,18 +364,22 @@ class _HomeViewState extends State<HomeView> {
                           color: Colors.black.withValues(alpha:0.5),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star_rounded,
-                                color: Colors.amber, size: 14),
-                            const SizedBox(width: 4),
-                            Text(
-                              course.rating.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 12),
-                            ),
-                          ],
+                        child: Semantics(
+                          excludeSemantics: true,
+                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars',
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.star_rounded,
+                                  color: Colors.amber, size: 14),
+                              const SizedBox(width: 4),
+                              Text(
+                                course.rating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
