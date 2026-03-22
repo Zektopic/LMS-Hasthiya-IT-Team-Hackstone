@@ -17,7 +17,9 @@ class CourseDetailView extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             _buildAppBar(context),
-            SliverToBoxAdapter(child: _buildContent(context)),
+            SliverToBoxAdapter(child: _buildContentHeader(context)),
+            ..._buildLessonsSlivers(context),
+            const SliverToBoxAdapter(child: SizedBox(height: 80)),
           ],
         ),
       ),
@@ -104,9 +106,9 @@ class CourseDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContentHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -176,8 +178,18 @@ class CourseDetailView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          if (course.lessons.isEmpty)
-            GlassCard(
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildLessonsSlivers(BuildContext context) {
+    if (course.lessons.isEmpty) {
+      return [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GlassCard(
               padding: const EdgeInsets.all(24),
               child: const Center(
                 child: Column(
@@ -192,14 +204,23 @@ class CourseDetailView extends StatelessWidget {
                   ],
                 ),
               ),
-            )
-          else
-            ...course.lessons.asMap().entries.map((entry) =>
-                _buildLessonItem(entry.key + 1, entry.value)),
-          const SizedBox(height: 80),
-        ],
+            ),
+          ),
+        ),
+      ];
+    }
+
+    return [
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        sliver: SliverList.builder(
+          itemCount: course.lessons.length,
+          itemBuilder: (context, index) {
+            return _buildLessonItem(index + 1, course.lessons[index]);
+          },
+        ),
       ),
-    );
+    ];
   }
 
   Widget _buildBadge({
