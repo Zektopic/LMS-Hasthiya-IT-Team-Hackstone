@@ -16,3 +16,7 @@
 ## 2024-05-20 - Synchronous JWT Verification
 **Learning:** In the `lms-backend`, `jwt.verify` was being used synchronously in `authMiddleware.js`. Synchronous execution of CPU-bound cryptographic operations blocks the Node.js single-threaded event loop, preventing the server from handling other incoming requests simultaneously and reducing overall throughput and responsiveness under high concurrency.
 **Action:** Always use the asynchronous callback version of `jwt.verify` (and similar CPU-intensive functions like `bcrypt.compare` or `jwt.sign`) in Node.js backends to avoid blocking the event loop.
+
+## 2024-05-21 - Flutter Frontend Virtualization and Memoization
+**Learning:** In the Flutter frontend (`hasthiya_lms`), `ListView` instantiates all its child widgets at once, which is a performance and memory bottleneck for dynamic or growing lists. Additionally, returning complex widget trees from private helper methods (e.g., `_buildCourseCard`) within a `Consumer` or `StatelessWidget` causes those entire sub-trees to be rebuilt unnecessarily every time the parent view updates its state.
+**Action:** Always use `ListView.builder` for lists that might grow to implement virtualization. Refactor large UI helper methods into standalone `StatelessWidget` classes and instantiate them with `const`. This acts as memoization, preventing the Flutter framework from unnecessarily rebuilding these leaf nodes when the parent's state changes.
