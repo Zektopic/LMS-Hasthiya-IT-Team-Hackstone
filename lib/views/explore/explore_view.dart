@@ -81,20 +81,24 @@ class _ExploreViewState extends State<ExploreView> {
   }
 
   void _filterContent() {
-    final query = _searchController.text.toLowerCase();
+    final query = _searchController.text.trim();
+    final isQueryEmpty = query.isEmpty;
+    final searchRegex = isQueryEmpty
+        ? null
+        : RegExp(RegExp.escape(query), caseSensitive: false);
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = query.isEmpty ||
-            v.title.toLowerCase().contains(query) ||
-            v.description.toLowerCase().contains(query);
+        final matchesSearch = isQueryEmpty ||
+            searchRegex!.hasMatch(v.title) ||
+            searchRegex.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = query.isEmpty ||
-            c.title.toLowerCase().contains(query) ||
-            c.description.toLowerCase().contains(query);
+        final matchesSearch = isQueryEmpty ||
+            searchRegex!.hasMatch(c.title) ||
+            searchRegex.hasMatch(c.description);
         final matchesCategory =
             _selectedCategory == 'All' || c.category == _selectedCategory;
         return matchesSearch && matchesCategory;
@@ -258,8 +262,8 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredCourses.length,
             itemBuilder: (context, index) {
               final course = _filteredCourses[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildCourseCard(course, colors);
             },
           ),
@@ -281,8 +285,8 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredVideos.length,
             itemBuilder: (context, index) {
               final video = _filteredVideos[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildVideoCard(video, colors);
             },
           ),
@@ -349,7 +353,8 @@ class _ExploreViewState extends State<ExploreView> {
                         const SizedBox(height: 4),
                         Semantics(
                           excludeSemantics: true,
-                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
+                          label:
+                              'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
                           child: Row(
                             children: [
                               const Icon(Icons.star_rounded,
@@ -358,7 +363,8 @@ class _ExploreViewState extends State<ExploreView> {
                               Text(
                                 course.rating.toStringAsFixed(1),
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 13),
                               ),
                               const SizedBox(width: 12),
                               Icon(Icons.play_lesson_rounded,
@@ -367,7 +373,8 @@ class _ExploreViewState extends State<ExploreView> {
                               Text(
                                 '${course.lessons.length} lessons',
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 13),
                               ),
                             ],
                           ),
