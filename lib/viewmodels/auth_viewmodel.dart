@@ -33,27 +33,27 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   String _parseFirebaseError(dynamic e) {
-    if (e is FirebaseAuthException) {
-      switch (e.code) {
-        case 'user-not-found':
-          return 'No account found with this email.';
-        case 'wrong-password':
-          return 'Incorrect password. Please try again.';
-        case 'email-already-in-use':
-          return 'An account already exists with this email.';
-        case 'weak-password':
-          return 'Password is too weak. Use at least 6 characters.';
-        case 'invalid-email':
-          return 'Please enter a valid email address.';
-        case 'too-many-requests':
-          return 'Too many attempts. Please try again later.';
-        case 'invalid-credential':
-          return 'Invalid email or password.';
-        default:
-          return e.message ?? 'Authentication failed.';
-      }
+    if (e is! FirebaseAuthException) {
+      return 'Something went wrong. Please try again.';
     }
-    return 'Something went wrong. Please try again.';
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'email-already-in-use':
+        return 'An account already exists with this email.';
+      case 'weak-password':
+        return 'Password is too weak. Use at least 6 characters.';
+      case 'invalid-email':
+        return 'Please enter a valid email address.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'invalid-credential':
+        return 'Invalid email or password.';
+      default:
+        return e.message ?? 'Authentication failed.';
+    }
   }
 
   Future<void> login(String email, String password) async {
