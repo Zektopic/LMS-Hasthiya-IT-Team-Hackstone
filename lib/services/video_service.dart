@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import '../models/video.dart';
 
 class VideoService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db;
+
+  VideoService({FirebaseFirestore? db})
+      : _db = db ?? FirebaseFirestore.instance;
 
   // Optimization: Added optional limit parameter to prevent unbounded reads
   Future<List<Video>> getVideos({int? limit}) async {
