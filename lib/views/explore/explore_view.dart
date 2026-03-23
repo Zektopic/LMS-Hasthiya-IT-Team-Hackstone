@@ -85,14 +85,16 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = query.isEmpty ||
+        final matchesSearch =
+            query.isEmpty ||
             v.title.toLowerCase().contains(query) ||
             v.description.toLowerCase().contains(query);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = query.isEmpty ||
+        final matchesSearch =
+            query.isEmpty ||
             c.title.toLowerCase().contains(query) ||
             c.description.toLowerCase().contains(query);
         final matchesCategory =
@@ -114,125 +116,137 @@ class _ExploreViewState extends State<ExploreView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Explore',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Discover new skills and knowledge',
-                    style: TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 15,
-                    ),
-                  ),
+                  _buildHeader(),
                   const SizedBox(height: 20),
-                  GlassCard(
-                    borderRadius: 16,
-                    padding: EdgeInsets.zero,
-                    // Optimization: Use ValueListenableBuilder to localize TextField rebuilds (e.g., toggling the clear icon) instead of rebuilding the entire view
-                    child: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: _searchController,
-                      builder: (context, value, child) {
-                        return TextField(
-                          controller: _searchController,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText: 'Search courses and videos...',
-                            prefixIcon: const Icon(Icons.search_rounded),
-                            suffixIcon: value.text.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(Icons.clear_rounded),
-                                    onPressed: () {
-                                      _searchController.clear();
-                                      _filterContent();
-                                    },
-                                  )
-                                : null,
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            filled: false,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  _buildSearchField(),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _categories.length,
-                      itemBuilder: (context, index) {
-                        final category = _categories[index];
-                        final isSelected = category == _selectedCategory;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() => _selectedCategory = category);
-                              _filterContent();
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 8),
-                              decoration: BoxDecoration(
-                                gradient: isSelected
-                                    ? AppTheme.primaryGradient
-                                    : null,
-                                color: isSelected
-                                    ? null
-                                    : Colors.white.withValues(alpha: 0.08),
-                                borderRadius: BorderRadius.circular(20),
-                                border: isSelected
-                                    ? null
-                                    : Border.all(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.1)),
-                              ),
-                              child: Text(
-                                category,
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : AppTheme.textSecondary,
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  _buildCategoriesList(),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                          color: AppTheme.primaryColor))
-                  : RefreshIndicator(
-                      onRefresh: _loadData,
-                      color: AppTheme.primaryColor,
-                      backgroundColor: AppTheme.surfaceColor,
-                      child: _buildContent(),
-                    ),
-            ),
+            _buildMainContent(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Explore',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Discover new skills and knowledge',
+          style: TextStyle(color: AppTheme.textSecondary, fontSize: 15),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchField() {
+    return GlassCard(
+      borderRadius: 16,
+      padding: EdgeInsets.zero,
+      // Optimization: Use ValueListenableBuilder to localize TextField rebuilds (e.g., toggling the clear icon) instead of rebuilding the entire view
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _searchController,
+        builder: (context, value, child) {
+          return TextField(
+            controller: _searchController,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'Search courses and videos...',
+              prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: value.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded),
+                      onPressed: () {
+                        _searchController.clear();
+                        _filterContent();
+                      },
+                    )
+                  : null,
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              filled: false,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCategoriesList() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final category = _categories[index];
+          final isSelected = category == _selectedCategory;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedCategory = category);
+                _filterContent();
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  gradient: isSelected ? AppTheme.primaryGradient : null,
+                  color: isSelected
+                      ? null
+                      : Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(20),
+                  border: isSelected
+                      ? null
+                      : Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                ),
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : AppTheme.textSecondary,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Expanded(
+      child: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: AppTheme.primaryColor),
+            )
+          : RefreshIndicator(
+              onRefresh: _loadData,
+              color: AppTheme.primaryColor,
+              backgroundColor: AppTheme.surfaceColor,
+              child: _buildContent(),
+            ),
     );
   }
 
@@ -258,14 +272,12 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredCourses.length,
             itemBuilder: (context, index) {
               final course = _filteredCourses[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildCourseCard(course, colors);
             },
           ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 24),
-          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
         if (_filteredVideos.isNotEmpty) ...[
           const SliverToBoxAdapter(
@@ -281,15 +293,13 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredVideos.length,
             itemBuilder: (context, index) {
               final video = _filteredVideos[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildVideoCard(video, colors);
             },
           ),
         ],
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 20),
-        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
     );
   }
@@ -306,7 +316,8 @@ class _ExploreViewState extends State<ExploreView> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => CourseDetailView(course: course)),
+                builder: (_) => CourseDetailView(course: course),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -326,13 +337,17 @@ class _ExploreViewState extends State<ExploreView> {
                               imageUrl: course.thumbnailUrl,
                               fit: BoxFit.cover,
                               errorWidget: (_, __, ___) => const Icon(
-                                  Icons.auto_stories_rounded,
-                                  color: Colors.white,
-                                  size: 28),
+                                Icons.auto_stories_rounded,
+                                color: Colors.white,
+                                size: 28,
+                              ),
                             ),
                           )
-                        : const Icon(Icons.auto_stories_rounded,
-                            color: Colors.white, size: 28),
+                        : const Icon(
+                            Icons.auto_stories_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -342,32 +357,45 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           course.title,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         Semantics(
                           excludeSemantics: true,
-                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
+                          label:
+                              'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
                           child: Row(
                             children: [
-                              const Icon(Icons.star_rounded,
-                                  color: Colors.amber, size: 16),
+                              const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                                size: 16,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 course.rating.toStringAsFixed(1),
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                  color: AppTheme.textSecondary,
+                                  fontSize: 13,
+                                ),
                               ),
                               const SizedBox(width: 12),
-                              Icon(Icons.play_lesson_rounded,
-                                  color: AppTheme.textMuted, size: 16),
+                              Icon(
+                                Icons.play_lesson_rounded,
+                                color: AppTheme.textMuted,
+                                size: 16,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 '${course.lessons.length} lessons',
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                  color: AppTheme.textSecondary,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
@@ -375,8 +403,10 @@ class _ExploreViewState extends State<ExploreView> {
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right_rounded,
-                      color: AppTheme.textMuted),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppTheme.textMuted,
+                  ),
                 ],
               ),
             ),
@@ -410,8 +440,11 @@ class _ExploreViewState extends State<ExploreView> {
                       gradient: LinearGradient(colors: colors),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: const Icon(Icons.play_arrow_rounded,
-                        color: Colors.white, size: 28),
+                    child: const Icon(
+                      Icons.play_arrow_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -421,7 +454,9 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           video.title,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -429,15 +464,19 @@ class _ExploreViewState extends State<ExploreView> {
                         Text(
                           video.description,
                           style: const TextStyle(
-                              color: AppTheme.textSecondary, fontSize: 13),
+                            color: AppTheme.textSecondary,
+                            fontSize: 13,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right_rounded,
-                      color: AppTheme.textMuted),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppTheme.textMuted,
+                  ),
                 ],
               ),
             ),
