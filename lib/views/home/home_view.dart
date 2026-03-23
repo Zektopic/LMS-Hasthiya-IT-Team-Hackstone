@@ -299,7 +299,8 @@ class _HomeViewState extends State<HomeView> {
         itemCount: _courses.length,
         itemBuilder: (context, index) {
           final course = _courses[index];
-          final colors = AppTheme.cardGradients[index % AppTheme.cardGradients.length];
+          final colors =
+              AppTheme.cardGradients[index % AppTheme.cardGradients.length];
           return _buildCourseCard(course, colors);
         },
       ),
@@ -339,7 +340,7 @@ class _HomeViewState extends State<HomeView> {
                       child: Icon(
                         Icons.auto_stories_rounded,
                         size: 80,
-                        color: Colors.white.withValues(alpha:0.15),
+                        color: Colors.white.withValues(alpha: 0.15),
                       ),
                     ),
                     if (course.thumbnailUrl.isNotEmpty)
@@ -361,12 +362,13 @@ class _HomeViewState extends State<HomeView> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha:0.5),
+                          color: Colors.black.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Semantics(
                           excludeSemantics: true,
-                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars',
+                          label:
+                              'Rating: ${course.rating.toStringAsFixed(1)} stars',
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -423,7 +425,8 @@ class _HomeViewState extends State<HomeView> {
       children: _videos.take(5).toList().asMap().entries.map((entry) {
         final index = entry.key;
         final video = entry.value;
-        final colors = AppTheme.cardGradients[index % AppTheme.cardGradients.length];
+        final colors =
+            AppTheme.cardGradients[index % AppTheme.cardGradients.length];
         return _buildVideoCard(video, colors);
       }).toList(),
     );
@@ -440,8 +443,7 @@ class _HomeViewState extends State<HomeView> {
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (_) => VideoPlayerView(video: video)),
+              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -519,7 +521,7 @@ class _HomeViewState extends State<HomeView> {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha:0.15),
+              color: AppTheme.primaryColor.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: const Icon(

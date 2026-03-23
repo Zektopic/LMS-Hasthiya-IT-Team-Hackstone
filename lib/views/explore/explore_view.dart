@@ -146,6 +146,7 @@ class _ExploreViewState extends State<ExploreView> {
                             prefixIcon: const Icon(Icons.search_rounded),
                             suffixIcon: value.text.isNotEmpty
                                 ? IconButton(
+                                    tooltip: 'Clear search',
                                     icon: const Icon(Icons.clear_rounded),
                                     onPressed: () {
                                       _searchController.clear();
@@ -258,8 +259,8 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredCourses.length,
             itemBuilder: (context, index) {
               final course = _filteredCourses[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildCourseCard(course, colors);
             },
           ),
@@ -281,8 +282,8 @@ class _ExploreViewState extends State<ExploreView> {
             itemCount: _filteredVideos.length,
             itemBuilder: (context, index) {
               final video = _filteredVideos[index];
-              final colors = AppTheme
-                  .cardGradients[index % AppTheme.cardGradients.length];
+              final colors =
+                  AppTheme.cardGradients[index % AppTheme.cardGradients.length];
               return _buildVideoCard(video, colors);
             },
           ),
@@ -349,7 +350,8 @@ class _ExploreViewState extends State<ExploreView> {
                         const SizedBox(height: 4),
                         Semantics(
                           excludeSemantics: true,
-                          label: 'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
+                          label:
+                              'Rating: ${course.rating.toStringAsFixed(1)} stars, ${course.lessons.length} lessons',
                           child: Row(
                             children: [
                               const Icon(Icons.star_rounded,
@@ -358,7 +360,8 @@ class _ExploreViewState extends State<ExploreView> {
                               Text(
                                 course.rating.toStringAsFixed(1),
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 13),
                               ),
                               const SizedBox(width: 12),
                               Icon(Icons.play_lesson_rounded,
@@ -367,7 +370,8 @@ class _ExploreViewState extends State<ExploreView> {
                               Text(
                                 '${course.lessons.length} lessons',
                                 style: const TextStyle(
-                                    color: AppTheme.textSecondary, fontSize: 13),
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 13),
                               ),
                             ],
                           ),

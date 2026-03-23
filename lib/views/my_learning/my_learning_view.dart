@@ -36,8 +36,7 @@ class MyLearningView extends StatelessWidget {
               // Tabs
               GlassCard(
                 borderRadius: 14,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Row(
                   children: [
                     _buildTab('In Progress', true),
@@ -89,7 +88,7 @@ class MyLearningView extends StatelessWidget {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: AppTheme.secondaryColor.withValues(alpha:0.12),
+                color: AppTheme.secondaryColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -119,8 +118,7 @@ class MyLearningView extends StatelessWidget {
             const SizedBox(height: 28),
             GlassButton(
               onPressed: onExplore,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

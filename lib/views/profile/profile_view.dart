@@ -95,8 +95,7 @@ class ProfileView extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () => _showLogoutDialog(context, auth),
-                  icon: const Icon(Icons.logout_rounded,
-                      color: AppTheme.error),
+                  icon: const Icon(Icons.logout_rounded, color: AppTheme.error),
                   label: const Text(
                     'Sign Out',
                     style: TextStyle(color: AppTheme.error),
@@ -104,7 +103,7 @@ class ProfileView extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: BorderSide(
-                        color: AppTheme.error.withValues(alpha:0.3)),
+                        color: AppTheme.error.withValues(alpha: 0.3)),
                   ),
                 ),
               ),
@@ -140,7 +139,7 @@ class ProfileView extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withValues(alpha:0.35),
+            color: AppTheme.primaryColor.withValues(alpha: 0.35),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -188,13 +187,13 @@ class ProfileView extends StatelessWidget {
           Container(
             width: 1,
             height: 36,
-            color: Colors.white.withValues(alpha:0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           _buildStatItem('0h', 'Learning'),
           Container(
             width: 1,
             height: 36,
-            color: Colors.white.withValues(alpha:0.1),
+            color: Colors.white.withValues(alpha: 0.1),
           ),
           _buildStatItem('0', 'Certificates'),
         ],
@@ -287,7 +286,7 @@ class ProfileView extends StatelessWidget {
                     Divider(
                       height: 1,
                       indent: 54,
-                      color: Colors.white.withValues(alpha:0.06),
+                      color: Colors.white.withValues(alpha: 0.06),
                     ),
                 ],
               );
@@ -319,8 +318,8 @@ class ProfileView extends StatelessWidget {
               Navigator.pop(ctx);
               auth.logout();
             },
-            child: const Text('Sign Out',
-                style: TextStyle(color: AppTheme.error)),
+            child:
+                const Text('Sign Out', style: TextStyle(color: AppTheme.error)),
           ),
         ],
       ),

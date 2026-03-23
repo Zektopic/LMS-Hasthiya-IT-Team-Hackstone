@@ -28,10 +28,10 @@ class GlassCard extends StatelessWidget {
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha:opacity),
+            color: Colors.white.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: Colors.white.withValues(alpha:0.12),
+              color: Colors.white.withValues(alpha: 0.12),
             ),
           ),
           child: child,
@@ -70,7 +70,7 @@ class GlassButton extends StatelessWidget {
           boxShadow: onPressed != null
               ? [
                   BoxShadow(
-                    color: AppTheme.primaryColor.withValues(alpha:0.35),
+                    color: AppTheme.primaryColor.withValues(alpha: 0.35),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -118,8 +118,8 @@ class GradientBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTheme.primaryColor.withValues(alpha:0.15),
-                    AppTheme.primaryColor.withValues(alpha:0.0),
+                    AppTheme.primaryColor.withValues(alpha: 0.15),
+                    AppTheme.primaryColor.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -135,8 +135,8 @@ class GradientBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTheme.secondaryColor.withValues(alpha:0.12),
-                    AppTheme.secondaryColor.withValues(alpha:0.0),
+                    AppTheme.secondaryColor.withValues(alpha: 0.12),
+                    AppTheme.secondaryColor.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -152,8 +152,8 @@ class GradientBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTheme.accentColor.withValues(alpha:0.08),
-                    AppTheme.accentColor.withValues(alpha:0.0),
+                    AppTheme.accentColor.withValues(alpha: 0.08),
+                    AppTheme.accentColor.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -186,7 +186,7 @@ class AppLogo extends StatelessWidget {
             borderRadius: BorderRadius.circular(size * 0.28),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryColor.withValues(alpha:0.4),
+                color: AppTheme.primaryColor.withValues(alpha: 0.4),
                 blurRadius: 24,
                 offset: const Offset(0, 8),
               ),
@@ -249,7 +249,7 @@ class GlassNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.surfaceColor,
         border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha:0.06)),
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
         ),
       ),
       child: Padding(
@@ -311,7 +311,7 @@ class _NavItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.primaryColor.withValues(alpha:0.15)
+              ? AppTheme.primaryColor.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
