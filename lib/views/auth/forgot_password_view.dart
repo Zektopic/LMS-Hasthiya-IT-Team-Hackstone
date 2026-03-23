@@ -92,6 +92,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                           borderRadius: 12,
                           padding: EdgeInsets.zero,
                           child: IconButton(
+                            tooltip: 'Back',
                             onPressed: () => Navigator.pop(context),
                             icon: const Icon(Icons.arrow_back_rounded,
                                 color: Colors.white),
@@ -124,7 +125,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           width: 64,
           height: 64,
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withValues(alpha:0.15),
+            color: AppTheme.primaryColor.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
           child: const Icon(
@@ -199,7 +200,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           width: 72,
           height: 72,
           decoration: BoxDecoration(
-            color: AppTheme.success.withValues(alpha:0.15),
+            color: AppTheme.success.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
           child: const Icon(

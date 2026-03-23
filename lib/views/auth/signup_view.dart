@@ -116,8 +116,7 @@ class _SignupViewState extends State<SignupView>
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 10),
-                        const Center(
-                            child: AppLogo(size: 56, showText: false)),
+                        const Center(child: AppLogo(size: 56, showText: false)),
                         const SizedBox(height: 32),
                         GlassCard(
                           padding: const EdgeInsets.all(28),
@@ -175,6 +174,9 @@ class _SignupViewState extends State<SignupView>
                                   labelText: 'Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
+                                    tooltip: _isPasswordVisible
+                                        ? 'Hide password'
+                                        : 'Show password',
                                     icon: Icon(
                                       _isPasswordVisible
                                           ? Icons.visibility_off_outlined
@@ -216,8 +218,8 @@ class _SignupViewState extends State<SignupView>
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                   const Padding(
@@ -233,8 +235,8 @@ class _SignupViewState extends State<SignupView>
                                   ),
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],

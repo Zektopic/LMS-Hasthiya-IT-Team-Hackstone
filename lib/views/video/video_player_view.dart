@@ -95,6 +95,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                       borderRadius: 12,
                       padding: EdgeInsets.zero,
                       child: IconButton(
+                        tooltip: 'Back',
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(Icons.arrow_back_rounded,
                             color: Colors.white),
@@ -124,7 +125,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha:0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -227,8 +228,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   setState(() => _hasError = false);
                   _initializePlayer();
                 },
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: const Text(
                   'Retry',
                   style: TextStyle(

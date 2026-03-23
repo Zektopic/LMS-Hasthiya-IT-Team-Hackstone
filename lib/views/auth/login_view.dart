@@ -154,6 +154,9 @@ class _LoginViewState extends State<LoginView>
                                   labelText: 'Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
+                                    tooltip: _isPasswordVisible
+                                        ? 'Hide password'
+                                        : 'Show password',
                                     icon: Icon(
                                       _isPasswordVisible
                                           ? Icons.visibility_off_outlined
@@ -209,8 +212,8 @@ class _LoginViewState extends State<LoginView>
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                   const Padding(
@@ -226,8 +229,8 @@ class _LoginViewState extends State<LoginView>
                                   ),
                                   Expanded(
                                     child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
+                                      color: AppTheme.textMuted
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],
