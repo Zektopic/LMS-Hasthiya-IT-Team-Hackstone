@@ -30,17 +30,11 @@ class _LoginViewState extends State<LoginView>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _fadeAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOut,
-    );
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.06),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOutCubic,
-    ));
+    _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
     _animController.forward();
   }
 
@@ -86,6 +80,137 @@ class _LoginViewState extends State<LoginView>
     }
   }
 
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Text(
+          'Welcome Back',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Sign in to continue learning',
+          style: TextStyle(fontSize: 15, color: AppTheme.textSecondary),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmailField() {
+    return TextField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      style: const TextStyle(color: Colors.white),
+      decoration: const InputDecoration(
+        labelText: 'Email Address',
+        prefixIcon: Icon(Icons.email_outlined),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(AuthViewModel auth) {
+    return TextField(
+      controller: _passwordController,
+      obscureText: !_isPasswordVisible,
+      textInputAction: TextInputAction.done,
+      style: const TextStyle(color: Colors.white),
+      onSubmitted: (_) {
+        if (!auth.isLoading) _handleLogin(auth);
+      },
+      decoration: InputDecoration(
+        labelText: 'Password',
+        prefixIcon: const Icon(Icons.lock_outline),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isPasswordVisible
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+          ),
+          onPressed: () =>
+              setState(() => _isPasswordVisible = !_isPasswordVisible),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForgotPasswordButton() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ForgotPasswordView()),
+        ),
+        child: const Text('Forgot Password?'),
+      ),
+    );
+  }
+
+  Widget _buildSignInButton(AuthViewModel auth) {
+    return GlassButton(
+      onPressed: auth.isLoading ? null : () => _handleLogin(auth),
+      child: Center(
+        child: auth.isLoading
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : const Text(
+                'Sign In',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(color: AppTheme.textMuted.withValues(alpha: 0.3)),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'or continue with',
+            style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
+          ),
+        ),
+        Expanded(
+          child: Divider(color: AppTheme.textMuted.withValues(alpha: 0.3)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGoogleSignInButton(AuthViewModel auth) {
+    return OutlinedButton.icon(
+      onPressed: auth.isLoading ? null : () => _handleGoogleSignIn(auth),
+      icon: const Text(
+        'G',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      label: const Text('Continue with Google'),
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthViewModel>();
@@ -102,7 +227,9 @@ class _LoginViewState extends State<LoginView>
                   position: _slideAnim,
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 32),
+                      horizontal: 24,
+                      vertical: 32,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -114,140 +241,19 @@ class _LoginViewState extends State<LoginView>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const Text(
-                                'Welcome Back',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'Sign in to continue learning',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: AppTheme.textSecondary,
-                                ),
-                              ),
+                              _buildHeader(),
                               const SizedBox(height: 32),
-                              TextField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  labelText: 'Email Address',
-                                  prefixIcon: Icon(Icons.email_outlined),
-                                ),
-                              ),
+                              _buildEmailField(),
                               const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: !_isPasswordVisible,
-                                textInputAction: TextInputAction.done,
-                                style: const TextStyle(color: Colors.white),
-                                onSubmitted: (_) {
-                                  if (!auth.isLoading) _handleLogin(auth);
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                    ),
-                                    onPressed: () => setState(() =>
-                                        _isPasswordVisible =
-                                            !_isPasswordVisible),
-                                  ),
-                                ),
-                              ),
+                              _buildPasswordField(auth),
                               const SizedBox(height: 8),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ForgotPasswordView(),
-                                    ),
-                                  ),
-                                  child: const Text('Forgot Password?'),
-                                ),
-                              ),
+                              _buildForgotPasswordButton(),
                               const SizedBox(height: 24),
-                              GlassButton(
-                                onPressed: auth.isLoading
-                                    ? null
-                                    : () => _handleLogin(auth),
-                                child: Center(
-                                  child: auth.isLoading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Sign In',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                ),
-                              ),
+                              _buildSignInButton(auth),
                               const SizedBox(height: 24),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16),
-                                    child: Text(
-                                      'or continue with',
-                                      style: TextStyle(
-                                        color: AppTheme.textMuted,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Divider(
-                                      color:
-                                          AppTheme.textMuted.withValues(alpha:0.3),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              _buildDivider(),
                               const SizedBox(height: 24),
-                              OutlinedButton.icon(
-                                onPressed: auth.isLoading
-                                    ? null
-                                    : () => _handleGoogleSignIn(auth),
-                                icon: const Text('G',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                label: const Text('Continue with Google'),
-                                style: OutlinedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                ),
-                              ),
+                              _buildGoogleSignInButton(auth),
                             ],
                           ),
                         ),
@@ -263,7 +269,8 @@ class _LoginViewState extends State<LoginView>
                               onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const SignupView()),
+                                  builder: (_) => const SignupView(),
+                                ),
                               ),
                               child: const Text('Sign Up'),
                             ),
