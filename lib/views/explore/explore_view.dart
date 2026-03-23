@@ -81,20 +81,24 @@ class _ExploreViewState extends State<ExploreView> {
   }
 
   void _filterContent() {
-    final query = _searchController.text.toLowerCase();
+    final query = _searchController.text.trim();
+    final isQueryEmpty = query.isEmpty;
+    final searchRegex = isQueryEmpty
+        ? null
+        : RegExp(RegExp.escape(query), caseSensitive: false);
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = query.isEmpty ||
-            v.title.toLowerCase().contains(query) ||
-            v.description.toLowerCase().contains(query);
+        final matchesSearch = isQueryEmpty ||
+            searchRegex!.hasMatch(v.title) ||
+            searchRegex.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = query.isEmpty ||
-            c.title.toLowerCase().contains(query) ||
-            c.description.toLowerCase().contains(query);
+        final matchesSearch = isQueryEmpty ||
+            searchRegex!.hasMatch(c.title) ||
+            searchRegex.hasMatch(c.description);
         final matchesCategory =
             _selectedCategory == 'All' || c.category == _selectedCategory;
         return matchesSearch && matchesCategory;
