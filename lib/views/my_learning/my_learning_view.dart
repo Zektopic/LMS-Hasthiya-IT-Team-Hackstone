@@ -27,17 +27,13 @@ class MyLearningView extends StatelessWidget {
               const SizedBox(height: 4),
               const Text(
                 'Track your progress',
-                style: TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 15,
-                ),
+                style: TextStyle(color: AppTheme.textSecondary, fontSize: 15),
               ),
               const SizedBox(height: 24),
               // Tabs
               GlassCard(
                 borderRadius: 14,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Row(
                   children: [
                     _buildTab('In Progress', true),
@@ -47,9 +43,7 @@ class MyLearningView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Expanded(
-                child: _buildEmptyState(),
-              ),
+              Expanded(child: _buildEmptyState()),
             ],
           ),
         ),
@@ -89,7 +83,7 @@ class MyLearningView extends StatelessWidget {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: AppTheme.secondaryColor.withValues(alpha:0.12),
+                color: AppTheme.secondaryColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -101,10 +95,7 @@ class MyLearningView extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               'Start Learning',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -119,8 +110,7 @@ class MyLearningView extends StatelessWidget {
             const SizedBox(height: 28),
             GlassButton(
               onPressed: onExplore,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

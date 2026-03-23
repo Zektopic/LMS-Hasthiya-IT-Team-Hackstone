@@ -28,3 +28,7 @@
 ## 2024-05-23 - Flutter List Virtualization
 **Learning:** In Flutter, rendering large collections using a standard `ListView` with eagerly built children (like `..._filteredCourses.map(...)`) causes all list items to be instantiated immediately. This can lead to severe UI stuttering, dropped frames, and excessive memory consumption as the dataset grows, especially when list items contain complex UI trees or images.
 **Action:** Always use virtualization components like `ListView.builder` or `CustomScrollView` with `SliverList.builder` for unbounded or potentially large lists to ensure widgets are only built dynamically as they become visible in the viewport.
+
+## 2024-05-24 - Flutter IndexedStack Eager Initialization
+**Learning:** In Flutter, the `IndexedStack` widget eager-initializes and builds all of its children on creation, even the ones that are not currently visible (index != currentIndex). In our app's `MainShell`, this meant `ExploreView` was executing its `initState` logic on app launch, triggering heavy, unbounded Firestore queries (`getVideos()` and `getRecommendedCourses()`) before the user ever visited the tab. This unnecessarily spiked data usage, memory overhead, and Firestore reads on launch.
+**Action:** Always implement lazy initialization for tabs in an `IndexedStack` (or `BottomNavigationBar` setups) by tracking visited tabs in a `Set<int>` and conditionally rendering unvisited tabs as `SizedBox.shrink()` to defer their `initState` execution until they are actually focused.
