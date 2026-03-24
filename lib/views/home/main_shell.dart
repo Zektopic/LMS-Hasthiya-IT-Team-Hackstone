@@ -14,10 +14,15 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
+  // Optimization: Track visited tabs to defer eager initialization of background views
+  final Set<int> _initializedTabs = {0};
 
   void _switchTab(int index) {
     if (index != _currentIndex) {
-      setState(() => _currentIndex = index);
+      setState(() {
+        _currentIndex = index;
+        _initializedTabs.add(index);
+      });
     }
   }
 
@@ -27,10 +32,20 @@ class _MainShellState extends State<MainShell> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          HomeView(onSearchTap: () => _switchTab(1)),
-          const ExploreView(),
-          MyLearningView(onExplore: () => _switchTab(1)),
-          const ProfileView(),
+          // Build only visited tabs; render SizedBox.shrink for unvisited tabs
+          // to prevent redundant API calls during app startup.
+          _initializedTabs.contains(0)
+              ? HomeView(onSearchTap: () => _switchTab(1))
+              : const SizedBox.shrink(),
+          _initializedTabs.contains(1)
+              ? const ExploreView()
+              : const SizedBox.shrink(),
+          _initializedTabs.contains(2)
+              ? MyLearningView(onExplore: () => _switchTab(1))
+              : const SizedBox.shrink(),
+          _initializedTabs.contains(3)
+              ? const ProfileView()
+              : const SizedBox.shrink(),
         ],
       ),
       bottomNavigationBar: GlassNavBar(
