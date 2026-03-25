@@ -187,20 +187,27 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildSearchBar() {
-    return GestureDetector(
-      onTap: widget.onSearchTap,
-      child: GlassCard(
-        borderRadius: 16,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: const Row(
-          children: [
-            Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
-            SizedBox(width: 12),
-            Text(
-              'Search courses, videos...',
-              style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+    return GlassCard(
+      borderRadius: 16,
+      padding: EdgeInsets.zero,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: widget.onSearchTap,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
+                SizedBox(width: 12),
+                Text(
+                  'Search courses, videos...',
+                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
