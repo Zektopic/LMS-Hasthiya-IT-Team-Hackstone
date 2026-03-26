@@ -37,59 +37,68 @@ class ProfileView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 28),
-              _buildStatsRow(),
+              const _StatsRow(),
               const SizedBox(height: 28),
-              _buildSection('Account', [
-                _SettingItem(
-                  icon: Icons.person_outline_rounded,
-                  label: 'Edit Profile',
-                  onTap: () {},
-                ),
-                _SettingItem(
-                  icon: Icons.notifications_none_rounded,
-                  label: 'Notifications',
-                  onTap: () {},
-                ),
-                _SettingItem(
-                  icon: Icons.download_rounded,
-                  label: 'Downloads',
-                  onTap: () {},
-                ),
-              ]),
-              const SizedBox(height: 20),
-              _buildSection('Preferences', [
-                _SettingItem(
-                  icon: Icons.dark_mode_rounded,
-                  label: 'Appearance',
-                  trailing: const Text(
-                    'Dark',
-                    style: TextStyle(color: AppTheme.textSecondary),
+              _SettingsSection(
+                title: 'Account',
+                items: [
+                  _SettingItemData(
+                    icon: Icons.person_outline_rounded,
+                    label: 'Edit Profile',
+                    onTap: () {},
                   ),
-                  onTap: () {},
-                ),
-                _SettingItem(
-                  icon: Icons.language_rounded,
-                  label: 'Language',
-                  trailing: const Text(
-                    'English',
-                    style: TextStyle(color: AppTheme.textSecondary),
+                  _SettingItemData(
+                    icon: Icons.notifications_none_rounded,
+                    label: 'Notifications',
+                    onTap: () {},
                   ),
-                  onTap: () {},
-                ),
-              ]),
+                  _SettingItemData(
+                    icon: Icons.download_rounded,
+                    label: 'Downloads',
+                    onTap: () {},
+                  ),
+                ],
+              ),
               const SizedBox(height: 20),
-              _buildSection('Support', [
-                _SettingItem(
-                  icon: Icons.help_outline_rounded,
-                  label: 'Help Center',
-                  onTap: () {},
-                ),
-                _SettingItem(
-                  icon: Icons.info_outline_rounded,
-                  label: 'About',
-                  onTap: () {},
-                ),
-              ]),
+              _SettingsSection(
+                title: 'Preferences',
+                items: [
+                  _SettingItemData(
+                    icon: Icons.dark_mode_rounded,
+                    label: 'Appearance',
+                    trailing: const Text(
+                      'Dark',
+                      style: TextStyle(color: AppTheme.textSecondary),
+                    ),
+                    onTap: () {},
+                  ),
+                  _SettingItemData(
+                    icon: Icons.language_rounded,
+                    label: 'Language',
+                    trailing: const Text(
+                      'English',
+                      style: TextStyle(color: AppTheme.textSecondary),
+                    ),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _SettingsSection(
+                title: 'Support',
+                items: [
+                  _SettingItemData(
+                    icon: Icons.help_outline_rounded,
+                    label: 'Help Center',
+                    onTap: () {},
+                  ),
+                  _SettingItemData(
+                    icon: Icons.info_outline_rounded,
+                    label: 'About',
+                    onTap: () {},
+                  ),
+                ],
+              ),
               const SizedBox(height: 28),
               SizedBox(
                 width: double.infinity,
@@ -103,17 +112,15 @@ class ProfileView extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: BorderSide(
-                        color: AppTheme.error.withValues(alpha: 0.3)),
+                      color: AppTheme.error.withValues(alpha: 0.3),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               const Text(
                 'Hackston LMS v1.0.0',
-                style: TextStyle(
-                  color: AppTheme.textMuted,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -177,126 +184,6 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow() {
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildStatItem('0', 'Courses'),
-          Container(
-            width: 1,
-            height: 36,
-            color: Colors.white.withValues(alpha: 0.1),
-          ),
-          _buildStatItem('0h', 'Learning'),
-          Container(
-            width: 1,
-            height: 36,
-            color: Colors.white.withValues(alpha: 0.1),
-          ),
-          _buildStatItem('0', 'Certificates'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppTheme.textSecondary,
-            fontSize: 13,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSection(String title, List<_SettingItem> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 12),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary,
-            ),
-          ),
-        ),
-        GlassCard(
-          borderRadius: 16,
-          child: Column(
-            children: items.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              return Column(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: index == 0 && items.length == 1
-                          ? BorderRadius.circular(16)
-                          : index == 0
-                              ? const BorderRadius.vertical(
-                                  top: Radius.circular(16))
-                              : index == items.length - 1
-                                  ? const BorderRadius.vertical(
-                                      bottom: Radius.circular(16))
-                                  : BorderRadius.zero,
-                      onTap: item.onTap,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 16),
-                        child: Row(
-                          children: [
-                            Icon(item.icon,
-                                color: AppTheme.textSecondary, size: 22),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Text(
-                                item.label,
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            ),
-                            if (item.trailing != null) item.trailing!,
-                            if (item.trailing == null)
-                              const Icon(Icons.chevron_right_rounded,
-                                  color: AppTheme.textMuted, size: 22),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (index < items.length - 1)
-                    Divider(
-                      height: 1,
-                      indent: 54,
-                      color: Colors.white.withValues(alpha: 0.06),
-                    ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
   void _showLogoutDialog(BuildContext context, AuthViewModel auth) {
     showDialog(
       context: context,
@@ -318,8 +205,10 @@ class ProfileView extends StatelessWidget {
               Navigator.pop(ctx);
               auth.logout();
             },
-            child:
-                const Text('Sign Out', style: TextStyle(color: AppTheme.error)),
+            child: const Text(
+              'Sign Out',
+              style: TextStyle(color: AppTheme.error),
+            ),
           ),
         ],
       ),
@@ -327,16 +216,163 @@ class ProfileView extends StatelessWidget {
   }
 }
 
-class _SettingItem {
+// Optimization: Extracted UI leaf nodes into standalone const StatelessWidget classes.
+// This prevents unnecessary rebuilds of static UI elements (like StatsRow and SettingsSection)
+// when the parent view updates due to Provider's context.watch<AuthViewModel>() changes.
+class _StatsRow extends StatelessWidget {
+  const _StatsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const _StatItem(value: '0', label: 'Courses'),
+          Container(
+            width: 1,
+            height: 36,
+            color: Colors.white.withValues(alpha: 0.1),
+          ),
+          const _StatItem(value: '0h', label: 'Learning'),
+          Container(
+            width: 1,
+            height: 36,
+            color: Colors.white.withValues(alpha: 0.1),
+          ),
+          const _StatItem(value: '0', label: 'Certificates'),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String value;
+  final String label;
+
+  const _StatItem({required this.value, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingItemData {
   final IconData icon;
   final String label;
   final Widget? trailing;
   final VoidCallback onTap;
 
-  const _SettingItem({
+  const _SettingItemData({
     required this.icon,
     required this.label,
     this.trailing,
     required this.onTap,
   });
+}
+
+class _SettingsSection extends StatelessWidget {
+  final String title;
+  final List<_SettingItemData> items;
+
+  const _SettingsSection({required this.title, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+        ),
+        GlassCard(
+          borderRadius: 16,
+          child: Column(
+            children: [
+              for (final (index, item) in items.indexed)
+                Column(
+                  children: [
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: index == 0 && items.length == 1
+                            ? BorderRadius.circular(16)
+                            : index == 0
+                                ? const BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  )
+                                : index == items.length - 1
+                                    ? const BorderRadius.vertical(
+                                        bottom: Radius.circular(16),
+                                      )
+                                    : BorderRadius.zero,
+                        onTap: item.onTap,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                item.icon,
+                                color: AppTheme.textSecondary,
+                                size: 22,
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  item.label,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              if (item.trailing != null) item.trailing!,
+                              if (item.trailing == null)
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppTheme.textMuted,
+                                  size: 22,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (index < items.length - 1)
+                      Divider(
+                        height: 1,
+                        indent: 54,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

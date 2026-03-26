@@ -26,8 +26,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   }
 
   Future<void> _initializePlayer() async {
-    _videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(widget.video.videoUrl));
+    _videoPlayerController = VideoPlayerController.networkUrl(
+      Uri.parse(widget.video.videoUrl),
+    );
 
     try {
       await _videoPlayerController.initialize();
@@ -41,8 +42,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline_rounded,
-                    color: AppTheme.error, size: 40),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: AppTheme.error,
+                  size: 40,
+                ),
                 const SizedBox(height: 12),
                 Text(
                   'Playback Error',
@@ -55,7 +59,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 Text(
                   errorMessage,
                   style: const TextStyle(
-                      color: AppTheme.textSecondary, fontSize: 13),
+                    color: AppTheme.textSecondary,
+                    fontSize: 13,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -87,8 +93,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: [
               // Custom app bar
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: Row(
                   children: [
                     GlassCard(
@@ -97,8 +105,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                       child: IconButton(
                         tooltip: 'Back',
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back_rounded,
-                            color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -165,8 +175,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  const Icon(Icons.access_time_rounded,
-                                      color: AppTheme.textMuted, size: 16),
+                                  const Icon(
+                                    Icons.access_time_rounded,
+                                    color: AppTheme.textMuted,
+                                    size: 16,
+                                  ),
                                   const SizedBox(width: 6),
                                   Text(
                                     widget.video.duration!,
@@ -212,8 +225,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.videocam_off_rounded,
-                  color: AppTheme.textMuted, size: 48),
+              const Icon(
+                Icons.videocam_off_rounded,
+                color: AppTheme.textMuted,
+                size: 48,
+              ),
               const SizedBox(height: 12),
               const Text(
                 'Unable to load video',
@@ -228,12 +244,16 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   setState(() => _hasError = false);
                   _initializePlayer();
                 },
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
                 child: const Text(
                   'Retry',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

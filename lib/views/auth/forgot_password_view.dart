@@ -26,10 +26,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _fadeAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOut,
-    );
+    _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
     _animController.forward();
   }
 
@@ -79,8 +76,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
               child: FadeTransition(
                 opacity: _fadeAnim,
                 child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -94,8 +93,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                           child: IconButton(
                             tooltip: 'Back',
                             onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.arrow_back_rounded,
-                                color: Colors.white),
+                            icon: const Icon(
+                              Icons.arrow_back_rounded,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -212,10 +213,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         const SizedBox(height: 24),
         const Text(
           'Check Your Email',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),

@@ -25,9 +25,10 @@ class FakeCollectionReference extends Fake
   @override
   Query<Map<String, dynamic>> limit(int limit) {
     return FakeQuery(
-        documents: documents,
-        shouldThrowError: shouldThrowError,
-        appliedLimit: limit);
+      documents: documents,
+      shouldThrowError: shouldThrowError,
+      appliedLimit: limit,
+    );
   }
 
   @override
@@ -44,10 +45,11 @@ class FakeQuery extends Fake implements Query<Map<String, dynamic>> {
   final bool shouldThrowError;
   final int appliedLimit;
 
-  FakeQuery(
-      {required this.documents,
-      required this.shouldThrowError,
-      required this.appliedLimit});
+  FakeQuery({
+    required this.documents,
+    required this.shouldThrowError,
+    required this.appliedLimit,
+  });
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> get([GetOptions? options]) async {

@@ -80,7 +80,10 @@ class _HomeViewState extends State<HomeView> {
                 const SizedBox(height: 24),
                 _buildSearchBar(),
                 const SizedBox(height: 28),
-                _buildStatsRow(),
+                _StatsRow(
+                  courseCount: _courses.length + _videos.length,
+                  videoCount: _videos.length,
+                ),
                 const SizedBox(height: 32),
                 if (_isLoading)
                   const Center(
@@ -213,81 +216,13 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildStatsRow() {
-    return Row(
-      children: [
-        _buildStatCard(
-          'Courses',
-          '${_courses.length + _videos.length}',
-          Icons.auto_stories_rounded,
-          const [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-        ),
-        const SizedBox(width: 12),
-        _buildStatCard(
-          'Videos',
-          '${_videos.length}',
-          Icons.play_circle_rounded,
-          const [Color(0xFF06B6D4), Color(0xFF3B82F6)],
-        ),
-        const SizedBox(width: 12),
-        _buildStatCard(
-          'Progress',
-          '0%',
-          Icons.trending_up_rounded,
-          const [Color(0xFF10B981), Color(0xFF059669)],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(
-      String label, String value, IconData icon, List<Color> colors) {
-    return Expanded(
-      child: GlassCard(
-        borderRadius: 16,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: colors),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(icon, color: Colors.white, size: 20),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              label,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildSectionHeader(String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         if (_videos.isNotEmpty || _courses.isNotEmpty)
           TextButton(
@@ -336,8 +271,9 @@ class _HomeViewState extends State<HomeView> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                 ),
                 child: Stack(
                   children: [
@@ -353,7 +289,8 @@ class _HomeViewState extends State<HomeView> {
                     if (course.thumbnailUrl.isNotEmpty)
                       ClipRRect(
                         borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(20)),
+                          top: Radius.circular(20),
+                        ),
                         child: CachedNetworkImage(
                           imageUrl: course.thumbnailUrl,
                           fit: BoxFit.cover,
@@ -367,7 +304,9 @@ class _HomeViewState extends State<HomeView> {
                       left: 8,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(8),
@@ -379,13 +318,18 @@ class _HomeViewState extends State<HomeView> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.star_rounded,
-                                  color: Colors.amber, size: 14),
+                              const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 course.rating.toStringAsFixed(1),
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -429,13 +373,13 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildVideoList() {
     return Column(
-      children: _videos.take(5).toList().asMap().entries.map((entry) {
-        final index = entry.key;
-        final video = entry.value;
-        final colors =
-            AppTheme.cardGradients[index % AppTheme.cardGradients.length];
-        return _buildVideoCard(video, colors);
-      }).toList(),
+      children: [
+        for (final (index, video) in _videos.take(5).indexed)
+          _buildVideoCard(
+            video,
+            AppTheme.cardGradients[index % AppTheme.cardGradients.length],
+          ),
+      ],
     );
   }
 
@@ -540,10 +484,7 @@ class _HomeViewState extends State<HomeView> {
           const SizedBox(height: 20),
           const Text(
             'Welcome to Hackston!',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -568,6 +509,93 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Optimization: Extracted UI leaf nodes into standalone const StatelessWidget classes.
+// This prevents unnecessary rebuilds of static UI elements when the parent view updates
+// (e.g., via Provider's context.watch<AuthViewModel>()).
+class _StatsRow extends StatelessWidget {
+  final int courseCount;
+  final int videoCount;
+
+  const _StatsRow({required this.courseCount, required this.videoCount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _StatCard(
+          label: 'Courses',
+          value: '$courseCount',
+          icon: Icons.auto_stories_rounded,
+          colors: const [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
+        const SizedBox(width: 12),
+        _StatCard(
+          label: 'Videos',
+          value: '$videoCount',
+          icon: Icons.play_circle_rounded,
+          colors: const [Color(0xFF06B6D4), Color(0xFF3B82F6)],
+        ),
+        const SizedBox(width: 12),
+        const _StatCard(
+          label: 'Progress',
+          value: '0%',
+          icon: Icons.trending_up_rounded,
+          colors: [Color(0xFF10B981), Color(0xFF059669)],
+        ),
+      ],
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final List<Color> colors;
+
+  const _StatCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GlassCard(
+        borderRadius: 16,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: colors),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: Colors.white, size: 20),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -12,22 +12,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set system UI style for immersive dark theme
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: AppTheme.surfaceColor,
-    systemNavigationBarIconBrightness: Brightness.light,
-  ));
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: AppTheme.surfaceColor,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ),
   );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthViewModel()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => AuthViewModel())],
       child: const HackstonLMS(),
     ),
   );
