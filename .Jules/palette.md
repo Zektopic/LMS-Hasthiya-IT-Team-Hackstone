@@ -7,3 +7,6 @@
 ## 2026-03-16 - [Group Information in Cards for Accessibility]
 **Learning:** Found that visual cards displaying statistics or ratings (like a star icon next to a number) are read separately by screen readers, leading to a disjointed user experience (e.g. reading 'star' then '4.8').
 **Action:** Use `Semantics` with `excludeSemantics: true` around the grouped widgets, and provide a single, clean `label` (e.g. 'Rating: 4.8 stars') to ensure screen readers announce the combined information cohesively.
+## 2026-03-25 - Interactive Components Tap Feedback
+**Learning:** When replacing `GestureDetector` with `Material` and `InkWell` for visual tap feedback inside `GlassCard` components, applying padding globally inside the `InkWell` can break edge-to-edge layouts (like cover images/thumbnails).
+**Action:** Always maintain the exact padding structure of the original component. Shift padding selectively to inner children only where needed, ensuring elements designed to be flush with the card's border retain their styling.
