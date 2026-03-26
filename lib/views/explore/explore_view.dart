@@ -178,39 +178,44 @@ class _ExploreViewState extends State<ExploreView> {
                         final isSelected = category == _selectedCategory;
                         return Padding(
                           padding: const EdgeInsets.only(right: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() => _selectedCategory = category);
-                              _filterContent();
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 8),
-                              decoration: BoxDecoration(
-                                gradient: isSelected
-                                    ? AppTheme.primaryGradient
-                                    : null,
-                                color: isSelected
-                                    ? null
-                                    : Colors.white.withValues(alpha: 0.08),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: BoxDecoration(
+                              gradient:
+                                  isSelected ? AppTheme.primaryGradient : null,
+                              color: isSelected
+                                  ? null
+                                  : Colors.white.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(20),
+                              border: isSelected
+                                  ? null
+                                  : Border.all(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.1)),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
                                 borderRadius: BorderRadius.circular(20),
-                                border: isSelected
-                                    ? null
-                                    : Border.all(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.1)),
-                              ),
-                              child: Text(
-                                category,
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : AppTheme.textSecondary,
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w500,
-                                  fontSize: 14,
+                                onTap: () {
+                                  setState(() => _selectedCategory = category);
+                                  _filterContent();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18, vertical: 8),
+                                  child: Text(
+                                    category,
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : AppTheme.textSecondary,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
