@@ -27,10 +27,7 @@ class MyLearningView extends StatelessWidget {
               const SizedBox(height: 4),
               const Text(
                 'Track your progress',
-                style: TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 15,
-                ),
+                style: TextStyle(color: AppTheme.textSecondary, fontSize: 15),
               ),
               const SizedBox(height: 24),
               // Tabs
@@ -46,9 +43,7 @@ class MyLearningView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Expanded(
-                child: _buildEmptyState(),
-              ),
+              Expanded(child: _buildEmptyState()),
             ],
           ),
         ),
@@ -100,10 +95,7 @@ class MyLearningView extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               'Start Learning',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             const Text(
