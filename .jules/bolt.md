@@ -32,3 +32,7 @@
 ## 2024-05-24 - Flutter IndexedStack Initialization
 **Learning:** In Flutter applications, using a standard `IndexedStack` to manage bottom navigation views eagerly initializes and builds *all* of its children simultaneously upon creation. This causes all hidden views to unnecessarily execute their `initState` lifecycle methods (which often involve expensive operations like API calls to Firestore) during app launch, degrading startup performance and consuming redundant bandwidth.
 **Action:** Avoid eager initialization of all tabs within an `IndexedStack`. Implement a lazy initialization strategy by tracking visited tabs (e.g., using a `Set<int> _initializedTabs`) and conditionally rendering unvisited tabs as `SizedBox.shrink()` to defer their instantiation until the user actually navigates to them.
+
+## 2026-03-27 - Pre-calculated Initials
+**Learning:** In Flutter, complex string manipulations (like `displayName.split(' ').where(...).take(2).map(...).join().toUpperCase()`) placed directly inside a `build` method (e.g., in `HomeView` or `ProfileView`) cause unnecessary overhead and redundant string allocations on every UI rebuild.
+**Action:** Move expensive state-derived computations out of the `build` method and into the view model (e.g., `AuthViewModel`). Pre-calculate the result (like `initials`) when the underlying state changes, so the UI only reads a cached value.

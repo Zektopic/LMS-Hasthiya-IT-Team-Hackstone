@@ -19,17 +19,36 @@ class AuthViewModel extends ChangeNotifier {
   String get email => currentUser?.email ?? '';
   String? get photoUrl => currentUser?.photoURL;
 
+  // Optimization: Pre-calculate initials when user state changes to avoid expensive
+  // string manipulation (split, where, take, map, join) on every UI rebuild
+  String _initials = 'U';
+  String get initials => _initials;
+
   AuthViewModel() {
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
         _isAuthenticated = false;
         _token = null;
+        _initials = 'U';
       } else {
         _isAuthenticated = true;
         _token = user.uid;
+        _updateInitials(user.displayName);
       }
       notifyListeners();
     });
+  }
+
+  void _updateInitials(String? name) {
+    final displayName = name ?? 'Learner';
+    final computedInitials = displayName
+        .split(' ')
+        .where((s) => s.isNotEmpty)
+        .take(2)
+        .map((s) => s[0])
+        .join()
+        .toUpperCase();
+    _initials = computedInitials.isEmpty ? 'U' : computedInitials;
   }
 
   String _parseFirebaseError(dynamic e) {
@@ -61,10 +80,7 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       _isLoading = false;
       notifyListeners();
@@ -103,8 +119,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser =
-          await GoogleSignIn.instance.authenticate();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();
