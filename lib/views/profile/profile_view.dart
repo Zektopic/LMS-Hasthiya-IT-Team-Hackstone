@@ -103,17 +103,15 @@ class ProfileView extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: BorderSide(
-                        color: AppTheme.error.withValues(alpha: 0.3)),
+                      color: AppTheme.error.withValues(alpha: 0.3),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               const Text(
                 'Hackston LMS v1.0.0',
-                style: TextStyle(
-                  color: AppTheme.textMuted,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -206,18 +204,12 @@ class ProfileView extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            color: AppTheme.textSecondary,
-            fontSize: 13,
-          ),
+          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
         ),
       ],
     );
@@ -241,56 +233,66 @@ class ProfileView extends StatelessWidget {
         GlassCard(
           borderRadius: 16,
           child: Column(
-            children: items.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              return Column(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: index == 0 && items.length == 1
-                          ? BorderRadius.circular(16)
-                          : index == 0
-                              ? const BorderRadius.vertical(
-                                  top: Radius.circular(16))
-                              : index == items.length - 1
-                                  ? const BorderRadius.vertical(
-                                      bottom: Radius.circular(16))
-                                  : BorderRadius.zero,
-                      onTap: item.onTap,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 16),
-                        child: Row(
-                          children: [
-                            Icon(item.icon,
-                                color: AppTheme.textSecondary, size: 22),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Text(
-                                item.label,
-                                style: const TextStyle(fontSize: 15),
+            // ⚡ Bolt: Optimize mapping with .indexed for better performance and reduced object allocation
+            children: [
+              for (final (index, item) in items.indexed)
+                Column(
+                  children: [
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: index == 0 && items.length == 1
+                            ? BorderRadius.circular(16)
+                            : index == 0
+                            ? const BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              )
+                            : index == items.length - 1
+                            ? const BorderRadius.vertical(
+                                bottom: Radius.circular(16),
+                              )
+                            : BorderRadius.zero,
+                        onTap: item.onTap,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                item.icon,
+                                color: AppTheme.textSecondary,
+                                size: 22,
                               ),
-                            ),
-                            if (item.trailing != null) item.trailing!,
-                            if (item.trailing == null)
-                              const Icon(Icons.chevron_right_rounded,
-                                  color: AppTheme.textMuted, size: 22),
-                          ],
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  item.label,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              if (item.trailing != null) item.trailing!,
+                              if (item.trailing == null)
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppTheme.textMuted,
+                                  size: 22,
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  if (index < items.length - 1)
-                    Divider(
-                      height: 1,
-                      indent: 54,
-                      color: Colors.white.withValues(alpha: 0.06),
-                    ),
-                ],
-              );
-            }).toList(),
+                    if (index < items.length - 1)
+                      Divider(
+                        height: 1,
+                        indent: 54,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                  ],
+                ),
+            ],
           ),
         ),
       ],
@@ -318,8 +320,10 @@ class ProfileView extends StatelessWidget {
               Navigator.pop(ctx);
               auth.logout();
             },
-            child:
-                const Text('Sign Out', style: TextStyle(color: AppTheme.error)),
+            child: const Text(
+              'Sign Out',
+              style: TextStyle(color: AppTheme.error),
+            ),
           ),
         ],
       ),

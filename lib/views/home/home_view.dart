@@ -230,18 +230,20 @@ class _HomeViewState extends State<HomeView> {
           const [Color(0xFF06B6D4), Color(0xFF3B82F6)],
         ),
         const SizedBox(width: 12),
-        _buildStatCard(
-          'Progress',
-          '0%',
-          Icons.trending_up_rounded,
-          const [Color(0xFF10B981), Color(0xFF059669)],
-        ),
+        _buildStatCard('Progress', '0%', Icons.trending_up_rounded, const [
+          Color(0xFF10B981),
+          Color(0xFF059669),
+        ]),
       ],
     );
   }
 
   Widget _buildStatCard(
-      String label, String value, IconData icon, List<Color> colors) {
+    String label,
+    String value,
+    IconData icon,
+    List<Color> colors,
+  ) {
     return Expanded(
       child: GlassCard(
         borderRadius: 16,
@@ -260,10 +262,7 @@ class _HomeViewState extends State<HomeView> {
             const SizedBox(height: 12),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             Text(
               label,
@@ -284,10 +283,7 @@ class _HomeViewState extends State<HomeView> {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         if (_videos.isNotEmpty || _courses.isNotEmpty)
           TextButton(
@@ -336,8 +332,9 @@ class _HomeViewState extends State<HomeView> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                 ),
                 child: Stack(
                   children: [
@@ -353,7 +350,8 @@ class _HomeViewState extends State<HomeView> {
                     if (course.thumbnailUrl.isNotEmpty)
                       ClipRRect(
                         borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(20)),
+                          top: Radius.circular(20),
+                        ),
                         child: CachedNetworkImage(
                           imageUrl: course.thumbnailUrl,
                           fit: BoxFit.cover,
@@ -367,7 +365,9 @@ class _HomeViewState extends State<HomeView> {
                       left: 8,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(8),
@@ -379,13 +379,18 @@ class _HomeViewState extends State<HomeView> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.star_rounded,
-                                  color: Colors.amber, size: 14),
+                              const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 course.rating.toStringAsFixed(1),
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -429,13 +434,14 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildVideoList() {
     return Column(
-      children: _videos.take(5).toList().asMap().entries.map((entry) {
-        final index = entry.key;
-        final video = entry.value;
-        final colors =
-            AppTheme.cardGradients[index % AppTheme.cardGradients.length];
-        return _buildVideoCard(video, colors);
-      }).toList(),
+      // ⚡ Bolt: Optimize mapping with .indexed for better list generation performance
+      children: [
+        for (final (index, video) in _videos.take(5).indexed)
+          _buildVideoCard(
+            video,
+            AppTheme.cardGradients[index % AppTheme.cardGradients.length],
+          ),
+      ],
     );
   }
 
@@ -540,10 +546,7 @@ class _HomeViewState extends State<HomeView> {
           const SizedBox(height: 20),
           const Text(
             'Welcome to Hackston!',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           const Text(
