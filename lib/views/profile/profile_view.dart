@@ -121,14 +121,6 @@ class ProfileView extends StatelessWidget {
   }
 
   Widget _buildAvatar(AuthViewModel auth) {
-    final initials = auth.displayName
-        .split(' ')
-        .where((s) => s.isNotEmpty)
-        .take(2)
-        .map((s) => s[0])
-        .join()
-        .toUpperCase();
-
     return Container(
       width: 88,
       height: 88,
@@ -152,7 +144,7 @@ class ProfileView extends StatelessWidget {
                 height: 88,
                 errorWidget: (_, __, ___) => Center(
                   child: Text(
-                    initials.isEmpty ? 'U' : initials,
+                    auth.initials,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -164,7 +156,7 @@ class ProfileView extends StatelessWidget {
             )
           : Center(
               child: Text(
-                initials.isEmpty ? 'U' : initials,
+                auth.initials,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
