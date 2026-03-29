@@ -27,9 +27,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LMS Courses'),
-      ),
+      appBar: AppBar(title: const Text('LMS Courses')),
       body: FutureBuilder<List<Video>>(
         future: _videosFuture,
         builder: (context, snapshot) {

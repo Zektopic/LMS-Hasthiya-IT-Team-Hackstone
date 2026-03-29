@@ -20,8 +20,9 @@ class _AboutDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final bodyTextStyle =
-        textTheme.bodyLarge!.apply(color: colorScheme.onPrimary);
+    final bodyTextStyle = textTheme.bodyLarge!.apply(
+      color: colorScheme.onPrimary,
+    );
 
     return AlertDialog(
       title: FutureBuilder<String>(

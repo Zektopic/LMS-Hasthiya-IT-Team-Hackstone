@@ -30,9 +30,7 @@ class GlassCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.12),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
           ),
           child: child,
         ),
@@ -48,6 +46,7 @@ class GlassButton extends StatelessWidget {
   final double borderRadius;
   final EdgeInsetsGeometry padding;
   final Gradient? gradient;
+  final bool isLoading;
 
   const GlassButton({
     super.key,
@@ -56,18 +55,21 @@ class GlassButton extends StatelessWidget {
     this.borderRadius = 16,
     this.padding = const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
     this.gradient,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isDisabled = onPressed == null || isLoading;
+
     return AnimatedOpacity(
-      opacity: onPressed != null ? 1.0 : 0.5,
+      opacity: !isDisabled ? 1.0 : 0.5,
       duration: const Duration(milliseconds: 200),
       child: Container(
         decoration: BoxDecoration(
           gradient: gradient ?? AppTheme.primaryGradient,
           borderRadius: BorderRadius.circular(borderRadius),
-          boxShadow: onPressed != null
+          boxShadow: !isDisabled
               ? [
                   BoxShadow(
                     color: AppTheme.primaryColor.withValues(alpha: 0.35),
@@ -80,11 +82,25 @@ class GlassButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onPressed,
+            onTap: isDisabled ? null : onPressed,
             borderRadius: BorderRadius.circular(borderRadius),
             child: Padding(
               padding: padding,
-              child: child,
+              child: Center(
+                child: isLoading
+                    ? Semantics(
+                        label: 'Loading',
+                        child: const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : child,
+              ),
             ),
           ),
         ),
@@ -102,9 +118,7 @@ class GradientBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: AppTheme.backgroundGradient,
-      ),
+      decoration: const BoxDecoration(gradient: AppTheme.backgroundGradient),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -323,8 +337,9 @@ class _NavItem extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color:
-                      isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                  color: isSelected
+                      ? AppTheme.primaryColor
+                      : AppTheme.textMuted,
                   size: 24,
                 ),
                 const SizedBox(height: 4),
@@ -333,8 +348,9 @@ class _NavItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color:
-                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textMuted,
                   ),
                 ),
               ],
