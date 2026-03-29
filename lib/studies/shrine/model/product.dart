@@ -4,28 +4,18 @@
 import 'package:flutter/material.dart';
 
 class Category {
-  const Category({
-    required this.name,
-  });
+  const Category({required this.name});
 
   final String Function(BuildContext) name;
 }
 
-Category categoryAll = Category(
-  name: (context) => "All",
-);
+Category categoryAll = Category(name: (context) => "All");
 
-Category categoryAccessories = Category(
-  name: (context) => "Accessories",
-);
+Category categoryAccessories = Category(name: (context) => "Accessories");
 
-Category categoryClothing = Category(
-  name: (context) => "Clothing",
-);
+Category categoryClothing = Category(name: (context) => "Clothing");
 
-Category categoryHome = Category(
-  name: (context) => "Home",
-);
+Category categoryHome = Category(name: (context) => "Home");
 
 List<Category> categories = [
   categoryAll,

@@ -195,8 +195,11 @@ class CourseDetailView extends StatelessWidget {
               child: const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.video_library_rounded,
-                        color: AppTheme.textMuted, size: 36),
+                    Icon(
+                      Icons.video_library_rounded,
+                      color: AppTheme.textMuted,
+                      size: 36,
+                    ),
                     SizedBox(height: 12),
                     Text(
                       'Lessons coming soon',
@@ -379,13 +382,16 @@ class CourseDetailView extends StatelessWidget {
                       content: const Text('Enrolled successfully!'),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       backgroundColor: AppTheme.success,
                     ),
                   );
                 },
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 16,
+                ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

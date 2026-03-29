@@ -110,9 +110,7 @@ class AppTheme {
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 0,
         textStyle: GoogleFonts.plusJakartaSans(
           fontSize: 16,
@@ -124,9 +122,7 @@ class AppTheme {
       style: OutlinedButton.styleFrom(
         foregroundColor: textPrimary,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         side: const BorderSide(color: glassBorder),
         textStyle: GoogleFonts.plusJakartaSans(
           fontSize: 16,

@@ -29,17 +29,11 @@ class _SignupViewState extends State<SignupView>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _fadeAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOut,
-    );
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.06),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOutCubic,
-    ));
+    _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
     _animController.forward();
   }
 
@@ -111,7 +105,9 @@ class _SignupViewState extends State<SignupView>
                   position: _slideAnim,
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 32),
+                      horizontal: 24,
+                      vertical: 32,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -182,35 +178,24 @@ class _SignupViewState extends State<SignupView>
                                           ? Icons.visibility_off_outlined
                                           : Icons.visibility_outlined,
                                     ),
-                                    onPressed: () => setState(() =>
-                                        _isPasswordVisible =
-                                            !_isPasswordVisible),
+                                    onPressed: () => setState(
+                                      () => _isPasswordVisible =
+                                          !_isPasswordVisible,
+                                    ),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 28),
                               GlassButton(
-                                onPressed: auth.isLoading
-                                    ? null
-                                    : () => _handleSignup(auth),
-                                child: Center(
-                                  child: auth.isLoading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Create Account',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
+                                onPressed: () => _handleSignup(auth),
+                                isLoading: auth.isLoading,
+                                child: const Text(
+                                  'Create Account',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -218,13 +203,15 @@ class _SignupViewState extends State<SignupView>
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color: AppTheme.textMuted
-                                          .withValues(alpha: 0.3),
+                                      color: AppTheme.textMuted.withValues(
+                                        alpha: 0.3,
+                                      ),
                                     ),
                                   ),
                                   const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
                                     child: Text(
                                       'or continue with',
                                       style: TextStyle(
@@ -235,8 +222,9 @@ class _SignupViewState extends State<SignupView>
                                   ),
                                   Expanded(
                                     child: Divider(
-                                      color: AppTheme.textMuted
-                                          .withValues(alpha: 0.3),
+                                      color: AppTheme.textMuted.withValues(
+                                        alpha: 0.3,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -246,15 +234,18 @@ class _SignupViewState extends State<SignupView>
                                 onPressed: auth.isLoading
                                     ? null
                                     : () => _handleGoogleSignIn(auth),
-                                icon: const Text('G',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                icon: const Text(
+                                  'G',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 label: const Text('Continue with Google'),
                                 style: OutlinedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                 ),
                               ),
                             ],
