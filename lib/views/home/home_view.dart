@@ -167,16 +167,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildInitials(AuthViewModel auth) {
-    final initials = auth.displayName
-        .split(' ')
-        .where((s) => s.isNotEmpty)
-        .take(2)
-        .map((s) => s[0])
-        .join()
-        .toUpperCase();
     return Center(
       child: Text(
-        initials.isEmpty ? 'U' : initials,
+        auth.initials,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,

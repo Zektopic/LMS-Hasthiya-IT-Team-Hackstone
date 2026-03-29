@@ -19,8 +19,26 @@ class AuthViewModel extends ChangeNotifier {
   String get email => currentUser?.email ?? '';
   String? get photoUrl => currentUser?.photoURL;
 
+  // Optimization: Cache calculated initials to prevent expensive regex/string parsing on every build
+  String? _cachedInitials;
+
+  String get initials {
+    if (_cachedInitials != null) return _cachedInitials!;
+    final calculated = displayName
+        .split(' ')
+        .where((s) => s.isNotEmpty)
+        .take(2)
+        .map((s) => s[0])
+        .join()
+        .toUpperCase();
+    _cachedInitials = calculated.isEmpty ? 'U' : calculated;
+    return _cachedInitials!;
+  }
+
   AuthViewModel() {
     _auth.authStateChanges().listen((User? user) {
+      // Clear cached initials when auth state changes
+      _cachedInitials = null;
       if (user == null) {
         _isAuthenticated = false;
         _token = null;
@@ -61,10 +79,7 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       _isLoading = false;
       notifyListeners();
@@ -87,6 +102,8 @@ class AuthViewModel extends ChangeNotifier {
       if (name != null && name.isNotEmpty) {
         await credential.user?.updateDisplayName(name);
         await credential.user?.reload();
+        // Clear cached initials when profile name is updated
+        _cachedInitials = null;
       }
     } catch (e) {
       _isLoading = false;
@@ -103,8 +120,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser =
-          await GoogleSignIn.instance.authenticate();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();
