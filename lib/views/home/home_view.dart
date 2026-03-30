@@ -141,8 +141,9 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () {},
+        Semantics(
+          label: 'Profile settings',
+          button: true,
           child: Container(
             width: 48,
             height: 48,
@@ -150,16 +151,23 @@ class _HomeViewState extends State<HomeView> {
               gradient: AppTheme.primaryGradient,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: auth.photoUrl != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: auth.photoUrl!,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => _buildInitials(auth),
-                    ),
-                  )
-                : _buildInitials(auth),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {},
+                child: auth.photoUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: auth.photoUrl!,
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => _buildInitials(auth),
+                        ),
+                      )
+                    : _buildInitials(auth),
+              ),
+            ),
           ),
         ),
       ],
@@ -304,121 +312,126 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildCourseCard(Course course, List<Color> colors) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => CourseDetailView(course: course)),
-      ),
-      child: Container(
-        width: 200,
-        margin: const EdgeInsets.only(right: 16),
-        child: GlassCard(
-          borderRadius: 20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 110,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: colors,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: -20,
-                      top: -20,
-                      child: Icon(
-                        Icons.auto_stories_rounded,
-                        size: 80,
-                        color: Colors.white.withValues(alpha: 0.15),
-                      ),
+    return Container(
+      width: 200,
+      margin: const EdgeInsets.only(right: 16),
+      child: GlassCard(
+        borderRadius: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => CourseDetailView(course: course)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 110,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    if (course.thumbnailUrl.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        child: CachedNetworkImage(
-                          imageUrl: course.thumbnailUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 110,
-                          errorWidget: (_, __, ___) => const SizedBox(),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        right: -20,
+                        top: -20,
+                        child: Icon(
+                          Icons.auto_stories_rounded,
+                          size: 80,
+                          color: Colors.white.withValues(alpha: 0.15),
                         ),
                       ),
-                    Positioned(
-                      bottom: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                      if (course.thumbnailUrl.isNotEmpty)
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: course.thumbnailUrl,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 110,
+                            errorWidget: (_, __, ___) => const SizedBox(),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Semantics(
-                          excludeSemantics: true,
-                          label:
-                              'Rating: ${course.rating.toStringAsFixed(1)} stars',
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.star_rounded,
-                                color: Colors.amber,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                course.rating.toStringAsFixed(1),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
+                      Positioned(
+                        bottom: 8,
+                        left: 8,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Semantics(
+                            excludeSemantics: true,
+                            label:
+                                'Rating: ${course.rating.toStringAsFixed(1)} stars',
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.star_rounded,
+                                  color: Colors.amber,
+                                  size: 14,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  course.rating.toStringAsFixed(1),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${course.lessons.length} lessons',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.textSecondary,
+                      const SizedBox(height: 6),
+                      Text(
+                        '${course.lessons.length} lessons',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
