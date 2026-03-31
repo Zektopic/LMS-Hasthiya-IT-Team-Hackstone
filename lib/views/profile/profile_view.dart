@@ -192,18 +192,22 @@ class ProfileView extends StatelessWidget {
   }
 
   Widget _buildStatItem(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-        ),
-      ],
+    return Semantics(
+      label: '$value $label',
+      excludeSemantics: true,
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+          ),
+        ],
+      ),
     );
   }
 
