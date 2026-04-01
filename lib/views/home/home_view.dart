@@ -141,25 +141,38 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: auth.photoUrl != null
-                ? ClipRRect(
+        SizedBox(
+          width: 48,
+          height: 48,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: AppTheme.primaryGradient,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: auth.photoUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: auth.photoUrl!,
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => _buildInitials(auth),
+                        ),
+                      )
+                    : _buildInitials(auth),
+              ),
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
                     borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: auth.photoUrl!,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => _buildInitials(auth),
-                    ),
-                  )
-                : _buildInitials(auth),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -308,31 +321,29 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildCourseCard(Course course, List<Color> colors) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => CourseDetailView(course: course)),
-      ),
-      child: Container(
-        width: 200,
-        margin: const EdgeInsets.only(right: 16),
-        child: GlassCard(
-          borderRadius: 20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 110,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: colors,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+    return Container(
+      width: 200,
+      margin: const EdgeInsets.only(right: 16),
+      child: GlassCard(
+        borderRadius: 20,
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 110,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
                   ),
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: Stack(
+                  child: Stack(
                   children: [
                     Positioned(
                       right: -20,
@@ -415,7 +426,20 @@ class _HomeViewState extends State<HomeView> {
               ),
             ],
           ),
-        ),
+          Positioned.fill(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => CourseDetailView(course: course)),
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ],
+      ),
       ),
     );
   }
