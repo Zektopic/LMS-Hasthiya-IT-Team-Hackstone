@@ -21,8 +21,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   bool _hasError = false;
-  final ReviewService _reviewService =
-      ReviewService(contentCollection: 'videos');
+  final ReviewService _reviewService = ReviewService(
+    contentCollection: 'videos',
+  );
 
   @override
   void initState() {
@@ -260,8 +261,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(24),
-                  child:
-                      CircularProgressIndicator(color: AppTheme.primaryColor),
+                  child: CircularProgressIndicator(
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
               );
             }
@@ -290,8 +292,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                           color: AppTheme.primaryColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.rate_review_rounded,
-                            color: AppTheme.primaryColor, size: 22),
+                        child: const Icon(
+                          Icons.rate_review_rounded,
+                          color: AppTheme.primaryColor,
+                          size: 22,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       const Expanded(
@@ -313,8 +318,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: AppTheme.textMuted),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppTheme.textMuted,
+                      ),
                     ],
                   ),
                 ),
@@ -364,8 +371,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                     i < avg.floor()
                                         ? Icons.star_rounded
                                         : i < avg
-                                            ? Icons.star_half_rounded
-                                            : Icons.star_border_rounded,
+                                        ? Icons.star_half_rounded
+                                        : Icons.star_border_rounded,
                                     color: Colors.amber,
                                     size: 20,
                                   );
@@ -382,8 +389,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_right_rounded,
-                            color: AppTheme.textMuted),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppTheme.textMuted,
+                        ),
                       ],
                     ),
                   ),

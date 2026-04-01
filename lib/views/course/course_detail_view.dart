@@ -18,8 +18,9 @@ class CourseDetailView extends StatefulWidget {
 }
 
 class _CourseDetailViewState extends State<CourseDetailView> {
-  final ReviewService _reviewService =
-      ReviewService(contentCollection: 'courses');
+  final ReviewService _reviewService = ReviewService(
+    contentCollection: 'courses',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final colors = AppTheme.cardGradients[
-        widget.course.title.length % AppTheme.cardGradients.length];
+    final colors =
+        AppTheme.cardGradients[widget.course.title.length %
+            AppTheme.cardGradients.length];
 
     return SliverAppBar(
       expandedHeight: 260,
@@ -201,8 +203,11 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               child: const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.video_library_rounded,
-                        color: AppTheme.textMuted, size: 36),
+                    Icon(
+                      Icons.video_library_rounded,
+                      color: AppTheme.textMuted,
+                      size: 36,
+                    ),
                     SizedBox(height: 12),
                     Text(
                       'Lessons coming soon',
@@ -267,8 +272,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(24),
-                    child:
-                        CircularProgressIndicator(color: AppTheme.primaryColor),
+                    child: CircularProgressIndicator(
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                 );
               }
@@ -286,8 +292,11 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                           color: AppTheme.primaryColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.rate_review_rounded,
-                            color: AppTheme.primaryColor, size: 22),
+                        child: const Icon(
+                          Icons.rate_review_rounded,
+                          color: AppTheme.primaryColor,
+                          size: 22,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       const Expanded(
@@ -309,8 +318,10 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: AppTheme.textMuted),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppTheme.textMuted,
+                      ),
                     ],
                   ),
                 );
@@ -361,8 +372,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                       i < avg.floor()
                                           ? Icons.star_rounded
                                           : i < avg
-                                              ? Icons.star_half_rounded
-                                              : Icons.star_border_rounded,
+                                          ? Icons.star_half_rounded
+                                          : Icons.star_border_rounded,
                                       color: Colors.amber,
                                       size: 20,
                                     );
@@ -379,8 +390,10 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right_rounded,
-                              color: AppTheme.textMuted),
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppTheme.textMuted,
+                          ),
                         ],
                       ),
                     ),
@@ -560,18 +573,25 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     child: Text(
                       lesson.title,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 15),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                   if (durationStr.isNotEmpty)
                     Text(
                       durationStr,
                       style: const TextStyle(
-                          color: AppTheme.textMuted, fontSize: 13),
+                        color: AppTheme.textMuted,
+                        fontSize: 13,
+                      ),
                     ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.play_circle_outline_rounded,
-                      color: AppTheme.primaryColor, size: 22),
+                  const Icon(
+                    Icons.play_circle_outline_rounded,
+                    color: AppTheme.primaryColor,
+                    size: 22,
+                  ),
                 ],
               ),
             ),
@@ -608,7 +628,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     const Text(
                       'Enroll for Free',
                       style: TextStyle(
-                          color: AppTheme.textSecondary, fontSize: 12),
+                        color: AppTheme.textSecondary,
+                        fontSize: 12,
+                      ),
                     ),
                     ShaderMask(
                       shaderCallback: (bounds) =>
@@ -632,13 +654,16 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                       content: const Text('Enrolled successfully!'),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       backgroundColor: AppTheme.success,
                     ),
                   );
                 },
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 16,
+                ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
