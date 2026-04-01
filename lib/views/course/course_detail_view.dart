@@ -18,7 +18,8 @@ class CourseDetailView extends StatefulWidget {
 }
 
 class _CourseDetailViewState extends State<CourseDetailView> {
-  final ReviewService _reviewService = ReviewService();
+  final ReviewService _reviewService =
+      ReviewService(contentCollection: 'courses');
 
   @override
   Widget build(BuildContext context) {
@@ -246,8 +247,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => ReviewsView(
-                      courseId: widget.course.id,
-                      courseTitle: widget.course.title,
+                      contentId: widget.course.id,
+                      contentTitle: widget.course.title,
+                      contentCollection: 'courses',
                     ),
                   ),
                 ),
@@ -323,8 +325,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => ReviewsView(
-                      courseId: widget.course.id,
-                      courseTitle: widget.course.title,
+                      contentId: widget.course.id,
+                      contentTitle: widget.course.title,
+                      contentCollection: 'courses',
                     ),
                   ),
                 ),

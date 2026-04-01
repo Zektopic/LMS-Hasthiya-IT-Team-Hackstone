@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import '../../models/video.dart';
+import '../../models/review.dart';
 import '../../core/app_theme.dart';
 import '../../core/glass_widgets.dart';
+import '../../services/review_service.dart';
+import '../course/reviews_view.dart';
 
 class VideoPlayerView extends StatefulWidget {
   final Video video;
@@ -18,6 +21,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   bool _hasError = false;
+  final ReviewService _reviewService =
+      ReviewService(contentCollection: 'videos');
 
   @override
   void initState() {
@@ -206,12 +211,276 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                         ),
                       ),
                       const SizedBox(height: 32),
+                      _buildReviewsPreview(context),
+                      const SizedBox(height: 32),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReviewsPreview(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Reviews',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            TextButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ReviewsView(
+                    contentId: widget.video.id,
+                    contentTitle: widget.video.title,
+                    contentCollection: 'videos',
+                  ),
+                ),
+              ),
+              icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+              label: const Text('See All'),
+              iconAlignment: IconAlignment.end,
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        StreamBuilder<List<Review>>(
+          stream: _reviewService.getReviews(widget.video.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: CircularProgressIndicator(
+                      color: AppTheme.primaryColor),
+                ),
+              );
+            }
+
+            final reviews = snapshot.data ?? [];
+
+            if (reviews.isEmpty) {
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReviewsView(
+                      contentId: widget.video.id,
+                      contentTitle: widget.video.title,
+                      contentCollection: 'videos',
+                    ),
+                  ),
+                ),
+                child: GlassCard(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.rate_review_rounded,
+                            color: AppTheme.primaryColor, size: 22),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'No reviews yet',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Be the first to review this video.',
+                              style: TextStyle(
+                                color: AppTheme.textSecondary,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right_rounded,
+                          color: AppTheme.textMuted),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final avg =
+                reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+
+            return GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ReviewsView(
+                    contentId: widget.video.id,
+                    contentTitle: widget.video.title,
+                    contentCollection: 'videos',
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  GlassCard(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (bounds) =>
+                              AppTheme.primaryGradient.createShader(bounds),
+                          child: Text(
+                            avg.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: List.generate(5, (i) {
+                                  return Icon(
+                                    i < avg.floor()
+                                        ? Icons.star_rounded
+                                        : i < avg
+                                            ? Icons.star_half_rounded
+                                            : Icons.star_border_rounded,
+                                    color: Colors.amber,
+                                    size: 20,
+                                  );
+                                }),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
+                                style: const TextStyle(
+                                  color: AppTheme.textSecondary,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right_rounded,
+                            color: AppTheme.textMuted),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ...reviews.take(2).map((r) => _buildInlineReviewCard(r)),
+                  if (reviews.length > 2)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Center(
+                        child: Text(
+                          '+ ${reviews.length - 2} more review${reviews.length - 2 == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                            color: AppTheme.textSecondary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInlineReviewCard(Review review) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GlassCard(
+        borderRadius: 14,
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      review.userName.isNotEmpty
+                          ? review.userName[0].toUpperCase()
+                          : 'U',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    review.userName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(5, (i) {
+                    return Icon(
+                      i < review.rating
+                          ? Icons.star_rounded
+                          : Icons.star_border_rounded,
+                      color: Colors.amber,
+                      size: 14,
+                    );
+                  }),
+                ),
+              ],
+            ),
+            if (review.comment.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                review.comment,
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ],
         ),
       ),
     );
