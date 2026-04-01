@@ -40,3 +40,6 @@
 ## 2024-05-26 - Flutter String Allocation Overheads
 **Learning:** In Flutter, optimizing simple string parsing (like generating initials from a name) is crucial when placed inside a `ListView.builder`. Chained operations like `.split(' ').where((s) => s.isNotEmpty).take(2).map((s) => s[0]).join().toUpperCase()` allocate multiple intermediate objects (Lists, Iterables, strings) creating unnecessary O(N) memory allocations per item, which triggers frequent garbage collection and causes stutter.
 **Action:** Replace expensive chained operations with a single-pass character loop (`for (var i = 0; i < str.length; i++)`) to construct the necessary string in-place without generating intermediate collections. Avoid micro-optimizing small fixed-size widget lists (like `List.generate(5)`), as the impact is infinitesimal.
+## 2026-04-01 - [RepaintBoundary for Animations]
+ **Learning:** In Flutter, optimize animations that continuously update or shift position (such as `SlideTransition` or `FadeTransition`) by wrapping them in a `RepaintBoundary`. This isolates the animated widget, preventing it from triggering unnecessary and expensive repaints in its parent widget tree.
+ **Action:** Identify static containers holding continuous animations and wrap the animated subtree with `RepaintBoundary` to improve rendering performance.
