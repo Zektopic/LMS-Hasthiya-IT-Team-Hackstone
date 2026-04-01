@@ -38,7 +38,7 @@ jobs:
           distribution: temurin
 
       - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@0ca7a949e71ae44c8e688a51c5e7e93b2c87e295
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           channel: stable
 
@@ -61,7 +61,7 @@ jobs:
     needs: get-version
     steps:
       - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@0ca7a949e71ae44c8e688a51c5e7e93b2c87e295
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           channel: stable
 
