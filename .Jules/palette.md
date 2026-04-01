@@ -14,3 +14,6 @@
 ## 2026-03-29 - [Form Accessibility and Feedback]
 **Learning:** Found that when buttons submit forms using `GlassButton` or similar custom buttons, if they only change opacity to indicate an inactive/loading state, it may be insufficient for accessibility and clear user feedback, especially without an ARIA label or `Semantics` equivalent in Flutter.
 **Action:** Always ensure buttons used for async actions show a visible loading state (like `CircularProgressIndicator`) and have explicit `Semantics` or descriptive labels to indicate their current state (e.g., 'Loading, please wait') to screen readers.
+## 2024-04-01 - Wrap visual data groups in Semantics
+**Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
+**Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
