@@ -19,7 +19,7 @@ dependencies:
   http: ^1.1.0
   cached_network_image: ^3.2.3
   intl: ^0.18.1
-  video_player: ^2.7.0
+  video_player: ^2.11.1
   chewie: ^1.7.0
   package_info_plus: ^9.0.0
   google_sign_in: ^7.2.0
