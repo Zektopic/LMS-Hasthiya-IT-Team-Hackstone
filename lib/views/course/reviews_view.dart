@@ -83,8 +83,7 @@ class _ReviewsViewState extends State<ReviewsView> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppTheme.surfaceColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Delete Review'),
         content: const Text(
           'Are you sure you want to delete your review?',
@@ -96,8 +95,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               child: const Text('Cancel')),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Delete',
-                style: TextStyle(color: AppTheme.error)),
+            child:
+                const Text('Delete', style: TextStyle(color: AppTheme.error)),
           ),
         ],
       ),
@@ -214,8 +213,7 @@ class _ReviewsViewState extends State<ReviewsView> {
           Column(
             children: [
               ShaderMask(
-                shaderCallback: (b) =>
-                    AppTheme.primaryGradient.createShader(b),
+                shaderCallback: (b) => AppTheme.primaryGradient.createShader(b),
                 child: Text(
                   avg == 0 ? '—' : avg.toStringAsFixed(1),
                   style: const TextStyle(
@@ -231,8 +229,7 @@ class _ReviewsViewState extends State<ReviewsView> {
               const SizedBox(height: 4),
               Text(
                 '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                style:
-                    const TextStyle(color: AppTheme.textMuted, fontSize: 12),
+                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -241,8 +238,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             child: Column(
               children: [5, 4, 3, 2, 1].map((star) {
                 final count = counts[star] ?? 0;
-                final frac =
-                    reviews.isEmpty ? 0.0 : count / reviews.length;
+                final frac = reviews.isEmpty ? 0.0 : count / reviews.length;
                 return _distributionBar(star, frac, count);
               }).toList(),
             ),
@@ -270,7 +266,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               borderRadius: BorderRadius.circular(4),
               child: Stack(
                 children: [
-                  Container(height: 6, color: Colors.white.withValues(alpha: 0.08)),
+                  Container(
+                      height: 6, color: Colors.white.withValues(alpha: 0.08)),
                   FractionallySizedBox(
                     widthFactor: fraction,
                     child: Container(
@@ -289,8 +286,7 @@ class _ReviewsViewState extends State<ReviewsView> {
           SizedBox(
             width: 20,
             child: Text('$count',
-                style: const TextStyle(
-                    color: AppTheme.textMuted, fontSize: 11),
+                style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
                 textAlign: TextAlign.end),
           ),
         ],
@@ -321,12 +317,11 @@ class _ReviewsViewState extends State<ReviewsView> {
                 child: Text('You\'ve reviewed this',
                     style: TextStyle(fontWeight: FontWeight.w600))),
             TextButton(
-                onPressed: _showWriteReviewSheet,
-                child: const Text('Edit')),
+                onPressed: _showWriteReviewSheet, child: const Text('Edit')),
             TextButton(
               onPressed: _deleteReview,
-              child: const Text('Delete',
-                  style: TextStyle(color: AppTheme.error)),
+              child:
+                  const Text('Delete', style: TextStyle(color: AppTheme.error)),
             ),
           ],
         ),
@@ -362,12 +357,10 @@ class _ReviewsViewState extends State<ReviewsView> {
                 size: 56, color: AppTheme.textMuted),
             const SizedBox(height: 16),
             const Text('No reviews yet',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text('Be the first to share your experience!',
-                style:
-                    TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+                style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
                 textAlign: TextAlign.center),
           ],
         ),
@@ -398,8 +391,7 @@ class _ReviewsViewState extends State<ReviewsView> {
                         children: [
                           Text(review.userName,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
+                                  fontWeight: FontWeight.w600, fontSize: 14)),
                           if (isOwn) ...[
                             const SizedBox(width: 8),
                             Container(
@@ -433,9 +425,7 @@ class _ReviewsViewState extends State<ReviewsView> {
               Text(
                 review.comment,
                 style: const TextStyle(
-                    color: AppTheme.textSecondary,
-                    fontSize: 14,
-                    height: 1.5),
+                    color: AppTheme.textSecondary, fontSize: 14, height: 1.5),
               ),
             ],
           ],
@@ -445,19 +435,25 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   Widget _avatar(Review review) {
-    final initials = review.userName
-        .split(' ')
-        .where((s) => s.isNotEmpty)
-        .take(2)
-        .map((s) => s[0])
-        .join()
-        .toUpperCase();
+    // ⚡ Bolt: Optimize initials generation to prevent O(N) string allocations inside ListView.builder
+    var initials = '';
+    var isNewWord = true;
+    for (var i = 0; i < review.userName.length; i++) {
+      final char = review.userName[i];
+      if (char == ' ') {
+        isNewWord = true;
+      } else if (isNewWord) {
+        initials += char.toUpperCase();
+        isNewWord = false;
+        if (initials.length >= 2) break;
+      }
+    }
 
     return Container(
       width: 40,
       height: 40,
-      decoration:
-          const BoxDecoration(gradient: AppTheme.primaryGradient, shape: BoxShape.circle),
+      decoration: const BoxDecoration(
+          gradient: AppTheme.primaryGradient, shape: BoxShape.circle),
       child: review.userPhotoUrl != null
           ? ClipOval(
               child: CachedNetworkImage(
@@ -572,8 +568,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
         content: Text(msg),
         backgroundColor: AppTheme.error,
         behavior: SnackBarBehavior.floating,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -609,8 +604,8 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                 : 'Review updated!'),
             backgroundColor: AppTheme.success,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }
@@ -624,8 +619,8 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
   Widget build(BuildContext context) {
     final isEditing = widget.existingReview != null;
     return Padding(
-      padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         decoration: const BoxDecoration(
           color: AppTheme.surfaceColor,
@@ -673,12 +668,11 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 onTap: () =>
                                     setState(() => _selectedRating = i + 1),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   child: AnimatedScale(
                                     scale: filled ? 1.15 : 1.0,
-                                    duration:
-                                        const Duration(milliseconds: 150),
+                                    duration: const Duration(milliseconds: 150),
                                     child: Icon(
                                       filled
                                           ? Icons.star_rounded
@@ -720,11 +714,9 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                       maxLength: 500,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
-                        hintText:
-                            'Share your experience with this content...',
+                        hintText: 'Share your experience with this content...',
                         alignLabelWithHint: true,
-                        counterStyle:
-                            TextStyle(color: AppTheme.textMuted),
+                        counterStyle: TextStyle(color: AppTheme.textMuted),
                       ),
                     ),
                     const SizedBox(height: 24),

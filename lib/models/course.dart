@@ -31,8 +31,7 @@ class Course {
       rating: (data?['rating'] ?? 0.0).toDouble(),
       category: data?['category'] ?? 'General',
       studentCount: data?['studentCount'] ?? 0,
-      lessons:
-          (data?['lessons'] as List<dynamic>?)
+      lessons: (data?['lessons'] as List<dynamic>?)
               ?.map(
                 (lessonData) =>
                     Lesson.fromJson(lessonData as Map<String, dynamic>),

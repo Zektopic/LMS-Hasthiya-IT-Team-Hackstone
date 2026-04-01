@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hackston_lms/core/glass_widgets.dart';
 
 void main() {
-  testWidgets('GlassButton shows CircularProgressIndicator when isLoading is true', (WidgetTester tester) async {
+  testWidgets(
+      'GlassButton shows CircularProgressIndicator when isLoading is true',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -26,7 +28,8 @@ void main() {
     expect(find.text('Sign In'), findsNothing);
   });
 
-  testWidgets('GlassButton shows child when isLoading is false', (WidgetTester tester) async {
+  testWidgets('GlassButton shows child when isLoading is false',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(

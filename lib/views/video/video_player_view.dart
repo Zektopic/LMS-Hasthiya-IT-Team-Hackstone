@@ -260,8 +260,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(24),
-                  child: CircularProgressIndicator(
-                      color: AppTheme.primaryColor),
+                  child:
+                      CircularProgressIndicator(color: AppTheme.primaryColor),
                 ),
               );
             }

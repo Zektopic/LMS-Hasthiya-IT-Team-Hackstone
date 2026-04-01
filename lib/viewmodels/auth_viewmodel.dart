@@ -24,13 +24,19 @@ class AuthViewModel extends ChangeNotifier {
 
   String get initials {
     if (_cachedInitials != null) return _cachedInitials!;
-    final calculated = displayName
-        .split(' ')
-        .where((s) => s.isNotEmpty)
-        .take(2)
-        .map((s) => s[0])
-        .join()
-        .toUpperCase();
+    // ⚡ Bolt: Optimize initials generation to prevent O(N) string allocations from split, where, and map
+    var calculated = '';
+    var isNewWord = true;
+    for (var i = 0; i < displayName.length; i++) {
+      final char = displayName[i];
+      if (char == ' ') {
+        isNewWord = true;
+      } else if (isNewWord) {
+        calculated += char.toUpperCase();
+        isNewWord = false;
+        if (calculated.length >= 2) break;
+      }
+    }
     _cachedInitials = calculated.isEmpty ? 'U' : calculated;
     return _cachedInitials!;
   }
@@ -120,8 +126,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
-          .authenticate();
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn.instance.authenticate();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();
