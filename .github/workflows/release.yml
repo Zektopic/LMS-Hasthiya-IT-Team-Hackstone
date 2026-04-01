@@ -49,7 +49,7 @@ jobs:
       - run: flutter build apk --release
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -75,7 +75,7 @@ jobs:
         run: tar czf web-release.tar.gz -C build/web .
 
       - name: Upload web artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: release-web
           path: web-release.tar.gz
