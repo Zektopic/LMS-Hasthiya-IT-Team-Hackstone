@@ -288,17 +288,21 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildCourseList() {
+    // ⚡ Bolt: Use SingleChildScrollView + Row for short fixed-length lists instead of ListView.builder
+    // to reduce framework overhead for the constrained max-5 item list.
     return SizedBox(
       height: 220,
-      child: ListView.builder(
+      child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        itemCount: _courses.length,
-        itemBuilder: (context, index) {
-          final course = _courses[index];
-          final colors =
-              AppTheme.cardGradients[index % AppTheme.cardGradients.length];
-          return _buildCourseCard(course, colors);
-        },
+        child: Row(
+          children: [
+            for (final (index, course) in _courses.indexed)
+              _buildCourseCard(
+                course,
+                AppTheme.cardGradients[index % AppTheme.cardGradients.length],
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -428,8 +432,9 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildVideoList() {
     return Column(
       // ⚡ Bolt: Optimize mapping with .indexed for better list generation performance
+      // Removed redundant .take(5) as data is already limited by backend query
       children: [
-        for (final (index, video) in _videos.take(5).indexed)
+        for (final (index, video) in _videos.indexed)
           _buildVideoCard(
             video,
             AppTheme.cardGradients[index % AppTheme.cardGradients.length],
