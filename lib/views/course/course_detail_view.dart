@@ -317,8 +317,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               }
 
               // Rating summary bar
-              final avg = reviews.fold(0.0, (s, r) => s + r.rating) /
-                  reviews.length;
+              final avg =
+                  reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
 
               return GestureDetector(
                 onTap: () => Navigator.push(
@@ -637,8 +637,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     ),
                   );
                 },
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
