@@ -249,30 +249,37 @@ class _HomeViewState extends State<HomeView> {
       child: GlassCard(
         borderRadius: 16,
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: colors),
-                borderRadius: BorderRadius.circular(10),
+        child: Semantics(
+          label: '$value $label',
+          excludeSemantics: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: colors),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: Colors.white, size: 20),
               ),
-              child: Icon(icon, color: Colors.white, size: 20),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              label,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 12,
+              const SizedBox(height: 12),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -324,7 +331,8 @@ class _HomeViewState extends State<HomeView> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => CourseDetailView(course: course)),
+                builder: (_) => CourseDetailView(course: course),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
