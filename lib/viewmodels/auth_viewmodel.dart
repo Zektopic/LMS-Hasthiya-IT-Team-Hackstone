@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
@@ -41,7 +41,7 @@ class AuthViewModel extends ChangeNotifier {
     return _cachedInitials!;
   }
 
-  AuthViewModel() {
+  AuthViewModel({FirebaseAuth? auth}) : _auth = auth ?? FirebaseAuth.instance {
     _auth.authStateChanges().listen((User? user) {
       // Clear cached initials when auth state changes
       _cachedInitials = null;
