@@ -240,14 +240,14 @@ class ProfileView extends StatelessWidget {
                         borderRadius: index == 0 && items.length == 1
                             ? BorderRadius.circular(16)
                             : index == 0
-                                ? const BorderRadius.vertical(
-                                    top: Radius.circular(16),
-                                  )
-                                : index == items.length - 1
-                                    ? const BorderRadius.vertical(
-                                        bottom: Radius.circular(16),
-                                      )
-                                    : BorderRadius.zero,
+                            ? const BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              )
+                            : index == items.length - 1
+                            ? const BorderRadius.vertical(
+                                bottom: Radius.circular(16),
+                              )
+                            : BorderRadius.zero,
                         onTap: item.onTap,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(

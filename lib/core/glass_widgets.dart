@@ -39,6 +39,31 @@ class GlassCard extends StatelessWidget {
   }
 }
 
+/// A standard section header for consistent typography across views.
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final Widget? action;
+
+  const SectionHeader({super.key, required this.title, this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    final titleWidget = Text(
+      title,
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    );
+
+    if (action != null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [titleWidget, action!],
+      );
+    }
+
+    return titleWidget;
+  }
+}
+
 /// A gradient button with glow effect.
 class GlassButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -337,8 +362,9 @@ class _NavItem extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color:
-                      isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                  color: isSelected
+                      ? AppTheme.primaryColor
+                      : AppTheme.textMuted,
                   size: 24,
                 ),
                 const SizedBox(height: 4),
@@ -347,8 +373,9 @@ class _NavItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color:
-                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textMuted,
                   ),
                 ),
               ],

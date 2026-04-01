@@ -286,19 +286,14 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildSectionHeader(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        if (_videos.isNotEmpty || _courses.isNotEmpty)
-          TextButton(
-            onPressed: widget.onSearchTap,
-            child: const Text('See All'),
-          ),
-      ],
+    return SectionHeader(
+      title: title,
+      action: (_videos.isNotEmpty || _courses.isNotEmpty)
+          ? TextButton(
+              onPressed: widget.onSearchTap,
+              child: const Text('See All'),
+            )
+          : null,
     );
   }
 
@@ -558,10 +553,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Welcome to Hackston!',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+          const SectionHeader(title: 'Welcome to Hackston!'),
           const SizedBox(height: 8),
           const Text(
             'Courses and videos will appear here once they\'re added to your learning catalog.',
