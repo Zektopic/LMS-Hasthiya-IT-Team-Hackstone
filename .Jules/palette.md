@@ -17,3 +17,6 @@
 ## 2024-04-01 - Wrap visual data groups in Semantics
 **Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
 **Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
+## $(date +%Y-%m-%d) - [Group rating statistics in Semantics for Screen Readers]
+**Learning:** In Flutter, when displaying visually grouped data such as a rating (e.g., a number followed by stars and a review count), placing them in a `Row` or `Column` causes screen readers to read each internal text node disjointedly.
+**Action:** Wrap visually grouped information blocks in a `Semantics` widget with `excludeSemantics: true` and assign a single cohesive string to `label` to improve the accessibility experience.
