@@ -17,3 +17,6 @@
 ## 2024-04-01 - Wrap visual data groups in Semantics
 **Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
 **Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
+## 2026-03-31 - [Interactive Tabs and Dynamic Content]
+**Learning:** In Flutter UX development, when making custom tab-like navigation elements interactive (e.g., using `Material` and `InkWell`), it is crucial to ensure the parent widget manages state (e.g., via `StatefulWidget`) to dynamically update the corresponding content view. Visually changing a tab's active state without updating the underlying content creates a misleading user experience.
+**Action:** Always verify that interactive navigation elements like tabs are fully wired to change the active view's content state, not just their own visual styling.
