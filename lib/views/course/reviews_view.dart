@@ -298,12 +298,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               const SizedBox(height: 4),
               Text(
                 '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-<<<<<<< HEAD
                 style: const TextStyle(
                     color: AppTheme.textMuted, fontSize: 12),
-=======
-                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
               ),
             ],
           ),
@@ -344,12 +340,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               child: Stack(
                 children: [
                   Container(
-<<<<<<< HEAD
                       height: 6,
                       color: Colors.white.withValues(alpha: 0.08)),
-=======
-                      height: 6, color: Colors.white.withValues(alpha: 0.08)),
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
                   FractionallySizedBox(
                     widthFactor: fraction,
                     child: Container(
@@ -452,7 +444,6 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             const SizedBox(height: 20),
             const Text('No reviews yet',
-<<<<<<< HEAD
                 style:
                     TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
@@ -480,13 +471,6 @@ class _ReviewsViewState extends State<ReviewsView> {
                   ],
                 ),
               ),
-=======
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            const Text('Be the first to share your experience!',
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-                textAlign: TextAlign.center),
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
           ],
         ),
       ),
@@ -572,14 +556,10 @@ class _ReviewsViewState extends State<ReviewsView> {
                             child: Text(
                               review.userName,
                               style: const TextStyle(
-<<<<<<< HEAD
                                   fontWeight: FontWeight.w600, fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-=======
-                                  fontWeight: FontWeight.w600, fontSize: 14)),
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
                           if (isOwn) ...[
                             const SizedBox(width: 8),
                             Container(
@@ -673,13 +653,8 @@ class _ReviewsViewState extends State<ReviewsView> {
     }
 
     return Container(
-<<<<<<< HEAD
       width: 42,
       height: 42,
-=======
-      width: 40,
-      height: 40,
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
       decoration: const BoxDecoration(
           gradient: AppTheme.primaryGradient, shape: BoxShape.circle),
       child: review.userPhotoUrl != null
@@ -904,14 +879,8 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: AnimatedScale(
-<<<<<<< HEAD
                                     scale: filled ? 1.2 : 1.0,
-                                    duration: const Duration(
-                                        milliseconds: 150),
-=======
-                                    scale: filled ? 1.15 : 1.0,
                                     duration: const Duration(milliseconds: 150),
->>>>>>> 164e053c9158446a7e04e36ad2dae9388c254a3b
                                     child: Icon(
                                       filled
                                           ? Icons.star_rounded
