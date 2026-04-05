@@ -336,52 +336,56 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     // Summary card
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          ShaderMask(
-                            shaderCallback: (bounds) =>
-                                AppTheme.primaryGradient.createShader(bounds),
-                            child: Text(
-                              avg.toStringAsFixed(1),
-                              style: const TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                      child: Semantics(
+                        excludeSemantics: true,
+                        label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                        child: Row(
+                          children: [
+                            ShaderMask(
+                              shaderCallback: (bounds) =>
+                                  AppTheme.primaryGradient.createShader(bounds),
+                              child: Text(
+                                avg.toStringAsFixed(1),
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: List.generate(5, (i) {
-                                    return Icon(
-                                      i < avg.floor()
-                                          ? Icons.star_rounded
-                                          : i < avg
-                                              ? Icons.star_half_rounded
-                                              : Icons.star_border_rounded,
-                                      color: Colors.amber,
-                                      size: 20,
-                                    );
-                                  }),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                                  style: const TextStyle(
-                                    color: AppTheme.textSecondary,
-                                    fontSize: 13,
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: List.generate(5, (i) {
+                                      return Icon(
+                                        i < avg.floor()
+                                            ? Icons.star_rounded
+                                            : i < avg
+                                                ? Icons.star_half_rounded
+                                                : Icons.star_border_rounded,
+                                        color: Colors.amber,
+                                        size: 20,
+                                      );
+                                    }),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
+                                    style: const TextStyle(
+                                      color: AppTheme.textSecondary,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const Icon(Icons.chevron_right_rounded,
-                              color: AppTheme.textMuted),
-                        ],
+                            const Icon(Icons.chevron_right_rounded,
+                                color: AppTheme.textMuted),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
