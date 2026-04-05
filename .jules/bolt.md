@@ -40,3 +40,7 @@
 ## 2024-05-26 - Flutter String Allocation Overheads
 **Learning:** In Flutter, optimizing simple string parsing (like generating initials from a name) is crucial when placed inside a `ListView.builder`. Chained operations like `.split(' ').where((s) => s.isNotEmpty).take(2).map((s) => s[0]).join().toUpperCase()` allocate multiple intermediate objects (Lists, Iterables, strings) creating unnecessary O(N) memory allocations per item, which triggers frequent garbage collection and causes stutter.
 **Action:** Replace expensive chained operations with a single-pass character loop (`for (var i = 0; i < str.length; i++)`) to construct the necessary string in-place without generating intermediate collections. Avoid micro-optimizing small fixed-size widget lists (like `List.generate(5)`), as the impact is infinitesimal.
+
+## 2024-05-27 - Flutter .map() Iterable Allocation in Widget Trees
+**Learning:** In Flutter, generating widget lists inside the `build` method using spread operators combined with `.map()` (e.g., `...reviews.take(2).map((r) => _buildInlineReviewCard(r))`) allocates intermediate Iterable objects and closures. While seemingly minor, this pattern creates unnecessary garbage collection pressure when the widget tree rebuilds, degrading performance.
+**Action:** Always replace `...collection.map(...)` patterns with Dart's collection `for` loop (e.g., `for (final r in collection) _buildInlineReviewCard(r)`). This constructs the widget list directly in place without creating any intermediate iterable objects, optimizing rendering performance.
