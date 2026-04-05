@@ -386,7 +386,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     ),
                     const SizedBox(height: 10),
                     // First 2 reviews inline
-                    ...reviews.take(2).map((r) => _buildInlineReviewCard(r)),
+                    // ⚡ Bolt: Optimize mapping with collection for better list generation performance
+                    for (final r in reviews.take(2)) _buildInlineReviewCard(r),
                     if (reviews.length > 2)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
