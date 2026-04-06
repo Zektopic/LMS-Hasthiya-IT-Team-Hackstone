@@ -192,7 +192,31 @@ class _ReviewsViewState extends State<ReviewsView> {
 
             final reviews = _sorted(snapshot.data ?? []);
 
-            return ListView(
+            final hasUserReviewAction = !_checkingUserReview;
+            final isReviewsEmpty = reviews.isEmpty;
+
+            // Calculate total items for ListView.builder:
+            // 0: Rating summary
+            // 1: Spacer
+            // 2: User review action (optional)
+            // 3: Spacer
+            // 4: Empty state OR Header
+            // 5: Spacer (if reviews not empty)
+            // 6+: Review cards
+            int itemCount = 2; // Summary + spacer
+            if (hasUserReviewAction) itemCount += 2; // Action + spacer
+
+            int reviewsStartIndex = itemCount;
+
+            if (isReviewsEmpty) {
+              itemCount += 1; // Empty state
+            } else {
+              itemCount += 2; // Header + spacer
+              reviewsStartIndex = itemCount;
+              itemCount += reviews.length;
+            }
+
+            return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
                 MediaQuery.of(context).padding.top +
@@ -201,35 +225,47 @@ class _ReviewsViewState extends State<ReviewsView> {
                 20,
                 40,
               ),
-              children: [
-                _buildRatingSummary(snapshot.data ?? []),
-                const SizedBox(height: 20),
-                if (!_checkingUserReview) _buildWriteReviewRow(),
-                const SizedBox(height: 20),
-                if (reviews.isEmpty)
-                  _buildEmptyState()
-                else ...[
-                  Row(
-                    children: [
-                      Text(
-                        '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _sortBy == _SortBy.newest
-                            ? 'Newest first'
-                            : 'Top rated',
-                        style: const TextStyle(
-                            color: AppTheme.textMuted, fontSize: 13),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  ...reviews.map(_buildReviewCard),
-                ],
-              ],
+              itemCount: itemCount,
+              itemBuilder: (context, index) {
+                int currentIndex = 0;
+
+                if (index == currentIndex++) return _buildRatingSummary(snapshot.data ?? []);
+                if (index == currentIndex++) return const SizedBox(height: 20);
+
+                if (hasUserReviewAction) {
+                  if (index == currentIndex++) return _buildWriteReviewRow();
+                  if (index == currentIndex++) return const SizedBox(height: 20);
+                }
+
+                if (isReviewsEmpty) {
+                  if (index == currentIndex++) return _buildEmptyState();
+                } else {
+                  if (index == currentIndex++) {
+                    return Row(
+                      children: [
+                        Text(
+                          '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        Text(
+                          _sortBy == _SortBy.newest
+                              ? 'Newest first'
+                              : 'Top rated',
+                          style: const TextStyle(
+                              color: AppTheme.textMuted, fontSize: 13),
+                        ),
+                      ],
+                    );
+                  }
+                  if (index == currentIndex++) return const SizedBox(height: 14);
+
+                  return _buildReviewCard(reviews[index - reviewsStartIndex]);
+                }
+
+                return const SizedBox.shrink(); // Fallback
+              },
             );
           },
         ),
