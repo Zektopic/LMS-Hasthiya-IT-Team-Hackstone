@@ -44,3 +44,6 @@
 ## 2024-05-27 - Flutter .map() Iterable Allocation in Widget Trees
 **Learning:** In Flutter, generating widget lists inside the `build` method using spread operators combined with `.map()` (e.g., `...reviews.take(2).map((r) => _buildInlineReviewCard(r))`) allocates intermediate Iterable objects and closures. While seemingly minor, this pattern creates unnecessary garbage collection pressure when the widget tree rebuilds, degrading performance.
 **Action:** Always replace `...collection.map(...)` patterns with Dart's collection `for` loop (e.g., `for (final r in collection) _buildInlineReviewCard(r)`). This constructs the widget list directly in place without creating any intermediate iterable objects, optimizing rendering performance.
+## 2024-05-28 - Flutter .map() and Spread Operator Overhead
+**Learning:** In Flutter/Dart, using the spread operator on a mapped iterable (e.g., `...items.map(...)`) inside a widget's `build` method allocates an intermediate `MappedIterable` object and its associated iterator closures on every build frame. This causes unnecessary garbage collection pressure.
+**Action:** Always replace the `...collection.map(...)` pattern with a collection `for` loop (e.g., `for (final item in items) ...`) inside lists and widget trees to avoid intermediate object allocations and improve rendering performance.
