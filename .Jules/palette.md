@@ -17,3 +17,7 @@
 ## 2024-04-01 - Wrap visual data groups in Semantics
 **Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
 **Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
+
+## 2024-06-18 - Replacing GestureDetector for Filter Chips
+**Learning:** Replacing `GestureDetector` with `Material` + `InkWell` for horizontal scrollable filter chips provides immediate visual feedback, making the app feel more responsive and accessible.
+**Action:** Use `Material` and `InkWell` instead of `GestureDetector` for custom button-like elements such as category filter chips. Ensure padding is moved inside the `InkWell` so the ripple effect covers the entire interactive area.

@@ -47,3 +47,9 @@
 ## 2024-05-28 - Flutter .map() and Spread Operator Overhead
 **Learning:** In Flutter/Dart, using the spread operator on a mapped iterable (e.g., `...items.map(...)`) inside a widget's `build` method allocates an intermediate `MappedIterable` object and its associated iterator closures on every build frame. This causes unnecessary garbage collection pressure.
 **Action:** Always replace the `...collection.map(...)` pattern with a collection `for` loop (e.g., `for (final item in items) ...`) inside lists and widget trees to avoid intermediate object allocations and improve rendering performance.
+## 2024-05-15 - [Avoid eagerly rendering lists to replace ListView.builder]
+**Learning:** [Replacing ListView.builder with SingleChildScrollView containing a Row or Column actually degrades performance by destroying virtualization if the list is not guaranteed to be extremely small and fixed-length.]
+**Action:** [Do not replace ListView.builder with eager rendering wrappers without verifying list bounds and constraints.]
+## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
+**Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
+**Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
