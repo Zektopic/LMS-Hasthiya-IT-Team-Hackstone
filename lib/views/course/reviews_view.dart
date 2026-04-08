@@ -227,7 +227,7 @@ class _ReviewsViewState extends State<ReviewsView> {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  ...reviews.map(_buildReviewCard),
+                  for (final review in reviews) _buildReviewCard(review),
                 ],
               ],
             );
