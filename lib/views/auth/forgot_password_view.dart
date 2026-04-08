@@ -73,41 +73,45 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
-              child: FadeTransition(
-                opacity: _fadeAnim,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 32,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 20),
-                      // Back button
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: GlassCard(
-                          borderRadius: 12,
-                          padding: EdgeInsets.zero,
-                          child: IconButton(
-                            tooltip: 'Back',
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(
-                              Icons.arrow_back_rounded,
-                              color: Colors.white,
+              // ⚡ Bolt: Wrap continuously updating animations (FadeTransition/SlideTransition) in a RepaintBoundary
+              // to prevent expensive repaints in the parent widget tree during the animation.
+              child: RepaintBoundary(
+                child: FadeTransition(
+                  opacity: _fadeAnim,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 32,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 20),
+                        // Back button
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: GlassCard(
+                            borderRadius: 12,
+                            padding: EdgeInsets.zero,
+                            child: IconButton(
+                              tooltip: 'Back',
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(
+                                Icons.arrow_back_rounded,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      GlassCard(
-                        padding: const EdgeInsets.all(28),
-                        child: _emailSent
-                            ? _buildSuccessContent()
-                            : _buildFormContent(auth),
-                      ),
-                    ],
+                        const SizedBox(height: 32),
+                        GlassCard(
+                          padding: const EdgeInsets.all(28),
+                          child: _emailSent
+                              ? _buildSuccessContent()
+                              : _buildFormContent(auth),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

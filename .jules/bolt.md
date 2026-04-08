@@ -44,3 +44,9 @@
 ## 2024-05-27 - Flutter .map() Iterable Allocation in Widget Trees
 **Learning:** In Flutter, generating widget lists inside the `build` method using spread operators combined with `.map()` (e.g., `...reviews.take(2).map((r) => _buildInlineReviewCard(r))`) allocates intermediate Iterable objects and closures. While seemingly minor, this pattern creates unnecessary garbage collection pressure when the widget tree rebuilds, degrading performance.
 **Action:** Always replace `...collection.map(...)` patterns with Dart's collection `for` loop (e.g., `for (final r in collection) _buildInlineReviewCard(r)`). This constructs the widget list directly in place without creating any intermediate iterable objects, optimizing rendering performance.
+## 2024-05-15 - [Avoid eagerly rendering lists to replace ListView.builder]
+**Learning:** [Replacing ListView.builder with SingleChildScrollView containing a Row or Column actually degrades performance by destroying virtualization if the list is not guaranteed to be extremely small and fixed-length.]
+**Action:** [Do not replace ListView.builder with eager rendering wrappers without verifying list bounds and constraints.]
+## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
+**Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
+**Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
