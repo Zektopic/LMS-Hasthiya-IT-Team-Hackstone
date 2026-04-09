@@ -89,14 +89,16 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = isQueryEmpty ||
+        final matchesSearch =
+            isQueryEmpty ||
             searchRegex!.hasMatch(v.title) ||
             searchRegex.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = isQueryEmpty ||
+        final matchesSearch =
+            isQueryEmpty ||
             searchRegex!.hasMatch(c.title) ||
             searchRegex.hasMatch(c.description);
         final matchesCategory =
@@ -144,6 +146,7 @@ class _ExploreViewState extends State<ExploreView> {
                       builder: (context, value, child) {
                         return TextField(
                           controller: _searchController,
+                          textInputAction: TextInputAction.search,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Search courses and videos...',
