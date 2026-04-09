@@ -24,3 +24,9 @@
 ## 2024-06-18 - Replacing GestureDetector for Filter Chips
 **Learning:** Replacing `GestureDetector` with `Material` + `InkWell` for horizontal scrollable filter chips provides immediate visual feedback, making the app feel more responsive and accessible.
 **Action:** Use `Material` and `InkWell` instead of `GestureDetector` for custom button-like elements such as category filter chips. Ensure padding is moved inside the `InkWell` so the ripple effect covers the entire interactive area.
+## 2024-05-18 - [Accessible Interactive Icons]
+**Learning:** Found that using static `GestureDetector` widgets for grid-based interactions like star rating pickers fails to provide native visual tap feedback and implicit semantic traits (like the button role).
+**Action:** When building interactive icon clusters, replace `GestureDetector` with `IconButton` where possible to automatically inherit visual ripple effects, button semantics, and easy `tooltip` integration for screen readers.
+## 2024-05-18 - [Optimized Mobile Keyboard Context]
+**Learning:** Found that generic search `TextField` inputs on mobile display standard "Return" keys, making the call-to-action less clear for users expecting to search.
+**Action:** Always assign `textInputAction: TextInputAction.search` to search-focused input fields to ensure the mobile virtual keyboard correctly displays a distinct "Search" action button.
