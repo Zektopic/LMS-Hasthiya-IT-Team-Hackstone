@@ -21,13 +21,24 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   bool _hasError = false;
-  final ReviewService _reviewService =
-      ReviewService(contentCollection: 'videos');
+  final ReviewService _reviewService = ReviewService(
+    contentCollection: 'videos',
+  );
+  late Stream<List<Review>> _reviewsStream;
 
   @override
   void initState() {
     super.initState();
+    _reviewsStream = _reviewService.getReviews(widget.video.id);
     _initializePlayer();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoPlayerView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.video.id != widget.video.id) {
+      _reviewsStream = _reviewService.getReviews(widget.video.id);
+    }
   }
 
   Future<void> _initializePlayer() async {
@@ -254,14 +265,15 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         ),
         const SizedBox(height: 14),
         StreamBuilder<List<Review>>(
-          stream: _reviewService.getReviews(widget.video.id),
+          stream: _reviewsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(24),
-                  child:
-                      CircularProgressIndicator(color: AppTheme.primaryColor),
+                  child: CircularProgressIndicator(
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
               );
             }
@@ -290,8 +302,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                           color: AppTheme.primaryColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.rate_review_rounded,
-                            color: AppTheme.primaryColor, size: 22),
+                        child: const Icon(
+                          Icons.rate_review_rounded,
+                          color: AppTheme.primaryColor,
+                          size: 22,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       const Expanded(
@@ -313,8 +328,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: AppTheme.textMuted),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppTheme.textMuted,
+                      ),
                     ],
                   ),
                 ),
@@ -341,7 +358,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     padding: const EdgeInsets.all(16),
                     child: Semantics(
                       excludeSemantics: true,
-                      label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                      label:
+                          'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
                       child: Row(
                         children: [
                           ShaderMask(
@@ -367,8 +385,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                       i < avg.floor()
                                           ? Icons.star_rounded
                                           : i < avg
-                                              ? Icons.star_half_rounded
-                                              : Icons.star_border_rounded,
+                                          ? Icons.star_half_rounded
+                                          : Icons.star_border_rounded,
                                       color: Colors.amber,
                                       size: 20,
                                     );
@@ -385,8 +403,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right_rounded,
-                              color: AppTheme.textMuted),
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppTheme.textMuted,
+                          ),
                         ],
                       ),
                     ),

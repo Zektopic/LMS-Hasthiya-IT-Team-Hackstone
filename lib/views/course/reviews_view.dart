@@ -27,17 +27,28 @@ class ReviewsView extends StatefulWidget {
 }
 
 class _ReviewsViewState extends State<ReviewsView> {
-  late final ReviewService _reviewService =
-      ReviewService(contentCollection: widget.contentCollection);
+  late final ReviewService _reviewService = ReviewService(
+    contentCollection: widget.contentCollection,
+  );
 
   Review? _userReview;
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
+  late Stream<List<Review>> _reviewsStream;
 
   @override
   void initState() {
     super.initState();
+    _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.contentId != widget.contentId) {
+      _reviewsStream = _reviewService.getReviews(widget.contentId);
+    }
   }
 
   Future<void> _checkUserReview() async {
@@ -108,8 +119,10 @@ class _ReviewsViewState extends State<ReviewsView> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child:
-                const Text('Delete', style: TextStyle(color: AppTheme.error)),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppTheme.error),
+            ),
           ),
         ],
       ),
@@ -139,14 +152,17 @@ class _ReviewsViewState extends State<ReviewsView> {
             const Text(
               'Reviews',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             Text(
               widget.contentTitle,
               style: const TextStyle(
-                  color: AppTheme.textSecondary, fontSize: 12),
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -158,7 +174,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             onSelected: (v) => setState(() => _sortBy = v),
             color: AppTheme.surfaceColor,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
+              borderRadius: BorderRadius.circular(14),
+            ),
             icon: Icon(
               _sortBy == _SortBy.newest
                   ? Icons.schedule_rounded
@@ -166,10 +183,12 @@ class _ReviewsViewState extends State<ReviewsView> {
               color: Colors.white,
             ),
             itemBuilder: (_) => [
-              _sortMenuItem(_SortBy.newest, Icons.schedule_rounded,
-                  'Newest First'),
               _sortMenuItem(
-                  _SortBy.topRated, Icons.star_rounded, 'Top Rated'),
+                _SortBy.newest,
+                Icons.schedule_rounded,
+                'Newest First',
+              ),
+              _sortMenuItem(_SortBy.topRated, Icons.star_rounded, 'Top Rated'),
             ],
           ),
           const SizedBox(width: 4),
@@ -177,12 +196,11 @@ class _ReviewsViewState extends State<ReviewsView> {
       ),
       body: GradientBackground(
         child: StreamBuilder<List<Review>>(
-          stream: _reviewService.getReviews(widget.contentId),
+          stream: _reviewsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                    color: AppTheme.primaryColor),
+                child: CircularProgressIndicator(color: AppTheme.primaryColor),
               );
             }
 
@@ -195,9 +213,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             return ListView(
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top +
-                    kToolbarHeight +
-                    16,
+                MediaQuery.of(context).padding.top + kToolbarHeight + 16,
                 20,
                 40,
               ),
@@ -214,7 +230,9 @@ class _ReviewsViewState extends State<ReviewsView> {
                       Text(
                         '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
                         style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Spacer(),
                       Text(
@@ -222,7 +240,9 @@ class _ReviewsViewState extends State<ReviewsView> {
                             ? 'Newest first'
                             : 'Top rated',
                         style: const TextStyle(
-                            color: AppTheme.textMuted, fontSize: 13),
+                          color: AppTheme.textMuted,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
@@ -238,22 +258,26 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   PopupMenuItem<_SortBy> _sortMenuItem(
-      _SortBy value, IconData icon, String label) {
+    _SortBy value,
+    IconData icon,
+    String label,
+  ) {
     final isActive = _sortBy == value;
     return PopupMenuItem(
       value: value,
       child: Row(
         children: [
-          Icon(icon,
-              size: 18,
-              color: isActive ? AppTheme.primaryColor : AppTheme.textSecondary),
+          Icon(
+            icon,
+            size: 18,
+            color: isActive ? AppTheme.primaryColor : AppTheme.textSecondary,
+          ),
           const SizedBox(width: 10),
           Text(
             label,
             style: TextStyle(
               color: isActive ? AppTheme.primaryColor : Colors.white,
-              fontWeight:
-                  isActive ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],
@@ -298,8 +322,7 @@ class _ReviewsViewState extends State<ReviewsView> {
               const SizedBox(height: 4),
               Text(
                 '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                style: const TextStyle(
-                    color: AppTheme.textMuted, fontSize: 12),
+                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -325,11 +348,14 @@ class _ReviewsViewState extends State<ReviewsView> {
         children: [
           SizedBox(
             width: 10,
-            child: Text('$star',
-                style: const TextStyle(
-                    color: AppTheme.textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600)),
+            child: Text(
+              '$star',
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           const SizedBox(width: 4),
           const Icon(Icons.star_rounded, color: Colors.amber, size: 12),
@@ -340,8 +366,9 @@ class _ReviewsViewState extends State<ReviewsView> {
               child: Stack(
                 children: [
                   Container(
-                      height: 6,
-                      color: Colors.white.withValues(alpha: 0.08)),
+                    height: 6,
+                    color: Colors.white.withValues(alpha: 0.08),
+                  ),
                   FractionallySizedBox(
                     widthFactor: fraction,
                     child: Container(
@@ -359,9 +386,11 @@ class _ReviewsViewState extends State<ReviewsView> {
           const SizedBox(width: 8),
           SizedBox(
             width: 20,
-            child: Text('$count',
-                style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
-                textAlign: TextAlign.end),
+            child: Text(
+              '$count',
+              style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),
@@ -385,20 +414,29 @@ class _ReviewsViewState extends State<ReviewsView> {
                 color: AppTheme.success.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.check_circle_rounded,
-                  color: AppTheme.success, size: 20),
+              child: const Icon(
+                Icons.check_circle_rounded,
+                color: AppTheme.success,
+                size: 20,
+              ),
             ),
             const SizedBox(width: 12),
             const Expanded(
-              child: Text("You've reviewed this",
-                  style: TextStyle(fontWeight: FontWeight.w600)),
+              child: Text(
+                "You've reviewed this",
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
             TextButton(
-                onPressed: _showWriteReviewSheet, child: const Text('Edit')),
+              onPressed: _showWriteReviewSheet,
+              child: const Text('Edit'),
+            ),
             TextButton(
               onPressed: _deleteReview,
-              child:
-                  const Text('Delete', style: TextStyle(color: AppTheme.error)),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppTheme.error),
+              ),
             ),
           ],
         ),
@@ -413,11 +451,14 @@ class _ReviewsViewState extends State<ReviewsView> {
           children: [
             Icon(Icons.rate_review_rounded, color: Colors.white, size: 20),
             SizedBox(width: 8),
-            Text('Write a Review',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              'Write a Review',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       ),
@@ -439,18 +480,25 @@ class _ReviewsViewState extends State<ReviewsView> {
                 color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.rate_review_outlined,
-                  size: 40, color: AppTheme.primaryColor),
+              child: const Icon(
+                Icons.rate_review_outlined,
+                size: 40,
+                color: AppTheme.primaryColor,
+              ),
             ),
             const SizedBox(height: 20),
-            const Text('No reviews yet',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              'No reviews yet',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             const Text(
               'Be the first to share your experience!',
               style: TextStyle(
-                  color: AppTheme.textSecondary, fontSize: 15, height: 1.5),
+                color: AppTheme.textSecondary,
+                fontSize: 15,
+                height: 1.5,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 28),
@@ -458,16 +506,21 @@ class _ReviewsViewState extends State<ReviewsView> {
               GlassButton(
                 onPressed: _showWriteReviewSheet,
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 14),
+                  horizontal: 28,
+                  vertical: 14,
+                ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.edit_rounded, color: Colors.white, size: 18),
                     SizedBox(width: 8),
-                    Text('Write a Review',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600)),
+                    Text(
+                      'Write a Review',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -491,35 +544,39 @@ class _ReviewsViewState extends State<ReviewsView> {
                 color: AppTheme.error.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.cloud_off_rounded,
-                  size: 36, color: AppTheme.error),
+              child: const Icon(
+                Icons.cloud_off_rounded,
+                size: 36,
+                color: AppTheme.error,
+              ),
             ),
             const SizedBox(height: 20),
-            const Text('Could not load reviews',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              'Could not load reviews',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             const Text(
               'Check your internet connection and try again.',
-              style:
-                  TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             GlassButton(
               onPressed: () => setState(() {}),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.refresh_rounded,
-                      color: Colors.white, size: 18),
+                  Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
                   SizedBox(width: 8),
-                  Text('Retry',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600)),
+                  Text(
+                    'Retry',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -556,7 +613,9 @@ class _ReviewsViewState extends State<ReviewsView> {
                             child: Text(
                               review.userName,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -564,25 +623,35 @@ class _ReviewsViewState extends State<ReviewsView> {
                             const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppTheme.primaryColor
-                                    .withValues(alpha: 0.15),
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.15,
+                                ),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: const Text('You',
-                                  style: TextStyle(
-                                      color: AppTheme.primaryColor,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600)),
+                              child: const Text(
+                                'You',
+                                style: TextStyle(
+                                  color: AppTheme.primaryColor,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ],
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(_formatDate(review.createdAt),
-                          style: const TextStyle(
-                              color: AppTheme.textMuted, fontSize: 12)),
+                      Text(
+                        _formatDate(review.createdAt),
+                        style: const TextStyle(
+                          color: AppTheme.textMuted,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -594,7 +663,10 @@ class _ReviewsViewState extends State<ReviewsView> {
               Text(
                 review.comment,
                 style: const TextStyle(
-                    color: AppTheme.textSecondary, fontSize: 14, height: 1.5),
+                  color: AppTheme.textSecondary,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
               ),
             ],
             if (isOwn) ...[
@@ -609,23 +681,29 @@ class _ReviewsViewState extends State<ReviewsView> {
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.primaryColor,
                       textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                     ),
                   ),
                   TextButton.icon(
                     onPressed: _deleteReview,
-                    icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        size: 14),
+                    icon: const Icon(Icons.delete_outline_rounded, size: 14),
                     label: const Text('Delete'),
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.error,
                       textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                     ),
                   ),
                 ],
@@ -656,27 +734,35 @@ class _ReviewsViewState extends State<ReviewsView> {
       width: 42,
       height: 42,
       decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient, shape: BoxShape.circle),
+        gradient: AppTheme.primaryGradient,
+        shape: BoxShape.circle,
+      ),
       child: review.userPhotoUrl != null
           ? ClipOval(
               child: CachedNetworkImage(
                 imageUrl: review.userPhotoUrl!,
                 fit: BoxFit.cover,
                 errorWidget: (_, __, ___) => Center(
-                  child: Text(initials.isEmpty ? 'U' : initials,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15)),
+                  child: Text(
+                    initials.isEmpty ? 'U' : initials,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ),
             )
           : Center(
-              child: Text(initials.isEmpty ? 'U' : initials,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15)),
+              child: Text(
+                initials.isEmpty ? 'U' : initials,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
             ),
     );
   }
@@ -689,8 +775,8 @@ class _ReviewsViewState extends State<ReviewsView> {
           i < rating.floor()
               ? Icons.star_rounded
               : i < rating
-                  ? Icons.star_half_rounded
-                  : Icons.star_border_rounded,
+              ? Icons.star_half_rounded
+              : Icons.star_border_rounded,
           color: Colors.amber,
           size: size,
         );
@@ -736,20 +822,14 @@ class _WriteReviewSheet extends StatefulWidget {
 }
 
 class _WriteReviewSheetState extends State<_WriteReviewSheet> {
-  late final ReviewService _reviewService =
-      ReviewService(contentCollection: widget.contentCollection);
+  late final ReviewService _reviewService = ReviewService(
+    contentCollection: widget.contentCollection,
+  );
   final TextEditingController _commentController = TextEditingController();
   int _selectedRating = 0;
   bool _isSubmitting = false;
 
-  static const _labels = [
-    '',
-    'Poor',
-    'Fair',
-    'Good',
-    'Great',
-    'Excellent'
-  ];
+  static const _labels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 
   @override
   void initState() {
@@ -805,13 +885,16 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
         widget.onSubmitted(review);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(widget.existingReview == null
-                ? 'Review submitted!'
-                : 'Review updated!'),
+            content: Text(
+              widget.existingReview == null
+                  ? 'Review submitted!'
+                  : 'Review updated!',
+            ),
             backgroundColor: AppTheme.success,
             behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         );
       }
@@ -825,8 +908,9 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
   Widget build(BuildContext context) {
     final isEditing = widget.existingReview != null;
     return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
         decoration: const BoxDecoration(
           color: AppTheme.surfaceColor,
@@ -853,13 +937,17 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                     Text(
                       isEditing ? 'Edit Your Review' : 'Rate this Content',
                       style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     const Text(
                       'Your feedback helps others make better decisions.',
                       style: TextStyle(
-                          color: AppTheme.textSecondary, fontSize: 14),
+                        color: AppTheme.textSecondary,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     // Star picker
@@ -876,12 +964,12 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                   setState(() => _selectedRating = i + 1);
                                 },
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                  ),
                                   child: AnimatedScale(
                                     scale: filled ? 1.2 : 1.0,
-                                    duration: const Duration(
-                                        milliseconds: 150),
+                                    duration: const Duration(milliseconds: 150),
                                     child: Icon(
                                       filled
                                           ? Icons.star_rounded
@@ -937,17 +1025,17 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white),
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
                               )
                             : Text(
-                                isEditing
-                                    ? 'Update Review'
-                                    : 'Submit Review',
+                                isEditing ? 'Update Review' : 'Submit Review',
                                 style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                       ),
                     ),
