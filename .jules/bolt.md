@@ -53,3 +53,7 @@
 ## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
 **Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
 **Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
+## 2026-04-10 - StreamBuilder Initialization
+
+**Learning:** Calling a stream getter method directly inside the `stream` parameter of a `StreamBuilder` causes the stream to be recreated on every widget rebuild. This leads to redundant subscriptions and unnecessary resource allocations, especially for things like Firestore listeners.
+**Action:** Always initialize the stream inside the `initState` of a StatefulWidget and pass the cached stream reference to the `StreamBuilder`. Remember to implement `didUpdateWidget` to recreate the stream if its dependencies change.

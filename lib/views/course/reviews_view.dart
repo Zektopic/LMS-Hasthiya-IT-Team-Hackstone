@@ -34,10 +34,22 @@ class _ReviewsViewState extends State<ReviewsView> {
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
 
+  late Stream<List<Review>> _reviewsStream;
+
   @override
   void initState() {
     super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
+    _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.contentId != widget.contentId) {
+      _reviewsStream = _reviewService.getReviews(widget.contentId);
+    }
   }
 
   Future<void> _checkUserReview() async {
@@ -145,8 +157,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             Text(
               widget.contentTitle,
-              style: const TextStyle(
-                  color: AppTheme.textSecondary, fontSize: 12),
+              style:
+                  const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -157,8 +169,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             initialValue: _sortBy,
             onSelected: (v) => setState(() => _sortBy = v),
             color: AppTheme.surfaceColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             icon: Icon(
               _sortBy == _SortBy.newest
                   ? Icons.schedule_rounded
@@ -166,10 +178,9 @@ class _ReviewsViewState extends State<ReviewsView> {
               color: Colors.white,
             ),
             itemBuilder: (_) => [
-              _sortMenuItem(_SortBy.newest, Icons.schedule_rounded,
-                  'Newest First'),
               _sortMenuItem(
-                  _SortBy.topRated, Icons.star_rounded, 'Top Rated'),
+                  _SortBy.newest, Icons.schedule_rounded, 'Newest First'),
+              _sortMenuItem(_SortBy.topRated, Icons.star_rounded, 'Top Rated'),
             ],
           ),
           const SizedBox(width: 4),
@@ -177,12 +188,11 @@ class _ReviewsViewState extends State<ReviewsView> {
       ),
       body: GradientBackground(
         child: StreamBuilder<List<Review>>(
-          stream: _reviewService.getReviews(widget.contentId),
+          stream: _reviewsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                    color: AppTheme.primaryColor),
+                child: CircularProgressIndicator(color: AppTheme.primaryColor),
               );
             }
 
@@ -195,9 +205,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             return ListView(
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top +
-                    kToolbarHeight +
-                    16,
+                MediaQuery.of(context).padding.top + kToolbarHeight + 16,
                 20,
                 40,
               ),
@@ -252,8 +260,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             label,
             style: TextStyle(
               color: isActive ? AppTheme.primaryColor : Colors.white,
-              fontWeight:
-                  isActive ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],
@@ -298,8 +305,7 @@ class _ReviewsViewState extends State<ReviewsView> {
               const SizedBox(height: 4),
               Text(
                 '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                style: const TextStyle(
-                    color: AppTheme.textMuted, fontSize: 12),
+                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
               ),
             ],
           ),
@@ -340,8 +346,7 @@ class _ReviewsViewState extends State<ReviewsView> {
               child: Stack(
                 children: [
                   Container(
-                      height: 6,
-                      color: Colors.white.withValues(alpha: 0.08)),
+                      height: 6, color: Colors.white.withValues(alpha: 0.08)),
                   FractionallySizedBox(
                     widthFactor: fraction,
                     child: Container(
@@ -444,8 +449,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             const SizedBox(height: 20),
             const Text('No reviews yet',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
               'Be the first to share your experience!',
@@ -457,8 +461,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             if (!_checkingUserReview && _userReview == null)
               GlassButton(
                 onPressed: _showWriteReviewSheet,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -466,8 +470,7 @@ class _ReviewsViewState extends State<ReviewsView> {
                     SizedBox(width: 8),
                     Text('Write a Review',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600)),
+                            color: Colors.white, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -496,30 +499,25 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             const SizedBox(height: 20),
             const Text('Could not load reviews',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
               'Check your internet connection and try again.',
-              style:
-                  TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             GlassButton(
               onPressed: () => setState(() {}),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.refresh_rounded,
-                      color: Colors.white, size: 18),
+                  Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
                   SizedBox(width: 8),
                   Text('Retry',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600)),
+                          color: Colors.white, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -616,9 +614,7 @@ class _ReviewsViewState extends State<ReviewsView> {
                   ),
                   TextButton.icon(
                     onPressed: _deleteReview,
-                    icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        size: 14),
+                    icon: const Icon(Icons.delete_outline_rounded, size: 14),
                     label: const Text('Delete'),
                     style: TextButton.styleFrom(
                       foregroundColor: AppTheme.error,
@@ -742,14 +738,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
   int _selectedRating = 0;
   bool _isSubmitting = false;
 
-  static const _labels = [
-    '',
-    'Poor',
-    'Fair',
-    'Good',
-    'Great',
-    'Excellent'
-  ];
+  static const _labels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 
   @override
   void initState() {
@@ -880,8 +869,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: AnimatedScale(
                                     scale: filled ? 1.2 : 1.0,
-                                    duration: const Duration(
-                                        milliseconds: 150),
+                                    duration: const Duration(milliseconds: 150),
                                     child: Icon(
                                       filled
                                           ? Icons.star_rounded
@@ -937,13 +925,10 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white),
+                                    strokeWidth: 2, color: Colors.white),
                               )
                             : Text(
-                                isEditing
-                                    ? 'Update Review'
-                                    : 'Submit Review',
+                                isEditing ? 'Update Review' : 'Submit Review',
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
