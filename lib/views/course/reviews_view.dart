@@ -859,15 +859,19 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(5, (i) {
                               final filled = i < _selectedRating;
-                              return GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.selectionClick();
-                                  setState(() => _selectedRating = i + 1);
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: AnimatedScale(
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: IconButton(
+                                  tooltip: 'Rate ${i + 1} star${i == 0 ? '' : 's'}',
+                                  iconSize: 48,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {
+                                    HapticFeedback.selectionClick();
+                                    setState(() => _selectedRating = i + 1);
+                                  },
+                                  icon: AnimatedScale(
                                     scale: filled ? 1.2 : 1.0,
                                     duration: const Duration(milliseconds: 150),
                                     child: Icon(
@@ -877,7 +881,6 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                       color: filled
                                           ? Colors.amber
                                           : AppTheme.textMuted,
-                                      size: 48,
                                     ),
                                   ),
                                 ),
