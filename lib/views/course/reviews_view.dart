@@ -202,42 +202,52 @@ class _ReviewsViewState extends State<ReviewsView> {
 
             final reviews = _sorted(snapshot.data ?? []);
 
-            return ListView(
+            // ⚡ Bolt: Use ListView.builder for potentially unbounded datasets to enable virtualization
+            // and prevent UI thread blocking during initial render.
+            return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
                 MediaQuery.of(context).padding.top + kToolbarHeight + 16,
                 20,
                 40,
               ),
-              children: [
-                _buildRatingSummary(snapshot.data ?? []),
-                const SizedBox(height: 20),
-                if (!_checkingUserReview) _buildWriteReviewRow(),
-                const SizedBox(height: 20),
-                if (reviews.isEmpty)
-                  _buildEmptyState()
-                else ...[
-                  Row(
+              itemCount: reviews.isEmpty ? 1 : reviews.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _sortBy == _SortBy.newest
-                            ? 'Newest first'
-                            : 'Top rated',
-                        style: const TextStyle(
-                            color: AppTheme.textMuted, fontSize: 13),
-                      ),
+                      _buildRatingSummary(snapshot.data ?? []),
+                      const SizedBox(height: 20),
+                      if (!_checkingUserReview) _buildWriteReviewRow(),
+                      const SizedBox(height: 20),
+                      if (reviews.isEmpty)
+                        _buildEmptyState()
+                      else ...[
+                        Row(
+                          children: [
+                            Text(
+                              '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            Text(
+                              _sortBy == _SortBy.newest
+                                  ? 'Newest first'
+                                  : 'Top rated',
+                              style: const TextStyle(
+                                  color: AppTheme.textMuted, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                      ],
                     ],
-                  ),
-                  const SizedBox(height: 14),
-                  for (final review in reviews) _buildReviewCard(review),
-                ],
-              ],
+                  );
+                }
+                return _buildReviewCard(reviews[index - 1]);
+              },
             );
           },
         ),
