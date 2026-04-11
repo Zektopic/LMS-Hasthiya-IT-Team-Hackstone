@@ -1,0 +1,4 @@
+💡 What: Converted the eagerly built `ListView` in `ReviewsView` (which iterated over reviews with a `for` loop inside `children`) to use `ListView.builder`.
+🎯 Why: Eagerly building all list items at once destroys virtualization. For potentially unbounded datasets (like a list of reviews), this blocks the UI thread during the initial render and leads to unscalable memory consumption.
+📊 Impact: Significant reduction in memory usage and elimination of initial UI thread blocking when rendering large lists of reviews, maintaining smooth 60fps scrolling.
+🔬 Measurement: Verify that memory consumption remains stable regardless of the number of loaded reviews (using Flutter DevTools), and observe that the initial render time of `ReviewsView` is no longer proportional to the total number of reviews.
