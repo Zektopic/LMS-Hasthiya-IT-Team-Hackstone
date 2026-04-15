@@ -27,3 +27,6 @@
 ## 2024-05-30 - Replace GestureDetector with IconButton for Icon grids
 **Learning:** In Flutter, wrapping interactive icons inside `GestureDetector` fails to provide visual tap feedback (ripple effects) and lacks explicit accessible properties for screen readers, breaking standard UX expectations.
 **Action:** Always prefer `IconButton` to make individual icons interactive. Configure it with a descriptive `tooltip` for immediate screen reader labeling and visual tooltips on hover. Adjust `padding` to `EdgeInsets.zero` and use `constraints: const BoxConstraints()` if you need to match tight previous layout boundaries without losing semantic traits.
+## 2024-05-23 - Screen Reader Accessibility for Visual Ratings
+**Learning:** In Flutter, using a `Row` of individual star icons to represent a rating results in screen readers either ignoring the visual data or unhelpfully announcing "star" multiple times. Grouped visual representations of data need cohesive semantic wrappers.
+**Action:** Always wrap visual groups representing single data points (like star ratings, aggregated numbers, or icon groups) in a `Semantics` widget with `excludeSemantics: true` and a clear, combined `label` (e.g., `label: '${rating} stars'`) to ensure a coherent experience for visually impaired users.
