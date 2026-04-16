@@ -53,3 +53,11 @@
 ## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
 **Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
 **Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
+## 2026-04-10 - StreamBuilder Initialization
+
+**Learning:** Calling a stream getter method directly inside the `stream` parameter of a `StreamBuilder` causes the stream to be recreated on every widget rebuild. This leads to redundant subscriptions and unnecessary resource allocations, especially for things like Firestore listeners.
+**Action:** Always initialize the stream inside the `initState` of a StatefulWidget and pass the cached stream reference to the `StreamBuilder`. Remember to implement `didUpdateWidget` to recreate the stream if its dependencies change.
+## 2024-05-29 - Flutter ListView Eager Building Anti-Pattern
+
+**Learning:** Using `ListView` with a `children` list containing a `for` loop over potentially unbounded datasets (e.g., `for (final review in reviews) _buildReviewCard(review)`) eagerly builds all widgets at once. This completely destroys the virtualization benefits of list views, blocking the main UI thread during the initial render and consuming excessive memory as the dataset grows.
+**Action:** Always replace eagerly constructed `ListView` children with `ListView.builder` for potentially large datasets to ensure list items are only built dynamically as they scroll into view, maintaining smooth 60fps rendering and bounded memory usage.
