@@ -145,6 +145,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'Back',
           icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
@@ -780,23 +781,19 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   Widget _starsRow(double rating, {required double size}) {
-    return Semantics(
-      excludeSemantics: true,
-      label: '${rating.toStringAsFixed(1)} stars',
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(5, (i) {
-          return Icon(
-            i < rating.floor()
-                ? Icons.star_rounded
-                : i < rating
-                ? Icons.star_half_rounded
-                : Icons.star_border_rounded,
-            color: Colors.amber,
-            size: size,
-          );
-        }),
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (i) {
+        return Icon(
+          i < rating.floor()
+              ? Icons.star_rounded
+              : i < rating
+              ? Icons.star_half_rounded
+              : Icons.star_border_rounded,
+          color: Colors.amber,
+          size: size,
+        );
+      }),
     );
   }
 

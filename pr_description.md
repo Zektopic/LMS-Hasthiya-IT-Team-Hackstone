@@ -1,12 +1,9 @@
-💡 What
-Added `textInputAction: TextInputAction.search` and an `onSubmitted` handler to the search `TextField` in `ExploreView`.
+💡 What: Added `tooltip: 'Back'` to the `IconButton` in `lib/views/course/reviews_view.dart`.
 
-🎯 Why
-By default, standard `TextField` widgets do not automatically dismiss the virtual keyboard upon submission. When a user searched for courses or videos, the keyboard remained open, obscuring the results and requiring a manual swipe to dismiss. This change ensures the correct "Search" key is shown on the keyboard and automatically dismisses it upon submission.
+🎯 Why: To improve accessibility for screen readers and provide a helpful tooltip for users hovering over the button. Without a tooltip, an icon-only button lacks semantic context.
 
-📸 Before/After
-*   **Before:** Pressing Enter/Return on the keyboard triggered the search logic, but the keyboard remained on screen.
-*   **After:** The keyboard displays a Search icon on the action button, and tapping it immediately executes the search and collapses the keyboard, revealing the content.
+📸 Before/After:
+- Before: The back button in the reviews view lacked a tooltip.
+- After: Hovering or focusing on the back button now displays a 'Back' tooltip.
 
-♿ Accessibility
-Improves keyboard interaction logic and ensures standard mobile OS behavior is respected.
+♿ Accessibility: Improved accessibility by providing semantic text context for an icon-only button, making it recognizable by assistive technologies like screen readers.
