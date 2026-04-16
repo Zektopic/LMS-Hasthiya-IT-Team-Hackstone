@@ -1026,6 +1026,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                       controller: _commentController,
                       maxLines: 4,
                       maxLength: 500,
+                      textInputAction: TextInputAction.newline,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         hintText: 'Share your experience with this content...',
