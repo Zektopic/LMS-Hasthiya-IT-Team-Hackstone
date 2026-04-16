@@ -1,4 +1,12 @@
-💡 What: Converted the eagerly built `ListView` in `ReviewsView` (which iterated over reviews with a `for` loop inside `children`) to use `ListView.builder`.
-🎯 Why: Eagerly building all list items at once destroys virtualization. For potentially unbounded datasets (like a list of reviews), this blocks the UI thread during the initial render and leads to unscalable memory consumption.
-📊 Impact: Significant reduction in memory usage and elimination of initial UI thread blocking when rendering large lists of reviews, maintaining smooth 60fps scrolling.
-🔬 Measurement: Verify that memory consumption remains stable regardless of the number of loaded reviews (using Flutter DevTools), and observe that the initial render time of `ReviewsView` is no longer proportional to the total number of reviews.
+💡 What
+Added `textInputAction: TextInputAction.search` and an `onSubmitted` handler to the search `TextField` in `ExploreView`.
+
+🎯 Why
+By default, standard `TextField` widgets do not automatically dismiss the virtual keyboard upon submission. When a user searched for courses or videos, the keyboard remained open, obscuring the results and requiring a manual swipe to dismiss. This change ensures the correct "Search" key is shown on the keyboard and automatically dismisses it upon submission.
+
+📸 Before/After
+*   **Before:** Pressing Enter/Return on the keyboard triggered the search logic, but the keyboard remained on screen.
+*   **After:** The keyboard displays a Search icon on the action button, and tapping it immediately executes the search and collapses the keyboard, revealing the content.
+
+♿ Accessibility
+Improves keyboard interaction logic and ensures standard mobile OS behavior is respected.
