@@ -10,16 +10,13 @@
 ## 2026-03-25 - Interactive Components Tap Feedback
 **Learning:** When replacing `GestureDetector` with `Material` and `InkWell` for visual tap feedback inside `GlassCard` components, applying padding globally inside the `InkWell` can break edge-to-edge layouts (like cover images/thumbnails).
 **Action:** Always maintain the exact padding structure of the original component. Shift padding selectively to inner children only where needed, ensuring elements designed to be flush with the card's border retain their styling.
-
-## 2024-05-30 - Replace GestureDetector with Material+InkWell for Interactive Elements
-**Learning:** Using `GestureDetector` for interactive widgets like cards, chips, and navigation items fails to provide visual tap feedback and misses out on implicit accessibility semantics (like screen readers identifying the element as a button).
-**Action:** When wrapping a widget to make it interactive, prefer using `Material` combined with `InkWell` inside the container to automatically provide visual ripple effects and implicit semantic button traits.
+\n## 2024-05-30 - Replace GestureDetector with Material+InkWell for Interactive Elements\n**Learning:** Using `GestureDetector` for interactive widgets like cards, chips, and navigation items fails to provide visual tap feedback and misses out on implicit accessibility semantics (like screen readers identifying the element as a button). \n**Action:** When wrapping a widget to make it interactive, prefer using `Material` combined with `InkWell` inside the container to automatically provide visual ripple effects and implicit semantic button traits.
 ## 2026-03-29 - [Form Accessibility and Feedback]
 **Learning:** Found that when buttons submit forms using `GlassButton` or similar custom buttons, if they only change opacity to indicate an inactive/loading state, it may be insufficient for accessibility and clear user feedback, especially without an ARIA label or `Semantics` equivalent in Flutter.
 **Action:** Always ensure buttons used for async actions show a visible loading state (like `CircularProgressIndicator`) and have explicit `Semantics` or descriptive labels to indicate their current state (e.g., 'Loading, please wait') to screen readers.
 ## 2024-04-01 - Wrap visual data groups in Semantics
 **Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
-**Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., ` `) to prevent screen readers from reading individual elements disjointedly.
+**Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
 
 ## 2024-05-31 - [Interactive Tabs and Dynamic Content]
 **Learning:** Found that custom tab-like navigation elements in Flutter are often built as static `Container`s within `StatelessWidget`s, meaning they lack visual feedback (ripple effect) when tapped, and the surrounding view doesn't update its content based on the active tab, resulting in a confusing UX.
@@ -30,9 +27,3 @@
 ## 2024-05-30 - Replace GestureDetector with IconButton for Icon grids
 **Learning:** In Flutter, wrapping interactive icons inside `GestureDetector` fails to provide visual tap feedback (ripple effects) and lacks explicit accessible properties for screen readers, breaking standard UX expectations.
 **Action:** Always prefer `IconButton` to make individual icons interactive. Configure it with a descriptive `tooltip` for immediate screen reader labeling and visual tooltips on hover. Adjust `padding` to `EdgeInsets.zero` and use `constraints: const BoxConstraints()` if you need to match tight previous layout boundaries without losing semantic traits.
-## 2024-05-23 - Screen Reader Accessibility for Visual Ratings
-**Learning:** In Flutter, using a `Row` of individual star icons to represent a rating results in screen readers either ignoring the visual data or unhelpfully announcing "star" multiple times. Grouped visual representations of data need cohesive semantic wrappers.
-**Action:** Always wrap visual groups representing single data points (like star ratings, aggregated numbers, or icon groups) in a `Semantics` widget with `excludeSemantics: true` and a clear, combined `label` (e.g., `label: '${rating} stars'`) to ensure a coherent experience for visually impaired users.
-## 2024-06-25 - [Search Bar Keyboard Interaction]
-**Learning:** For in-app search experiences on mobile, standard `TextField`s do not auto-dismiss the keyboard when the user presses enter/search on the virtual keyboard. This creates a poor user experience where results are hidden.
-**Action:** Always configure search `TextField`s with `textInputAction: TextInputAction.search` to trigger the correct keyboard icon, and provide an `onSubmitted` callback that dismisses the keyboard explicitly using `FocusScope.of(context).unfocus()`.
