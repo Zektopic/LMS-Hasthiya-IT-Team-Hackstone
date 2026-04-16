@@ -26,9 +26,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   );
   late Stream<List<Review>> _reviewsStream;
 
+  late Stream<List<Review>> _reviewsStream;
+
   @override
   void initState() {
     super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.video.id);
     _initializePlayer();
   }

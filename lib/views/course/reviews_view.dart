@@ -36,9 +36,12 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
+  late Stream<List<Review>> _reviewsStream;
+
   @override
   void initState() {
     super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
   }
@@ -48,6 +51,11 @@ class _ReviewsViewState extends State<ReviewsView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contentId != widget.contentId) {
       _reviewsStream = _reviewService.getReviews(widget.contentId);
+      setState(() {
+        _userReview = null;
+        _checkingUserReview = true;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
     }
   }
 
@@ -143,6 +151,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'Back',
           icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
@@ -210,46 +219,56 @@ class _ReviewsViewState extends State<ReviewsView> {
 
             final reviews = _sorted(snapshot.data ?? []);
 
-            return ListView(
+            // ⚡ Bolt: Use ListView.builder for potentially unbounded datasets to enable virtualization
+            // and prevent UI thread blocking during initial render.
+            return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
                 MediaQuery.of(context).padding.top + kToolbarHeight + 16,
                 20,
                 40,
               ),
-              children: [
-                _buildRatingSummary(snapshot.data ?? []),
-                const SizedBox(height: 20),
-                if (!_checkingUserReview) _buildWriteReviewRow(),
-                const SizedBox(height: 20),
-                if (reviews.isEmpty)
-                  _buildEmptyState()
-                else ...[
-                  Row(
+              itemCount: reviews.isEmpty ? 1 : reviews.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      _buildRatingSummary(snapshot.data ?? []),
+                      const SizedBox(height: 20),
+                      if (!_checkingUserReview) _buildWriteReviewRow(),
+                      const SizedBox(height: 20),
+                      if (reviews.isEmpty)
+                        _buildEmptyState()
+                      else ...[
+                        Row(
+                          children: [
+                            Text(
+                              '${reviews.length} Review${reviews.length == 1 ? '' : 's'}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              _sortBy == _SortBy.newest
+                                  ? 'Newest first'
+                                  : 'Top rated',
+                              style: const TextStyle(
+                                color: AppTheme.textMuted,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _sortBy == _SortBy.newest
-                            ? 'Newest first'
-                            : 'Top rated',
-                        style: const TextStyle(
-                          color: AppTheme.textMuted,
-                          fontSize: 13,
-                        ),
-                      ),
+                        const SizedBox(height: 14),
+                      ],
                     ],
-                  ),
-                  const SizedBox(height: 14),
-                  for (final review in reviews) _buildReviewCard(review),
-                ],
-              ],
+                  );
+                }
+                return _buildReviewCard(reviews[index - 1]);
+              },
             );
           },
         ),
@@ -563,7 +582,9 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             const SizedBox(height: 24),
             GlassButton(
-              onPressed: () => setState(() {}),
+              onPressed: () => setState(() {
+                _reviewsStream = _reviewService.getReviews(widget.contentId);
+              }),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
@@ -958,16 +979,21 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(5, (i) {
                               final filled = i < _selectedRating;
-                              return GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.selectionClick();
-                                  setState(() => _selectedRating = i + 1);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                  ),
-                                  child: AnimatedScale(
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                ),
+                                child: IconButton(
+                                  tooltip:
+                                      'Rate ${i + 1} star${i == 0 ? '' : 's'}',
+                                  iconSize: 48,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {
+                                    HapticFeedback.selectionClick();
+                                    setState(() => _selectedRating = i + 1);
+                                  },
+                                  icon: AnimatedScale(
                                     scale: filled ? 1.2 : 1.0,
                                     duration: const Duration(milliseconds: 150),
                                     child: Icon(
@@ -977,7 +1003,6 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                       color: filled
                                           ? Colors.amber
                                           : AppTheme.textMuted,
-                                      size: 48,
                                     ),
                                   ),
                                 ),
@@ -1009,6 +1034,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                       controller: _commentController,
                       maxLines: 4,
                       maxLength: 500,
+                      textInputAction: TextInputAction.newline,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         hintText: 'Share your experience with this content...',

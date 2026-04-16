@@ -37,6 +37,23 @@ class _CourseDetailViewState extends State<CourseDetailView> {
     }
   }
 
+  late Stream<List<Review>> _reviewsStream;
+
+  @override
+  void initState() {
+    super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
+    _reviewsStream = _reviewService.getReviews(widget.course.id);
+  }
+
+  @override
+  void didUpdateWidget(covariant CourseDetailView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.course.id != widget.course.id) {
+      _reviewsStream = _reviewService.getReviews(widget.course.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

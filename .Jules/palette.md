@@ -24,3 +24,9 @@
 ## 2024-06-18 - Replacing GestureDetector for Filter Chips
 **Learning:** Replacing `GestureDetector` with `Material` + `InkWell` for horizontal scrollable filter chips provides immediate visual feedback, making the app feel more responsive and accessible.
 **Action:** Use `Material` and `InkWell` instead of `GestureDetector` for custom button-like elements such as category filter chips. Ensure padding is moved inside the `InkWell` so the ripple effect covers the entire interactive area.
+## 2024-05-30 - Replace GestureDetector with IconButton for Icon grids
+**Learning:** In Flutter, wrapping interactive icons inside `GestureDetector` fails to provide visual tap feedback (ripple effects) and lacks explicit accessible properties for screen readers, breaking standard UX expectations.
+**Action:** Always prefer `IconButton` to make individual icons interactive. Configure it with a descriptive `tooltip` for immediate screen reader labeling and visual tooltips on hover. Adjust `padding` to `EdgeInsets.zero` and use `constraints: const BoxConstraints()` if you need to match tight previous layout boundaries without losing semantic traits.
+## 2024-06-25 - [Virtual Keyboard Actions and Dismissal]
+**Learning:** Found that when `TextField`s are used for search or multi-line text input (like reviews), they default to a basic submit button on the virtual keyboard. Without an `onSubmitted` handler, hitting 'Search' on the keyboard doesn't dismiss the keyboard, forcing users to awkwardly tap elsewhere on the screen.
+**Action:** In Flutter, ensure `TextField` widgets use the appropriate `textInputAction` for their context (e.g., `TextInputAction.search` for search inputs, `TextInputAction.newline` for multiline inputs). For search fields, provide an `onSubmitted` callback that dismisses the keyboard using `FocusScope.of(context).unfocus()` to improve mobile UX.
