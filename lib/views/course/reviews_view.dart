@@ -316,28 +316,37 @@ class _ReviewsViewState extends State<ReviewsView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            children: [
-              ShaderMask(
-                shaderCallback: (b) => AppTheme.primaryGradient.createShader(b),
-                child: Text(
-                  avg == 0 ? '—' : avg.toStringAsFixed(1),
-                  style: const TextStyle(
-                    fontSize: 52,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    height: 1,
+          Semantics(
+            excludeSemantics: true,
+            label:
+                'Average Rating: ${avg == 0 ? '0' : avg.toStringAsFixed(1)} stars from ${reviews.length} reviews',
+            child: Column(
+              children: [
+                ShaderMask(
+                  shaderCallback: (b) =>
+                      AppTheme.primaryGradient.createShader(b),
+                  child: Text(
+                    avg == 0 ? '—' : avg.toStringAsFixed(1),
+                    style: const TextStyle(
+                      fontSize: 52,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      height: 1,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              _starsRow(avg, size: 18),
-              const SizedBox(height: 4),
-              Text(
-                '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
-              ),
-            ],
+                const SizedBox(height: 8),
+                _starsRow(avg, size: 18),
+                const SizedBox(height: 4),
+                Text(
+                  '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
+                  style: const TextStyle(
+                    color: AppTheme.textMuted,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(width: 20),
           Expanded(
