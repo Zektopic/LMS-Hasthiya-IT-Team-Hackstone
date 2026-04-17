@@ -34,6 +34,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   Review? _userReview;
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
+  late Stream<List<Review>> _reviewsStream;
 
   late Stream<List<Review>> _reviewsStream;
 
@@ -50,6 +51,11 @@ class _ReviewsViewState extends State<ReviewsView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contentId != widget.contentId) {
       _reviewsStream = _reviewService.getReviews(widget.contentId);
+      setState(() {
+        _userReview = null;
+        _checkingUserReview = true;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
     }
   }
 
@@ -585,7 +591,9 @@ class _ReviewsViewState extends State<ReviewsView> {
             ),
             const SizedBox(height: 24),
             GlassButton(
-              onPressed: () => setState(() {}),
+              onPressed: () => setState(() {
+                _reviewsStream = _reviewService.getReviews(widget.contentId);
+              }),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
