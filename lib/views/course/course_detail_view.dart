@@ -37,22 +37,6 @@ class _CourseDetailViewState extends State<CourseDetailView> {
     }
   }
 
-  late Stream<List<Review>> _reviewsStream;
-
-  @override
-  void initState() {
-    super.initState();
-    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
-    _reviewsStream = _reviewService.getReviews(widget.course.id);
-  }
-
-  @override
-  void didUpdateWidget(covariant CourseDetailView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.course.id != widget.course.id) {
-      _reviewsStream = _reviewService.getReviews(widget.course.id);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -315,110 +299,54 @@ class _CourseDetailViewState extends State<CourseDetailView> {
 
               if (reviews.isEmpty) {
                 return GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.rate_review_rounded,
-                          color: AppTheme.primaryColor,
-                          size: 22,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'No reviews yet',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'Be the first to review this course.',
-                              style: TextStyle(
-                                color: AppTheme.textSecondary,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
+                  padding: EdgeInsets.zero,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ReviewsView(
+                            contentId: widget.course.id,
+                            contentTitle: widget.course.title,
+                            contentCollection: 'courses',
+                          ),
                         ),
                       ),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: AppTheme.textMuted,
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              // Rating summary bar
-              final avg =
-                  reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
-
-              return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ReviewsView(
-                      contentId: widget.course.id,
-                      contentTitle: widget.course.title,
-                      contentCollection: 'courses',
-                    ),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    // Summary card
-                    GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Semantics(
-                        excludeSemantics: true,
-                        label:
-                            'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
                         child: Row(
                           children: [
-                            ShaderMask(
-                              shaderCallback: (bounds) =>
-                                  AppTheme.primaryGradient.createShader(bounds),
-                              child: Text(
-                                avg.toStringAsFixed(1),
-                                style: const TextStyle(
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.12,
                                 ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.rate_review_rounded,
+                                color: AppTheme.primaryColor,
+                                size: 22,
                               ),
                             ),
                             const SizedBox(width: 14),
-                            Expanded(
+                            const Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: List.generate(5, (i) {
-                                      return Icon(
-                                        i < avg.floor()
-                                            ? Icons.star_rounded
-                                            : i < avg
-                                            ? Icons.star_half_rounded
-                                            : Icons.star_border_rounded,
-                                        color: Colors.amber,
-                                        size: 20,
-                                      );
-                                    }),
-                                  ),
-                                  const SizedBox(height: 4),
                                   Text(
-                                    '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                                    style: const TextStyle(
+                                    'No reviews yet',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Be the first to review this course.',
+                                    style: TextStyle(
                                       color: AppTheme.textSecondary,
                                       fontSize: 13,
                                     ),
@@ -434,14 +362,114 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    // First 2 reviews inline
-                    // ⚡ Bolt: Optimize mapping with collection for better list generation performance
-                    for (final r in reviews.take(2)) _buildInlineReviewCard(r),
-                    if (reviews.length > 2)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Center(
+                  ),
+                );
+              }
+
+              // Rating summary bar
+              final avg =
+                  reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+
+              return Column(
+                children: [
+                  // Summary card
+                  GlassCard(
+                    padding: EdgeInsets.zero,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ReviewsView(
+                              contentId: widget.course.id,
+                              contentTitle: widget.course.title,
+                              contentCollection: 'courses',
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Semantics(
+                            excludeSemantics: true,
+                            label:
+                                'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                            child: Row(
+                              children: [
+                                ShaderMask(
+                                  shaderCallback: (bounds) => AppTheme
+                                      .primaryGradient
+                                      .createShader(bounds),
+                                  child: Text(
+                                    avg.toStringAsFixed(1),
+                                    style: const TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: List.generate(5, (i) {
+                                          return Icon(
+                                            i < avg.floor()
+                                                ? Icons.star_rounded
+                                                : i < avg
+                                                ? Icons.star_half_rounded
+                                                : Icons.star_border_rounded,
+                                            color: Colors.amber,
+                                            size: 20,
+                                          );
+                                        }),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
+                                        style: const TextStyle(
+                                          color: AppTheme.textSecondary,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppTheme.textMuted,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // First 2 reviews inline
+                  // ⚡ Bolt: Optimize mapping with collection for better list generation performance
+                  for (final r in reviews.take(2)) _buildInlineReviewCard(r),
+                  if (reviews.length > 2)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ReviewsView(
+                                contentId: widget.course.id,
+                                contentTitle: widget.course.title,
+                                contentCollection: 'courses',
+                              ),
+                            ),
+                          ),
                           child: Text(
                             '+ ${reviews.length - 2} more review${reviews.length - 2 == 1 ? '' : 's'}',
                             style: const TextStyle(
@@ -452,8 +480,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               );
             },
           ),

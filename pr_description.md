@@ -1,9 +1,15 @@
-💡 What: Added `tooltip: 'Back'` to the `IconButton` in `lib/views/course/reviews_view.dart`.
+💡 What
+- Replaced `GestureDetector` with `Material` and `InkWell` for the reviews summary section and empty review state in both `course_detail_view.dart` and `video_player_view.dart`.
+- Converted the "+ X more reviews" static text into a clickable `TextButton`.
 
-🎯 Why: To improve accessibility for screen readers and provide a helpful tooltip for users hovering over the button. Without a tooltip, an icon-only button lacks semantic context.
+🎯 Why
+- The previous implementation using `GestureDetector` provided no visual feedback (ripple effect) when users tapped the reviews section.
+- The empty state ("No reviews yet") was entirely static and unclickable, preventing users from being the first to review content.
+- Using `Material` and `InkWell` (and `TextButton`) natively handles visual touch feedback and improves user interaction clarity.
 
-📸 Before/After:
-- Before: The back button in the reviews view lacked a tooltip.
-- After: Hovering or focusing on the back button now displays a 'Back' tooltip.
+📸 Before/After
+- **Before:** Tapping the review summary or empty review state produced no visual feedback. The "+ X more reviews" was plain text.
+- **After:** Tapping the review summary or empty state produces a material ripple effect. The "+ X more reviews" is now a styled `TextButton` with proper focus and hover states.
 
-♿ Accessibility: Improved accessibility by providing semantic text context for an icon-only button, making it recognizable by assistive technologies like screen readers.
+♿ Accessibility
+- `InkWell` and `TextButton` automatically provide standard button semantics for screen readers, unlike the generic `GestureDetector`.
