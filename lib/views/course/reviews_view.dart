@@ -36,7 +36,6 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
-  late Stream<List<Review>> _reviewsStream;
 
   @override
   void initState() {
