@@ -36,7 +36,6 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
-
   @override
   void initState() {
     super.initState();
@@ -797,19 +796,23 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   Widget _starsRow(double rating, {required double size}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(5, (i) {
-        return Icon(
-          i < rating.floor()
-              ? Icons.star_rounded
-              : i < rating
-              ? Icons.star_half_rounded
-              : Icons.star_border_rounded,
-          color: Colors.amber,
-          size: size,
-        );
-      }),
+    return Semantics(
+      label: 'Rating: ${rating.toStringAsFixed(1)} stars',
+      excludeSemantics: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(5, (i) {
+          return Icon(
+            i < rating.floor()
+                ? Icons.star_rounded
+                : i < rating
+                ? Icons.star_half_rounded
+                : Icons.star_border_rounded,
+            color: Colors.amber,
+            size: size,
+          );
+        }),
+      ),
     );
   }
 
