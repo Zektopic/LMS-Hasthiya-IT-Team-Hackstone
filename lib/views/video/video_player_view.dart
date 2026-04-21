@@ -509,17 +509,21 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(5, (i) {
-                    return Icon(
-                      i < review.rating
-                          ? Icons.star_rounded
-                          : Icons.star_border_rounded,
-                      color: Colors.amber,
-                      size: 14,
-                    );
-                  }),
+                Semantics(
+                  label: 'Rating: ${review.rating.toStringAsFixed(1)} stars',
+                  excludeSemantics: true,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(5, (i) {
+                      return Icon(
+                        i < review.rating
+                            ? Icons.star_rounded
+                            : Icons.star_border_rounded,
+                        color: Colors.amber,
+                        size: 14,
+                      );
+                    }),
+                  ),
                 ),
               ],
             ),
