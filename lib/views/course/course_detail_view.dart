@@ -20,6 +20,21 @@ class CourseDetailView extends StatefulWidget {
 class _CourseDetailViewState extends State<CourseDetailView> {
   final ReviewService _reviewService =
       ReviewService(contentCollection: 'courses');
+  late Stream<List<Review>> _reviewsStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _reviewsStream = _reviewService.getReviews(widget.course.id);
+  }
+
+  @override
+  void didUpdateWidget(covariant CourseDetailView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.course.id != widget.course.id) {
+      _reviewsStream = _reviewService.getReviews(widget.course.id);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +276,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
           ),
           const SizedBox(height: 14),
           StreamBuilder<List<Review>>(
-            stream: _reviewService.getReviews(widget.course.id),
+            stream: _reviewsStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(

@@ -33,11 +33,21 @@ class _ReviewsViewState extends State<ReviewsView> {
   Review? _userReview;
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
+  late Stream<List<Review>> _reviewsStream;
 
   @override
   void initState() {
     super.initState();
+    _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
+  }
+
+  @override
+  void didUpdateWidget(covariant ReviewsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.contentId != widget.contentId) {
+      _reviewsStream = _reviewService.getReviews(widget.contentId);
+    }
   }
 
   Future<void> _checkUserReview() async {
@@ -177,7 +187,7 @@ class _ReviewsViewState extends State<ReviewsView> {
       ),
       body: GradientBackground(
         child: StreamBuilder<List<Review>>(
-          stream: _reviewService.getReviews(widget.contentId),
+          stream: _reviewsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

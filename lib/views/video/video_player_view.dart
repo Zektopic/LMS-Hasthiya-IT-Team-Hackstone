@@ -23,11 +23,21 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   bool _hasError = false;
   final ReviewService _reviewService =
       ReviewService(contentCollection: 'videos');
+  late Stream<List<Review>> _reviewsStream;
 
   @override
   void initState() {
     super.initState();
+    _reviewsStream = _reviewService.getReviews(widget.video.id);
     _initializePlayer();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoPlayerView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.video.id != widget.video.id) {
+      _reviewsStream = _reviewService.getReviews(widget.video.id);
+    }
   }
 
   Future<void> _initializePlayer() async {
@@ -254,7 +264,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         ),
         const SizedBox(height: 14),
         StreamBuilder<List<Review>>(
-          stream: _reviewService.getReviews(widget.video.id),
+          stream: _reviewsStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
