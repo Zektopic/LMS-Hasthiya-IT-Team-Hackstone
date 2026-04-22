@@ -270,6 +270,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
             if (reviews.isEmpty) {
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -281,8 +282,24 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   ),
                 ),
                 child: GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
+                  padding: EdgeInsets.zero,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ReviewsView(
+                            contentId: widget.video.id,
+                            contentTitle: widget.video.title,
+                            contentCollection: 'videos',
+                          ),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -313,9 +330,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: AppTheme.textMuted),
-                    ],
+                            const Icon(Icons.chevron_right_rounded,
+                                color: AppTheme.textMuted),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -325,6 +345,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -338,11 +359,27 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               child: Column(
                 children: [
                   GlassCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Semantics(
-                      excludeSemantics: true,
-                      label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
-                      child: Row(
+                    padding: EdgeInsets.zero,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ReviewsView(
+                              contentId: widget.video.id,
+                              contentTitle: widget.video.title,
+                              contentCollection: 'videos',
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Semantics(
+                            excludeSemantics: true,
+                            label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                            child: Row(
                         children: [
                           ShaderMask(
                             shaderCallback: (bounds) =>
@@ -385,9 +422,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right_rounded,
-                              color: AppTheme.textMuted),
-                        ],
+                                const Icon(Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

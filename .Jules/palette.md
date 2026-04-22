@@ -24,3 +24,6 @@
 ## 2024-06-18 - Replacing GestureDetector for Filter Chips
 **Learning:** Replacing `GestureDetector` with `Material` + `InkWell` for horizontal scrollable filter chips provides immediate visual feedback, making the app feel more responsive and accessible.
 **Action:** Use `Material` and `InkWell` instead of `GestureDetector` for custom button-like elements such as category filter chips. Ensure padding is moved inside the `InkWell` so the ripple effect covers the entire interactive area.
+## 2024-05-30 - Interactive Components Tap Feedback Regression Fix
+**Learning:** In Flutter, when moving a tap action from an outer `GestureDetector` to an inner `InkWell` to provide localized ripple feedback on a specific child element (like a card within a Column), sibling elements (like trailing text or inline elements) can inadvertently lose clickability.
+**Action:** To maintain a large interactive area (including empty spaces) while providing specific visual feedback on a child, wrap the entire parent container in a `GestureDetector` with `behavior: HitTestBehavior.opaque` to catch taps outside the specific `InkWell` area.

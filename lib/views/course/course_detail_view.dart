@@ -321,6 +321,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
 
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -335,11 +336,27 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   children: [
                     // Summary card
                     GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Semantics(
-                        excludeSemantics: true,
-                        label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
-                        child: Row(
+                      padding: EdgeInsets.zero,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ReviewsView(
+                                contentId: widget.course.id,
+                                contentTitle: widget.course.title,
+                                contentCollection: 'courses',
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Semantics(
+                              excludeSemantics: true,
+                              label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                              child: Row(
                           children: [
                             ShaderMask(
                               shaderCallback: (bounds) =>
@@ -382,13 +399,16 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                 ],
                               ),
                             ),
-                            const Icon(Icons.chevron_right_rounded,
-                                color: AppTheme.textMuted),
-                          ],
+                                const Icon(Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                  ),
+                  const SizedBox(height: 10),
                     // First 2 reviews inline
                     // ⚡ Bolt: Optimize mapping with collection for better list generation performance
                     for (final r in reviews.take(2)) _buildInlineReviewCard(r),
