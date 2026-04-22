@@ -25,12 +25,19 @@ class Video {
 }
 
 class LmsDataService {
-  final String baseUrl = 'http://localhost:5000';
+  static const String baseUrl = String.fromEnvironment(
+    'LMS_API_BASE_URL',
+    defaultValue: 'https://api.hackston-lms.com',
+  );
+
+  final http.Client _client;
   static String? _authToken;
+
+  LmsDataService({http.Client? client}) : _client = client ?? http.Client();
 
   /// Authenticates the user and retrieves a JWT token.
   Future<void> login(String email, String password) async {
-    final response = await http.post(
+    final response = await _client.post(
       Uri.parse('$baseUrl/api/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
@@ -50,7 +57,7 @@ class LmsDataService {
       throw Exception('Not authenticated. Please login first.');
     }
 
-    final response = await http.get(
+    final response = await _client.get(
       Uri.parse('$baseUrl/api/videos'),
       headers: {
         'Content-Type': 'application/json',
