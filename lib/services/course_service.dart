@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../models/course.dart';
 
 class CourseService {
@@ -17,7 +18,7 @@ class CourseService {
       final snapshot = await query.get();
       return snapshot.docs.map((doc) => Course.fromFirestore(doc)).toList();
     } catch (e) {
-      print('Error fetching courses: $e');
+      debugPrint('Error fetching courses: $e');
       return [];
     }
   }
