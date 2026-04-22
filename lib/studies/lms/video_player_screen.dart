@@ -22,7 +22,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     // The videoUrl from the backend is relative (e.g., "uploads/video-....mp4")
     // We need to prepend the base URL to make it a full, playable URL.
-    final fullVideoUrl = LmsDataService().baseUrl + '/' + widget.video.videoUrl;
+    final fullVideoUrl = LmsDataService.baseUrl + '/' + widget.video.videoUrl;
 
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(fullVideoUrl),
