@@ -355,11 +355,17 @@ class _ReviewsViewState extends State<ReviewsView> {
           const SizedBox(width: 20),
           Expanded(
             child: Column(
-              children: [5, 4, 3, 2, 1].map((star) {
-                final count = counts[star] ?? 0;
-                final frac = reviews.isEmpty ? 0.0 : count / reviews.length;
-                return _distributionBar(star, frac, count);
-              }).toList(),
+              // ⚡ Bolt: Optimize mapping with collection for better list generation performance
+              children: [
+                for (final star in [5, 4, 3, 2, 1])
+                  _distributionBar(
+                    star,
+                    reviews.isEmpty
+                        ? 0.0
+                        : (counts[star] ?? 0) / reviews.length,
+                    counts[star] ?? 0,
+                  ),
+              ],
             ),
           ),
         ],
