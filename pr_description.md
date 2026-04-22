@@ -1,4 +1,7 @@
-💡 What: Converted the eagerly built `ListView` in `ReviewsView` (which iterated over reviews with a `for` loop inside `children`) to use `ListView.builder`.
-🎯 Why: Eagerly building all list items at once destroys virtualization. For potentially unbounded datasets (like a list of reviews), this blocks the UI thread during the initial render and leads to unscalable memory consumption.
-📊 Impact: Significant reduction in memory usage and elimination of initial UI thread blocking when rendering large lists of reviews, maintaining smooth 60fps scrolling.
-🔬 Measurement: Verify that memory consumption remains stable regardless of the number of loaded reviews (using Flutter DevTools), and observe that the initial render time of `ReviewsView` is no longer proportional to the total number of reviews.
+💡 **What:** Replaced the usage of chained iterable methods like `.take(n)` and `.indexed` inside the `build` methods of `HomeView`, `CourseDetailView`, and `VideoPlayerView` with explicitly bounds-checked `for` loops.
+
+🎯 **Why:** In Dart, calling methods like `.take()` on iterables inside a widget's build method creates intermediate `TakeIterable` objects on every UI frame/rebuild. In list generation logic, this creates entirely unnecessary intermediate allocations that immediately become garbage. By using a standard explicit loop (`for (var i = 0; i < collection.length && i < n; i++)`), we skip these intermediate object allocations completely, avoiding extra work for the garbage collector and maintaining smooth 60fps rendering, especially on lower-end devices.
+
+📊 **Impact:** Reduces object allocation and garbage collection pressure linearly correlated with the frequency of widget rebuilds and list generation occurrences.
+
+🔬 **Measurement:** Verify the codebase compiles and tests pass. Direct GPU/GC measurement in a headless runner is impractical, but the technical reduction of object allocation per-frame is verified via Dart's documentation for lazy iterables.

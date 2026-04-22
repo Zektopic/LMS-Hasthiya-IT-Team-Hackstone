@@ -448,11 +448,11 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildVideoList() {
     return Column(
-      // ⚡ Bolt: Optimize mapping with .indexed for better list generation performance
+      // ⚡ Bolt: Optimize mapping by avoiding .take() and .indexed to prevent intermediate iterable allocations
       children: [
-        for (final (index, video) in _videos.take(5).indexed)
+        for (var index = 0; index < _videos.length && index < 5; index++)
           _buildVideoCard(
-            video,
+            _videos[index],
             AppTheme.cardGradients[index % AppTheme.cardGradients.length],
           ),
       ],

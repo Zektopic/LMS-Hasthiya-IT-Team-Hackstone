@@ -61,3 +61,6 @@
 
 **Learning:** Using `ListView` with a `children` list containing a `for` loop over potentially unbounded datasets (e.g., `for (final review in reviews) _buildReviewCard(review)`) eagerly builds all widgets at once. This completely destroys the virtualization benefits of list views, blocking the main UI thread during the initial render and consuming excessive memory as the dataset grows.
 **Action:** Always replace eagerly constructed `ListView` children with `ListView.builder` for potentially large datasets to ensure list items are only built dynamically as they scroll into view, maintaining smooth 60fps rendering and bounded memory usage.
+## 2024-05-30 - Flutter Iterable .take() and .indexed Allocation
+**Learning:** Using chained iterable methods like `.take(n)` or `.take(n).indexed` inside a Flutter `build` method allocates intermediate objects (`TakeIterable`, `IndexedIterable`) on every single widget rebuild. This creates unnecessary garbage collection pressure and degrades rendering performance, especially for lists that update frequently.
+**Action:** Always replace `.take(n)` and `.indexed` within widget build methods with an explicit, bounds-checked `for` loop (e.g., `for (var i = 0; i < collection.length && i < n; i++)`). This constructs the desired list of widgets directly in place without creating any intermediate iterable objects.
