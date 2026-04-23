@@ -63,3 +63,6 @@
 ## 2024-05-30 - Flutter .map().toList() Allocation in Widget Trees
 **Learning:** In Flutter/Dart, generating widget lists inside the `build` method using the `.map(...).toList()` pattern allocates an intermediate `MappedIterable` object and its associated closure on every build frame. This causes unnecessary garbage collection pressure and can lead to UI stutter, especially if the parent widget rebuilds frequently.
 **Action:** Always replace the `[...].map(...).toList()` pattern with Dart's collection `for` loop (e.g., `[for (final item in items) ...]`) to construct widget lists directly in place without creating any intermediate iterable objects, optimizing rendering performance.
+## YYYY-MM-DD - Flutter Iterable Allocation with .take() and .indexed
+**Learning:** In Flutter, chaining methods like `.take(n)` or `.indexed` in widget `build` methods (e.g., `for (final r in reviews.take(2))`) creates intermediate `TakeIterable` or `IndexedIterable` objects during every rebuild. This unnecessary allocation triggers garbage collection and can stutter UI.
+**Action:** Replace these iterables with an explicit bounds-checked `for` loop (e.g., `for (var i = 0; i < collection.length && i < n; i++)`) to prevent intermediate allocations, applying it to rendering loops that process collections.

@@ -26,7 +26,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   );
   late Stream<List<Review>> _reviewsStream;
 
-
   @override
   void initState() {
     super.initState();
@@ -433,7 +432,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 ),
                 const SizedBox(height: 10),
                 // ⚡ Bolt: Optimize mapping with collection for better list generation performance
-                for (final r in reviews.take(2)) _buildInlineReviewCard(r),
+                for (var i = 0; i < reviews.length && i < 2; i++)
+                  _buildInlineReviewCard(reviews[i]),
                 if (reviews.length > 2)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
@@ -509,17 +509,21 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(5, (i) {
-                    return Icon(
-                      i < review.rating
-                          ? Icons.star_rounded
-                          : Icons.star_border_rounded,
-                      color: Colors.amber,
-                      size: 14,
-                    );
-                  }),
+                Semantics(
+                  label: 'Rating: ${review.rating.toStringAsFixed(1)} stars',
+                  excludeSemantics: true,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(5, (i) {
+                      return Icon(
+                        i < review.rating
+                            ? Icons.star_rounded
+                            : Icons.star_border_rounded,
+                        color: Colors.amber,
+                        size: 14,
+                      );
+                    }),
+                  ),
                 ),
               ],
             ),
