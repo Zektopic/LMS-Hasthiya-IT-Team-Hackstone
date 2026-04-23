@@ -318,17 +318,9 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
-              ),
-            ),
-            child: Padding(
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -419,7 +411,21 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -430,15 +436,9 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -489,7 +489,21 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerView(video: video),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
