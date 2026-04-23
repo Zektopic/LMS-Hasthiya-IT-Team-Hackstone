@@ -229,9 +229,9 @@ class ProfileView extends StatelessWidget {
         GlassCard(
           borderRadius: 16,
           child: Column(
-            // ⚡ Bolt: Optimize mapping with .indexed for better performance and reduced object allocation
+            // ⚡ Bolt: Optimize mapping with explicit loop for better performance and reduced object allocation
             children: [
-              for (final (index, item) in items.indexed)
+              for (var index = 0; index < items.length; index++)
                 Column(
                   children: [
                     Material(
@@ -240,15 +240,15 @@ class ProfileView extends StatelessWidget {
                         borderRadius: index == 0 && items.length == 1
                             ? BorderRadius.circular(16)
                             : index == 0
-                                ? const BorderRadius.vertical(
-                                    top: Radius.circular(16),
-                                  )
-                                : index == items.length - 1
-                                    ? const BorderRadius.vertical(
-                                        bottom: Radius.circular(16),
-                                      )
-                                    : BorderRadius.zero,
-                        onTap: item.onTap,
+                            ? const BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              )
+                            : index == items.length - 1
+                            ? const BorderRadius.vertical(
+                                bottom: Radius.circular(16),
+                              )
+                            : BorderRadius.zero,
+                        onTap: items[index].onTap,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 18,
@@ -257,19 +257,20 @@ class ProfileView extends StatelessWidget {
                           child: Row(
                             children: [
                               Icon(
-                                item.icon,
+                                items[index].icon,
                                 color: AppTheme.textSecondary,
                                 size: 22,
                               ),
                               const SizedBox(width: 14),
                               Expanded(
                                 child: Text(
-                                  item.label,
+                                  items[index].label,
                                   style: const TextStyle(fontSize: 15),
                                 ),
                               ),
-                              if (item.trailing != null) item.trailing!,
-                              if (item.trailing == null)
+                              if (items[index].trailing != null)
+                                items[index].trailing!,
+                              if (items[index].trailing == null)
                                 const Icon(
                                   Icons.chevron_right_rounded,
                                   color: AppTheme.textMuted,

@@ -26,7 +26,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   );
   late Stream<List<Review>> _reviewsStream;
 
-
   @override
   void initState() {
     super.initState();
@@ -433,7 +432,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 ),
                 const SizedBox(height: 10),
                 // ⚡ Bolt: Optimize mapping with collection for better list generation performance
-                for (final r in reviews.take(2)) _buildInlineReviewCard(r),
+                for (var i = 0; i < reviews.length && i < 2; i++)
+                  _buildInlineReviewCard(reviews[i]),
                 if (reviews.length > 2)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
