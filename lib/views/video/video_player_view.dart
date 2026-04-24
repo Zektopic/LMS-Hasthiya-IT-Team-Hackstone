@@ -348,8 +348,13 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            final avg =
-                reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+            // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
+            // to avoid allocating a closure on every widget rebuild
+            var sum = 0.0;
+            for (final r in reviews) {
+              sum += r.rating;
+            }
+            final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
 
             return Column(
               children: [
@@ -401,8 +406,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                           i < avg.floor()
                                               ? Icons.star_rounded
                                               : i < avg
-                                              ? Icons.star_half_rounded
-                                              : Icons.star_border_rounded,
+                                                  ? Icons.star_half_rounded
+                                                  : Icons.star_border_rounded,
                                           color: Colors.amber,
                                           size: 20,
                                         );

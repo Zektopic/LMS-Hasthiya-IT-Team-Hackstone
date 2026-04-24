@@ -305,15 +305,18 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    final avg = reviews.isEmpty
-        ? 0.0
-        : reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
-
+    var sum = 0.0;
     final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+
+    // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
+    // and avoid creating closures inside the render loop via .fold()
     for (final r in reviews) {
+      sum += r.rating;
       final key = r.rating.round().clamp(1, 5);
       counts[key] = (counts[key] ?? 0) + 1;
     }
+
+    final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
 
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -812,8 +815,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             i < rating.floor()
                 ? Icons.star_rounded
                 : i < rating
-                ? Icons.star_half_rounded
-                : Icons.star_border_rounded,
+                    ? Icons.star_half_rounded
+                    : Icons.star_border_rounded,
             color: Colors.amber,
             size: size,
           );
