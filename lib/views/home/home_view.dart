@@ -193,20 +193,25 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: widget.onSearchTap,
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
-                SizedBox(width: 12),
-                Text(
-                  'Search courses, videos...',
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
-                ),
-              ],
+        child: Semantics(
+          button: true,
+          label: 'Search courses, videos...',
+          excludeSemantics: true,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: widget.onSearchTap,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
+                  SizedBox(width: 12),
+                  Text(
+                    'Search courses, videos...',
+                    style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -35,3 +35,6 @@
 ## 2026-04-19 - Cohesive Semantics for Star Ratings
 **Learning:** When displaying grouped visual indicators like star ratings (e.g., using a `Row` of `Icon` widgets), screen readers will announce each icon individually (e.g., 'star, star, star, star, star'), creating a tedious and disjointed user experience.
 **Action:** Wrap the visually grouped data in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., 'Rating: 4.5 stars') to ensure a clear, concise announcement for assistive technology users.
+## 2024-05-24 - Accessibility for Custom Search Bar
+**Learning:** In Flutter, building custom interactive widgets using `InkWell` that look like inputs (like a pseudo-search bar) can be inaccessible to screen readers because they aren't announced as buttons or text fields natively.
+**Action:** Always wrap custom `InkWell`-based controls in a `Semantics` widget with explicit roles (e.g., `button: true`) and descriptive labels.
