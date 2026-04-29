@@ -89,16 +89,14 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch =
-            isQueryEmpty ||
+        final matchesSearch = isQueryEmpty ||
             searchRegex!.hasMatch(v.title) ||
             searchRegex!.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch =
-            isQueryEmpty ||
+        final matchesSearch = isQueryEmpty ||
             searchRegex!.hasMatch(c.title) ||
             searchRegex!.hasMatch(c.description);
         final matchesCategory =
@@ -187,9 +185,8 @@ class _ExploreViewState extends State<ExploreView> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              gradient: isSelected
-                                  ? AppTheme.primaryGradient
-                                  : null,
+                              gradient:
+                                  isSelected ? AppTheme.primaryGradient : null,
                               color: isSelected
                                   ? null
                                   : Colors.white.withValues(alpha: 0.08),
@@ -318,17 +315,10 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
-              ),
-            ),
-            child: Padding(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -419,7 +409,21 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -430,15 +434,10 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -489,7 +488,20 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => VideoPlayerView(video: video)),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

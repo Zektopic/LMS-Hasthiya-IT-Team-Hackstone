@@ -204,7 +204,11 @@ class _HomeViewState extends State<HomeView> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
                 children: [
-                  Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
+                  Icon(
+                    Icons.search_rounded,
+                    color: AppTheme.textMuted,
+                    size: 22,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     'Search courses, videos...',
@@ -329,17 +333,11 @@ class _HomeViewState extends State<HomeView> {
       margin: const EdgeInsets.only(right: 16),
       child: GlassCard(
         borderRadius: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
-              ),
-            ),
-            child: Column(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -445,7 +443,21 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -469,15 +481,10 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.only(bottom: 12),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -538,7 +545,21 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerView(video: video),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
