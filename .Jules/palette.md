@@ -38,3 +38,6 @@
 ## 2024-05-24 - Accessibility for Custom Search Bar
 **Learning:** In Flutter, building custom interactive widgets using `InkWell` that look like inputs (like a pseudo-search bar) can be inaccessible to screen readers because they aren't announced as buttons or text fields natively.
 **Action:** Always wrap custom `InkWell`-based controls in a `Semantics` widget with explicit roles (e.g., `button: true`) and descriptive labels.
+## 2024-04-30 - Flutter Semantic Wrapping for Interactive InkWells
+**Learning:** In Flutter, using `InkWell` directly inside a `Material` widget creates visually appealing interactive tabs or chips, but it does not automatically expose its role or state to accessibility services. We found a recurring pattern in the app where custom interactive elements (like the category selector in `ExploreView`) missed crucial a11y context.
+**Action:** When implementing custom interactive widgets that act as tabs or toggle buttons using `InkWell` or `GestureDetector`, always wrap them in a `Semantics` widget. Explicitly define `button: true` and pass its current state via `selected: isSelected` so screen readers correctly identify it as an interactive, selectable control and announce its active status.
