@@ -31,10 +31,10 @@ class _LoginViewState extends State<LoginView>
       duration: const Duration(milliseconds: 900),
     );
     _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
-    _slideAnim =
-        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
-    );
+    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
     _animController.forward();
   }
 
@@ -134,6 +134,8 @@ class _LoginViewState extends State<LoginView>
                                   controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
+                                  autocorrect: false,
+                                  autofillHints: const [AutofillHints.email],
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     labelText: 'Email Address',
@@ -145,6 +147,7 @@ class _LoginViewState extends State<LoginView>
                                   controller: _passwordController,
                                   obscureText: !_isPasswordVisible,
                                   textInputAction: TextInputAction.done,
+                                  autofillHints: const [AutofillHints.password],
                                   style: const TextStyle(color: Colors.white),
                                   onSubmitted: (_) {
                                     if (!auth.isLoading) _handleLogin(auth);
