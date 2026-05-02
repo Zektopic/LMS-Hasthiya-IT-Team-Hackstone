@@ -41,3 +41,7 @@
 ## 2024-04-30 - Flutter Semantic Wrapping for Interactive InkWells
 **Learning:** In Flutter, using `InkWell` directly inside a `Material` widget creates visually appealing interactive tabs or chips, but it does not automatically expose its role or state to accessibility services. We found a recurring pattern in the app where custom interactive elements (like the category selector in `ExploreView`) missed crucial a11y context.
 **Action:** When implementing custom interactive widgets that act as tabs or toggle buttons using `InkWell` or `GestureDetector`, always wrap them in a `Semantics` widget. Explicitly define `button: true` and pass its current state via `selected: isSelected` so screen readers correctly identify it as an interactive, selectable control and announce its active status.
+
+## 2024-05-02 - Autofill and Autocorrect for Credential Fields
+**Learning:** TextFields intended for credentials (e.g., email addresses, passwords, names) should actively guide the user and avoid confusing autocorrect modifications. Missing `autofillHints` makes users rely on external password managers manually or type repetitively, while left-on `autocorrect` can erroneously rewrite parts of emails.
+**Action:** Always add appropriate `autofillHints` (e.g., `AutofillHints.email`, `AutofillHints.password`, `AutofillHints.newPassword`) to credential inputs. Explicitly set `autocorrect: false` on inputs like emails where the user's explicit input must be preserved without autocorrect interference.
