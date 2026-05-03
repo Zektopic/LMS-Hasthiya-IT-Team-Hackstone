@@ -45,3 +45,7 @@
 ## 2024-05-02 - Autofill and Autocorrect for Credential Fields
 **Learning:** TextFields intended for credentials (e.g., email addresses, passwords, names) should actively guide the user and avoid confusing autocorrect modifications. Missing `autofillHints` makes users rely on external password managers manually or type repetitively, while left-on `autocorrect` can erroneously rewrite parts of emails.
 **Action:** Always add appropriate `autofillHints` (e.g., `AutofillHints.email`, `AutofillHints.password`, `AutofillHints.newPassword`) to credential inputs. Explicitly set `autocorrect: false` on inputs like emails where the user's explicit input must be preserved without autocorrect interference.
+
+## 2024-05-03 - Add semantic roles and states to custom navigation items
+**Learning:** Custom bottom navigation items built with `InkWell` in Flutter are only read as text by screen readers unless explicitly wrapped in a `Semantics` widget. Screen readers need `button: true` to know they are interactive tabs, and `selected: isSelected` to communicate their current selection state to the user.
+**Action:** Always wrap `InkWell` or `GestureDetector` based custom navigation elements in `Semantics(button: true, selected: ...)` to ensure correct accessibility roles and states are announced.
