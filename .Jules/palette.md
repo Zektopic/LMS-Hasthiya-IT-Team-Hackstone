@@ -49,3 +49,6 @@
 ## 2024-05-03 - Add semantic roles and states to custom navigation items
 **Learning:** Custom bottom navigation items built with `InkWell` in Flutter are only read as text by screen readers unless explicitly wrapped in a `Semantics` widget. Screen readers need `button: true` to know they are interactive tabs, and `selected: isSelected` to communicate their current selection state to the user.
 **Action:** Always wrap `InkWell` or `GestureDetector` based custom navigation elements in `Semantics(button: true, selected: ...)` to ensure correct accessibility roles and states are announced.
+## 2026-05-04 - Wrap Custom Tab Buttons in Semantics
+**Learning:** In Flutter, when building custom tab controls or bottom navigation items using `InkWell` inside a container (like the tabs in My Learning), screen readers won't automatically know they are interactive buttons or which one is active.
+**Action:** Always wrap the `InkWell` of custom tab buttons in a `Semantics` widget. Set `button: true` to announce it's clickable and `selected: isSelected` to announce its active state.
