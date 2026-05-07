@@ -52,3 +52,6 @@
 ## 2026-05-04 - Wrap Custom Tab Buttons in Semantics
 **Learning:** In Flutter, when building custom tab controls or bottom navigation items using `InkWell` inside a container (like the tabs in My Learning), screen readers won't automatically know they are interactive buttons or which one is active.
 **Action:** Always wrap the `InkWell` of custom tab buttons in a `Semantics` widget. Set `button: true` to announce it's clickable and `selected: isSelected` to announce its active state.
+## 2024-05-30 - Replace GestureDetector with Material+InkWell for Interactive Elements
+**Learning:** Using `GestureDetector` for interactive widgets like cards, chips, and navigation items fails to provide visual tap feedback and misses out on implicit accessibility semantics (like screen readers identifying the element as a button).
+**Action:** When wrapping a widget to make it interactive, prefer using `Material` combined with `InkWell` inside the container to automatically provide visual ripple effects and implicit semantic button traits.
