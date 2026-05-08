@@ -22,6 +22,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
     contentCollection: 'courses',
   );
   late Stream<List<Review>> _reviewsStream;
+  bool _isEnrolling = false;
 
   @override
   void initState() {
@@ -722,7 +723,12 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 ),
               ),
               GlassButton(
-                onPressed: () {
+                isLoading: _isEnrolling,
+                onPressed: () async {
+                  setState(() => _isEnrolling = true);
+                  await Future.delayed(const Duration(seconds: 1));
+                  if (!mounted) return;
+                  setState(() => _isEnrolling = false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Enrolled successfully!'),

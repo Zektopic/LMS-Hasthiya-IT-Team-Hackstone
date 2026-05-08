@@ -55,3 +55,6 @@
 ## 2024-05-30 - Replace GestureDetector with Material+InkWell for Interactive Elements
 **Learning:** Using `GestureDetector` for interactive widgets like cards, chips, and navigation items fails to provide visual tap feedback and misses out on implicit accessibility semantics (like screen readers identifying the element as a button).
 **Action:** When wrapping a widget to make it interactive, prefer using `Material` combined with `InkWell` inside the container to automatically provide visual ripple effects and implicit semantic button traits.
+## 2024-05-31 - [Form Accessibility and Feedback]
+**Learning:** Found that when buttons submit forms using `GlassButton` or similar custom buttons, if they only change opacity to indicate an inactive/loading state, it may be insufficient for accessibility and clear user feedback, especially without an ARIA label or `Semantics` equivalent in Flutter. Even for actions simulating a network request, lacking a visual loading state makes the interaction feel unresponsive.
+**Action:** Always ensure buttons used for async actions show a visible loading state (like `CircularProgressIndicator`) and have explicit `Semantics` or descriptive labels to indicate their current state (e.g., 'Loading, please wait') to screen readers. For simulated actions, add a brief delay and utilize the button's native `isLoading` state.
