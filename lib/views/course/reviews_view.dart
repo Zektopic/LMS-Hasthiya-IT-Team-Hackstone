@@ -810,17 +810,19 @@ class _ReviewsViewState extends State<ReviewsView> {
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: List.generate(5, (i) {
-          return Icon(
-            i < rating.floor()
-                ? Icons.star_rounded
-                : i < rating
-                    ? Icons.star_half_rounded
-                    : Icons.star_border_rounded,
-            color: Colors.amber,
-            size: size,
-          );
-        }),
+        // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+        children: [
+          for (var i = 0; i < 5; i++)
+            Icon(
+              i < rating.floor()
+                  ? Icons.star_rounded
+                  : i < rating
+                      ? Icons.star_half_rounded
+                      : Icons.star_border_rounded,
+              color: Colors.amber,
+              size: size,
+            ),
+        ],
       ),
     );
   }
@@ -997,37 +999,38 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(5, (i) {
-                              final filled = i < _selectedRating;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                ),
-                                child: IconButton(
-                                  tooltip:
-                                      'Rate ${i + 1} star${i == 0 ? '' : 's'}',
-                                  iconSize: 48,
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {
-                                    HapticFeedback.selectionClick();
-                                    setState(() => _selectedRating = i + 1);
-                                  },
-                                  icon: AnimatedScale(
-                                    scale: filled ? 1.2 : 1.0,
-                                    duration: const Duration(milliseconds: 150),
-                                    child: Icon(
-                                      filled
-                                          ? Icons.star_rounded
-                                          : Icons.star_border_rounded,
-                                      color: filled
-                                          ? Colors.amber
-                                          : AppTheme.textMuted,
+                            // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+                            children: [
+                              for (var i = 0; i < 5; i++)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                  ),
+                                  child: IconButton(
+                                    tooltip:
+                                        'Rate ${i + 1} star${i == 0 ? '' : 's'}',
+                                    iconSize: 48,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () {
+                                      HapticFeedback.selectionClick();
+                                      setState(() => _selectedRating = i + 1);
+                                    },
+                                    icon: AnimatedScale(
+                                      scale: i < _selectedRating ? 1.2 : 1.0,
+                                      duration: const Duration(milliseconds: 150),
+                                      child: Icon(
+                                        i < _selectedRating
+                                            ? Icons.star_rounded
+                                            : Icons.star_border_rounded,
+                                        color: i < _selectedRating
+                                            ? Colors.amber
+                                            : AppTheme.textMuted,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              );
-                            }),
+                            ],
                           ),
                           const SizedBox(height: 10),
                           AnimatedSwitcher(
