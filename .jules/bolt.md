@@ -69,3 +69,7 @@
 ## 2024-05-30 - Flutter Avoid .fold() Closure Allocations in Render Loop
 **Learning:** Using higher-order methods like `.fold(0.0, (s, r) => s + r.rating)` inside a Flutter widget's `build` method is a performance anti-pattern. While seemingly elegant, this pattern allocates an intermediate closure on *every* frame the widget rebuilds, increasing garbage collection pressure and degrading UI smoothness. Furthermore, if a UI block calculates multiple aggregates from the same list (like sum, average, and item frequencies), using multiple higher-order methods results in redundant O(N) traversals.
 **Action:** Always replace `.fold()` or other mapping methods inside `build` methods with standard imperative `for` loops (e.g., `for (final item in items)`). This calculates aggregates directly without closures and allows combining multiple aggregate calculations into a single, efficient O(N) pass.
+
+## 2024-05-18 - [List.generate closure allocations]
+**Learning:** In Flutter, higher-order functions like `List.generate` that take closures allocate new closure objects on every widget rebuild when used directly within a `build` method.
+**Action:** Use explicit collection `for` loops (e.g., `[for (var i = 0; i < n; i++) ...]`) instead of `List.generate` inside `build` methods to prevent unnecessary object allocation and reduce garbage collection pressure.

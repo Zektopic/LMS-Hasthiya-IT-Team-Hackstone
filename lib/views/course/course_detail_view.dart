@@ -421,17 +421,19 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        children: List.generate(5, (i) {
-                                          return Icon(
-                                            i < avg.floor()
-                                                ? Icons.star_rounded
-                                                : i < avg
-                                                    ? Icons.star_half_rounded
-                                                    : Icons.star_border_rounded,
-                                            color: Colors.amber,
-                                            size: 20,
-                                          );
-                                        }),
+                                        // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+                                        children: [
+                                          for (var i = 0; i < 5; i++)
+                                            Icon(
+                                              i < avg.floor()
+                                                  ? Icons.star_rounded
+                                                  : i < avg
+                                                      ? Icons.star_half_rounded
+                                                      : Icons.star_border_rounded,
+                                              color: Colors.amber,
+                                              size: 20,
+                                            ),
+                                        ],
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
@@ -542,15 +544,17 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   excludeSemantics: true,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: List.generate(5, (i) {
-                      return Icon(
-                        i < review.rating
-                            ? Icons.star_rounded
-                            : Icons.star_border_rounded,
-                        color: Colors.amber,
-                        size: 14,
-                      );
-                    }),
+                    // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+                    children: [
+                      for (var i = 0; i < 5; i++)
+                        Icon(
+                          i < review.rating
+                              ? Icons.star_rounded
+                              : Icons.star_border_rounded,
+                          color: Colors.amber,
+                          size: 14,
+                        ),
+                    ],
                   ),
                 ),
               ],
