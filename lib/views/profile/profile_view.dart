@@ -236,8 +236,10 @@ class ProfileView extends StatelessWidget {
                   children: [
                     Material(
                       color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: index == 0 && items.length == 1
+                      child: Semantics(
+                        button: true,
+                        child: InkWell(
+                          borderRadius: index == 0 && items.length == 1
                             ? BorderRadius.circular(16)
                             : index == 0
                             ? const BorderRadius.vertical(
@@ -280,6 +282,7 @@ class ProfileView extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ),
                     ),
                     if (index < items.length - 1)
                       Divider(

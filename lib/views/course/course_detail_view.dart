@@ -22,6 +22,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
     contentCollection: 'courses',
   );
   late Stream<List<Review>> _reviewsStream;
+  bool _isEnrolling = false;
 
   @override
   void initState() {
@@ -420,17 +421,19 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        children: List.generate(5, (i) {
-                                          return Icon(
-                                            i < avg.floor()
-                                                ? Icons.star_rounded
-                                                : i < avg
-                                                    ? Icons.star_half_rounded
-                                                    : Icons.star_border_rounded,
-                                            color: Colors.amber,
-                                            size: 20,
-                                          );
-                                        }),
+                                        // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+                                        children: [
+                                          for (var i = 0; i < 5; i++)
+                                            Icon(
+                                              i < avg.floor()
+                                                  ? Icons.star_rounded
+                                                  : i < avg
+                                                      ? Icons.star_half_rounded
+                                                      : Icons.star_border_rounded,
+                                              color: Colors.amber,
+                                              size: 20,
+                                            ),
+                                        ],
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
@@ -541,15 +544,17 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   excludeSemantics: true,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: List.generate(5, (i) {
-                      return Icon(
-                        i < review.rating
-                            ? Icons.star_rounded
-                            : Icons.star_border_rounded,
-                        color: Colors.amber,
-                        size: 14,
-                      );
-                    }),
+                    // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
+                    children: [
+                      for (var i = 0; i < 5; i++)
+                        Icon(
+                          i < review.rating
+                              ? Icons.star_rounded
+                              : Icons.star_border_rounded,
+                          color: Colors.amber,
+                          size: 14,
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -619,7 +624,17 @@ class _CourseDetailViewState extends State<CourseDetailView> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(14),
-            onTap: () {},
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Lesson playback coming soon!'),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -722,7 +737,12 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 ),
               ),
               GlassButton(
-                onPressed: () {
+                isLoading: _isEnrolling,
+                onPressed: () async {
+                  setState(() => _isEnrolling = true);
+                  await Future.delayed(const Duration(seconds: 1));
+                  if (!mounted) return;
+                  setState(() => _isEnrolling = false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Enrolled successfully!'),
