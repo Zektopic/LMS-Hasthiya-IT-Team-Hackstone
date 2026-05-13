@@ -30,10 +30,10 @@ class _SignupViewState extends State<SignupView>
       duration: const Duration(milliseconds: 900),
     );
     _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
-    _slideAnim =
-        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
-    );
+    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
     _animController.forward();
   }
 
@@ -116,7 +116,8 @@ class _SignupViewState extends State<SignupView>
                         children: [
                           const SizedBox(height: 10),
                           const Center(
-                              child: AppLogo(size: 56, showText: false)),
+                            child: AppLogo(size: 56, showText: false),
+                          ),
                           const SizedBox(height: 32),
                           GlassCard(
                             padding: const EdgeInsets.all(28),
@@ -144,6 +145,7 @@ class _SignupViewState extends State<SignupView>
                                   controller: _nameController,
                                   textInputAction: TextInputAction.next,
                                   textCapitalization: TextCapitalization.words,
+                                  autofillHints: const [AutofillHints.name],
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     labelText: 'Full Name',
@@ -155,6 +157,8 @@ class _SignupViewState extends State<SignupView>
                                   controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
+                                  autocorrect: false,
+                                  autofillHints: const [AutofillHints.email],
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     labelText: 'Email Address',
@@ -166,6 +170,9 @@ class _SignupViewState extends State<SignupView>
                                   controller: _passwordController,
                                   obscureText: !_isPasswordVisible,
                                   textInputAction: TextInputAction.done,
+                                  autofillHints: const [
+                                    AutofillHints.newPassword,
+                                  ],
                                   style: const TextStyle(color: Colors.white),
                                   onSubmitted: (_) {
                                     if (!auth.isLoading) _handleSignup(auth);

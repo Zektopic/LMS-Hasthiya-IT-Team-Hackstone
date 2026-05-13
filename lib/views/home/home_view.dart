@@ -193,20 +193,29 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: widget.onSearchTap,
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
-                SizedBox(width: 12),
-                Text(
-                  'Search courses, videos...',
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
-                ),
-              ],
+        child: Semantics(
+          button: true,
+          label: 'Search courses, videos...',
+          excludeSemantics: true,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: widget.onSearchTap,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search_rounded,
+                    color: AppTheme.textMuted,
+                    size: 22,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Search courses, videos...',
+                    style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -324,17 +333,11 @@ class _HomeViewState extends State<HomeView> {
       margin: const EdgeInsets.only(right: 16),
       child: GlassCard(
         borderRadius: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
-              ),
-            ),
-            child: Column(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -440,7 +443,21 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -448,12 +465,12 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildVideoList() {
     return Column(
-      // ⚡ Bolt: Optimize mapping by avoiding .take() and .indexed to prevent intermediate iterable allocations
+      // ⚡ Bolt: Optimize mapping with explicit loop for better list generation performance
       children: [
-        for (var index = 0; index < _videos.length && index < 5; index++)
+        for (var i = 0; i < _videos.length && i < 5; i++)
           _buildVideoCard(
-            _videos[index],
-            AppTheme.cardGradients[index % AppTheme.cardGradients.length],
+            _videos[i],
+            AppTheme.cardGradients[i % AppTheme.cardGradients.length],
           ),
       ],
     );
@@ -464,15 +481,10 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.only(bottom: 12),
       child: GlassCard(
         borderRadius: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -533,7 +545,21 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-          ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerView(video: video),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

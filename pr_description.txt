@@ -1,0 +1,4 @@
+💡 What: Added appropriate `autofillHints` and `autocorrect: false` to credential text fields across the auth views (Login, Signup, Forgot Password).
+🎯 Why: TextFields intended for credentials should actively guide the user and avoid confusing autocorrect modifications. Adding `autofillHints` allows password managers to work seamlessly, and disabling `autocorrect` ensures email addresses are not erroneously rewritten.
+📸 Before/After: Before, fields lacked autofill support and could autocorrect email addresses. Now, they correctly integrate with OS autofill and preserve typed text exactly.
+♿ Accessibility: Improves usability by reducing repetitive typing and integrating with systemic password management tools, which is particularly helpful for users with motor or cognitive impairments.

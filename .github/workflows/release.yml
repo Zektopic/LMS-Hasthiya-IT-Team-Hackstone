@@ -49,7 +49,7 @@ jobs:
       - run: flutter build apk --release
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -75,7 +75,7 @@ jobs:
         run: tar czf web-release.tar.gz -C build/web .
 
       - name: Upload web artifact
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: release-web
           path: web-release.tar.gz
@@ -89,19 +89,19 @@ jobs:
       contents: write
     steps:
       - name: Download APK artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-apk
           path: artifacts/android
 
       - name: Download web artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-web
           path: artifacts/web
 
       - name: Create release and upload assets
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
         with:
           tag_name: ${{ needs.get-version.outputs.version }}
           name: Release ${{ needs.get-version.outputs.version }}

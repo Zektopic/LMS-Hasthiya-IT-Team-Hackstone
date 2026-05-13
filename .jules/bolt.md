@@ -53,14 +53,23 @@
 ## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
 **Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
 **Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
-## 2026-04-10 - StreamBuilder Initialization
-
-**Learning:** Calling a stream getter method directly inside the `stream` parameter of a `StreamBuilder` causes the stream to be recreated on every widget rebuild. This leads to redundant subscriptions and unnecessary resource allocations, especially for things like Firestore listeners.
-**Action:** Always initialize the stream inside the `initState` of a StatefulWidget and pass the cached stream reference to the `StreamBuilder`. Remember to implement `didUpdateWidget` to recreate the stream if its dependencies change.
+## 2024-05-29 - Flutter StreamBuilder Initialization
+**Learning:** In Flutter, passing a method call directly to the `stream` parameter of a `StreamBuilder` (e.g., `stream: _service.getStream()`) inside a `build` method causes a new stream subscription to be created and evaluated every time the widget rebuilds. This leads to redundant Firestore queries, unnecessary resource allocations, and visible UI flickering.
+**Action:** Always initialize and cache the stream as a state variable (e.g., `late Stream _myStream;`) in `initState`, and re-initialize it in `didUpdateWidget` if its underlying dependencies change. Pass this cached variable to the `StreamBuilder` to ensure a single, stable subscription across rebuilds.
 ## 2024-05-29 - Flutter ListView Eager Building Anti-Pattern
 
 **Learning:** Using `ListView` with a `children` list containing a `for` loop over potentially unbounded datasets (e.g., `for (final review in reviews) _buildReviewCard(review)`) eagerly builds all widgets at once. This completely destroys the virtualization benefits of list views, blocking the main UI thread during the initial render and consuming excessive memory as the dataset grows.
 **Action:** Always replace eagerly constructed `ListView` children with `ListView.builder` for potentially large datasets to ensure list items are only built dynamically as they scroll into view, maintaining smooth 60fps rendering and bounded memory usage.
-## 2024-05-30 - Flutter Iterable .take() and .indexed Allocation
-**Learning:** Using chained iterable methods like `.take(n)` or `.take(n).indexed` inside a Flutter `build` method allocates intermediate objects (`TakeIterable`, `IndexedIterable`) on every single widget rebuild. This creates unnecessary garbage collection pressure and degrades rendering performance, especially for lists that update frequently.
-**Action:** Always replace `.take(n)` and `.indexed` within widget build methods with an explicit, bounds-checked `for` loop (e.g., `for (var i = 0; i < collection.length && i < n; i++)`). This constructs the desired list of widgets directly in place without creating any intermediate iterable objects.
+## 2024-05-30 - Flutter .map().toList() Allocation in Widget Trees
+**Learning:** In Flutter/Dart, generating widget lists inside the `build` method using the `.map(...).toList()` pattern allocates an intermediate `MappedIterable` object and its associated closure on every build frame. This causes unnecessary garbage collection pressure and can lead to UI stutter, especially if the parent widget rebuilds frequently.
+**Action:** Always replace the `[...].map(...).toList()` pattern with Dart's collection `for` loop (e.g., `[for (final item in items) ...]`) to construct widget lists directly in place without creating any intermediate iterable objects, optimizing rendering performance.
+## YYYY-MM-DD - Flutter Iterable Allocation with .take() and .indexed
+**Learning:** In Flutter, chaining methods like `.take(n)` or `.indexed` in widget `build` methods (e.g., `for (final r in reviews.take(2))`) creates intermediate `TakeIterable` or `IndexedIterable` objects during every rebuild. This unnecessary allocation triggers garbage collection and can stutter UI.
+**Action:** Replace these iterables with an explicit bounds-checked `for` loop (e.g., `for (var i = 0; i < collection.length && i < n; i++)`) to prevent intermediate allocations, applying it to rendering loops that process collections.
+## 2024-05-30 - Flutter Avoid .fold() Closure Allocations in Render Loop
+**Learning:** Using higher-order methods like `.fold(0.0, (s, r) => s + r.rating)` inside a Flutter widget's `build` method is a performance anti-pattern. While seemingly elegant, this pattern allocates an intermediate closure on *every* frame the widget rebuilds, increasing garbage collection pressure and degrading UI smoothness. Furthermore, if a UI block calculates multiple aggregates from the same list (like sum, average, and item frequencies), using multiple higher-order methods results in redundant O(N) traversals.
+**Action:** Always replace `.fold()` or other mapping methods inside `build` methods with standard imperative `for` loops (e.g., `for (final item in items)`). This calculates aggregates directly without closures and allows combining multiple aggregate calculations into a single, efficient O(N) pass.
+
+## 2024-05-18 - [List.generate closure allocations]
+**Learning:** In Flutter, higher-order functions like `List.generate` that take closures allocate new closure objects on every widget rebuild when used directly within a `build` method.
+**Action:** Use explicit collection `for` loops (e.g., `[for (var i = 0; i < n; i++) ...]`) instead of `List.generate` inside `build` methods to prevent unnecessary object allocation and reduce garbage collection pressure.

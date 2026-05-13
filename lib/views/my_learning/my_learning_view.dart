@@ -69,22 +69,26 @@ class _MyLearningViewState extends State<MyLearningView> {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: () {
-              setState(() {
-                _selectedTabIndex = index;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: isActive ? Colors.white : AppTheme.textSecondary,
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                  fontSize: 14,
+          child: Semantics(
+            button: true,
+            selected: isActive,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                setState(() {
+                  _selectedTabIndex = index;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isActive ? Colors.white : AppTheme.textSecondary,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
@@ -108,7 +112,8 @@ class _MyLearningViewState extends State<MyLearningView> {
       case 2:
         icon = Icons.bookmark_rounded;
         title = 'No Saved Courses';
-        subtitle = 'Save courses you are interested in\nto find them quickly later.';
+        subtitle =
+            'Save courses you are interested in\nto find them quickly later.';
         break;
       case 0:
       default:
@@ -131,11 +136,7 @@ class _MyLearningViewState extends State<MyLearningView> {
                 color: AppTheme.secondaryColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 44,
-                color: AppTheme.secondaryColor,
-              ),
+              child: Icon(icon, size: 44, color: AppTheme.secondaryColor),
             ),
             const SizedBox(height: 24),
             Text(
