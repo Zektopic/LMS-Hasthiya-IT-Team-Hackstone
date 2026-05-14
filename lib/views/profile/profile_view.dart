@@ -43,17 +43,17 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.person_outline_rounded,
                   label: 'Edit Profile',
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Edit Profile'),
                 ),
                 _SettingItem(
                   icon: Icons.notifications_none_rounded,
                   label: 'Notifications',
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Notifications'),
                 ),
                 _SettingItem(
                   icon: Icons.download_rounded,
                   label: 'Downloads',
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Downloads'),
                 ),
               ]),
               const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class ProfileView extends StatelessWidget {
                     'Dark',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Appearance settings'),
                 ),
                 _SettingItem(
                   icon: Icons.language_rounded,
@@ -74,7 +74,7 @@ class ProfileView extends StatelessWidget {
                     'English',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Language settings'),
                 ),
               ]),
               const SizedBox(height: 20),
@@ -82,12 +82,12 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.help_outline_rounded,
                   label: 'Help Center',
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'Help Center'),
                 ),
                 _SettingItem(
                   icon: Icons.info_outline_rounded,
                   label: 'About',
-                  onTap: () {},
+                  onTap: () => _showComingSoon(context, 'About information'),
                 ),
               ]),
               const SizedBox(height: 28),
@@ -207,6 +207,16 @@ class ProfileView extends StatelessWidget {
             style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showComingSoon(BuildContext context, String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature coming soon!'),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
