@@ -155,7 +155,17 @@ class _HomeViewState extends State<HomeView> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Profile settings coming soon!'),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  );
+                },
                 child: auth.photoUrl != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
