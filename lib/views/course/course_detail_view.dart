@@ -57,8 +57,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final colors = AppTheme.cardGradients[
-        widget.course.title.length % AppTheme.cardGradients.length];
+    final colors =
+        AppTheme.cardGradients[widget.course.title.length %
+            AppTheme.cardGradients.length];
 
     return SliverAppBar(
       expandedHeight: 260,
@@ -421,15 +422,14 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
                                         children: [
                                           for (var i = 0; i < 5; i++)
                                             Icon(
                                               i < avg.floor()
                                                   ? Icons.star_rounded
                                                   : i < avg
-                                                      ? Icons.star_half_rounded
-                                                      : Icons.star_border_rounded,
+                                                  ? Icons.star_half_rounded
+                                                  : Icons.star_border_rounded,
                                               color: Colors.amber,
                                               size: 20,
                                             ),
@@ -544,7 +544,6 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                   excludeSemantics: true,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
                     children: [
                       for (var i = 0; i < 5; i++)
                         Icon(

@@ -5,7 +5,7 @@ class CourseService {
   final FirebaseFirestore _db;
 
   CourseService({FirebaseFirestore? db})
-      : _db = db ?? FirebaseFirestore.instance;
+    : _db = db ?? FirebaseFirestore.instance;
 
   // Optimization: Added optional limit parameter to prevent unbounded reads
   Future<List<Course>> getRecommendedCourses({int? limit}) async {

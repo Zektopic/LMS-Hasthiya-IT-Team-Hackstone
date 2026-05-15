@@ -810,15 +810,14 @@ class _ReviewsViewState extends State<ReviewsView> {
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
         children: [
           for (var i = 0; i < 5; i++)
             Icon(
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                      ? Icons.star_half_rounded
-                      : Icons.star_border_rounded,
+                  ? Icons.star_half_rounded
+                  : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
@@ -999,7 +998,6 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
                             children: [
                               for (var i = 0; i < 5; i++)
                                 Padding(
@@ -1018,7 +1016,9 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                     },
                                     icon: AnimatedScale(
                                       scale: i < _selectedRating ? 1.2 : 1.0,
-                                      duration: const Duration(milliseconds: 150),
+                                      duration: const Duration(
+                                        milliseconds: 150,
+                                      ),
                                       child: Icon(
                                         i < _selectedRating
                                             ? Icons.star_rounded

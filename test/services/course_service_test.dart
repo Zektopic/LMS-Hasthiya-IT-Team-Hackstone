@@ -94,72 +94,75 @@ void main() {
       courseService = CourseService(db: fakeFirestore);
     });
 
-    test('getRecommendedCourses successfully fetches courses without limit', () async {
-      final collection =
-          fakeFirestore.collection('courses') as FakeCollectionReference;
-      collection.documents = [
-        FakeDocumentSnapshot('course1', {
-          'title': 'Test Course 1',
-          'description': 'Description 1',
-          'thumbnailUrl': 'thumb1',
-          'rating': 4.5,
-          'category': 'Programming',
-          'studentCount': 100,
-          'lessons': [],
-        }),
-        FakeDocumentSnapshot('course2', {
-          'title': 'Test Course 2',
-          'description': 'Description 2',
-          'thumbnailUrl': 'thumb2',
-          'rating': 4.8,
-          'category': 'Design',
-          'studentCount': 200,
-          'lessons': [],
-        }),
-      ];
+    test(
+      'getRecommendedCourses successfully fetches courses without limit',
+      () async {
+        final collection =
+            fakeFirestore.collection('courses') as FakeCollectionReference;
+        collection.documents = [
+          FakeDocumentSnapshot('course1', {
+            'title': 'Test Course 1',
+            'description': 'Description 1',
+            'thumbnailUrl': 'thumb1',
+            'rating': 4.5,
+            'category': 'Programming',
+            'studentCount': 100,
+            'lessons': [],
+          }),
+          FakeDocumentSnapshot('course2', {
+            'title': 'Test Course 2',
+            'description': 'Description 2',
+            'thumbnailUrl': 'thumb2',
+            'rating': 4.8,
+            'category': 'Design',
+            'studentCount': 200,
+            'lessons': [],
+          }),
+        ];
 
-      final courses = await courseService.getRecommendedCourses();
+        final courses = await courseService.getRecommendedCourses();
 
-      expect(courses.length, 2);
-      expect(courses[0].id, 'course1');
-      expect(courses[0].title, 'Test Course 1');
-      expect(courses[0].category, 'Programming');
+        expect(courses.length, 2);
+        expect(courses[0].id, 'course1');
+        expect(courses[0].title, 'Test Course 1');
+        expect(courses[0].category, 'Programming');
 
-      expect(courses[1].id, 'course2');
-      expect(courses[1].title, 'Test Course 2');
-      expect(courses[1].category, 'Design');
-    });
+        expect(courses[1].id, 'course2');
+        expect(courses[1].title, 'Test Course 2');
+        expect(courses[1].category, 'Design');
+      },
+    );
 
-    test('getRecommendedCourses successfully fetches courses with limit', () async {
-      final collection =
-          fakeFirestore.collection('courses') as FakeCollectionReference;
-      collection.documents = [
-        FakeDocumentSnapshot('course1', {
-          'title': 'Test Course 1',
-        }),
-        FakeDocumentSnapshot('course2', {
-          'title': 'Test Course 2',
-        }),
-        FakeDocumentSnapshot('course3', {
-          'title': 'Test Course 3',
-        }),
-      ];
+    test(
+      'getRecommendedCourses successfully fetches courses with limit',
+      () async {
+        final collection =
+            fakeFirestore.collection('courses') as FakeCollectionReference;
+        collection.documents = [
+          FakeDocumentSnapshot('course1', {'title': 'Test Course 1'}),
+          FakeDocumentSnapshot('course2', {'title': 'Test Course 2'}),
+          FakeDocumentSnapshot('course3', {'title': 'Test Course 3'}),
+        ];
 
-      final courses = await courseService.getRecommendedCourses(limit: 2);
+        final courses = await courseService.getRecommendedCourses(limit: 2);
 
-      expect(courses.length, 2);
-      expect(courses[0].id, 'course1');
-      expect(courses[1].id, 'course2');
-    });
+        expect(courses.length, 2);
+        expect(courses[0].id, 'course1');
+        expect(courses[1].id, 'course2');
+      },
+    );
 
-    test('getRecommendedCourses handles errors and returns an empty list', () async {
-      final collection =
-          fakeFirestore.collection('courses') as FakeCollectionReference;
-      collection.shouldThrowError = true;
+    test(
+      'getRecommendedCourses handles errors and returns an empty list',
+      () async {
+        final collection =
+            fakeFirestore.collection('courses') as FakeCollectionReference;
+        collection.shouldThrowError = true;
 
-      final courses = await courseService.getRecommendedCourses();
+        final courses = await courseService.getRecommendedCourses();
 
-      expect(courses, isEmpty);
-    });
+        expect(courses, isEmpty);
+      },
+    );
   });
 }
