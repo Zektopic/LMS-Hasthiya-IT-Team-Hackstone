@@ -401,15 +401,14 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
                                       children: [
                                         for (var i = 0; i < 5; i++)
                                           Icon(
                                             i < avg.floor()
                                                 ? Icons.star_rounded
                                                 : i < avg
-                                                    ? Icons.star_half_rounded
-                                                    : Icons.star_border_rounded,
+                                                ? Icons.star_half_rounded
+                                                : Icons.star_border_rounded,
                                             color: Colors.amber,
                                             size: 20,
                                           ),
@@ -521,7 +520,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   excludeSemantics: true,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    // ⚡ Bolt: Replace List.generate with collection for to prevent closure allocation
                     children: [
                       for (var i = 0; i < 5; i++)
                         Icon(

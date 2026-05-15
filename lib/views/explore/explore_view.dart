@@ -89,14 +89,16 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       _filteredVideos = _allVideos.where((v) {
-        final matchesSearch = isQueryEmpty ||
+        final matchesSearch =
+            isQueryEmpty ||
             searchRegex!.hasMatch(v.title) ||
             searchRegex!.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
-        final matchesSearch = isQueryEmpty ||
+        final matchesSearch =
+            isQueryEmpty ||
             searchRegex!.hasMatch(c.title) ||
             searchRegex!.hasMatch(c.description);
         final matchesCategory =
@@ -185,8 +187,9 @@ class _ExploreViewState extends State<ExploreView> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              gradient:
-                                  isSelected ? AppTheme.primaryGradient : null,
+                              gradient: isSelected
+                                  ? AppTheme.primaryGradient
+                                  : null,
                               color: isSelected
                                   ? null
                                   : Colors.white.withValues(alpha: 0.08),
@@ -208,7 +211,8 @@ class _ExploreViewState extends State<ExploreView> {
                                   borderRadius: BorderRadius.circular(20),
                                   onTap: () {
                                     setState(
-                                        () => _selectedCategory = category);
+                                      () => _selectedCategory = category,
+                                    );
                                     _filterContent();
                                   },
                                   child: Padding(
@@ -501,7 +505,8 @@ class _ExploreViewState extends State<ExploreView> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => VideoPlayerView(video: video)),
+                      builder: (_) => VideoPlayerView(video: video),
+                    ),
                   ),
                 ),
               ),
