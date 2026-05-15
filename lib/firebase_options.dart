@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-import 'env.dart';
-
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -42,8 +40,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static FirebaseOptions get web => FirebaseOptions(
-    apiKey: Env.webApiKey,
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCBS3fd5LqpqzdWxLL1A-dIbuYQoCdA-20',
     appId: '1:546437856933:web:d883d3a8fb0d3f6060d74c',
     messagingSenderId: '546437856933',
     projectId: 'manups-lms-finapp-2026',
@@ -51,16 +49,16 @@ class DefaultFirebaseOptions {
     storageBucket: 'manups-lms-finapp-2026.firebasestorage.app',
   );
 
-  static FirebaseOptions get android => FirebaseOptions(
-    apiKey: Env.androidApiKey,
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAAhtp_HvjB4IG1cGAwjsiW6BPo1mbElzA',
     appId: '1:546437856933:android:28fc6736485e4cd760d74c',
     messagingSenderId: '546437856933',
     projectId: 'manups-lms-finapp-2026',
     storageBucket: 'manups-lms-finapp-2026.firebasestorage.app',
   );
 
-  static FirebaseOptions get ios => FirebaseOptions(
-    apiKey: Env.iosApiKey,
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCkpOUTYFxLXalE-pOGT6iT7y1UxMWt3uI',
     appId: '1:546437856933:ios:43286b061eca30fe60d74c',
     messagingSenderId: '546437856933',
     projectId: 'manups-lms-finapp-2026',
@@ -68,8 +66,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'io.flutter.demo.gallery',
   );
 
-  static FirebaseOptions get macos => FirebaseOptions(
-    apiKey: Env.macosApiKey,
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCkpOUTYFxLXalE-pOGT6iT7y1UxMWt3uI',
     appId: '1:546437856933:ios:43286b061eca30fe60d74c',
     messagingSenderId: '546437856933',
     projectId: 'manups-lms-finapp-2026',
@@ -77,8 +75,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'io.flutter.demo.gallery',
   );
 
-  static FirebaseOptions get windows => FirebaseOptions(
-    apiKey: Env.windowsApiKey,
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCBS3fd5LqpqzdWxLL1A-dIbuYQoCdA-20',
     appId: '1:546437856933:web:ebcb4c8ef32db6b060d74c',
     messagingSenderId: '546437856933',
     projectId: 'manups-lms-finapp-2026',
