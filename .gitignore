@@ -84,5 +84,3 @@ new_gallery/.pub/
 new_gallery/ios/
 new_gallery/android/
 node_modules/
-.env
-lib/env.g.dart
