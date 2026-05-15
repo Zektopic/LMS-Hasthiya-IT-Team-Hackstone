@@ -25,7 +25,7 @@ class Video {
 }
 
 class LmsDataService {
-  final String baseUrl = 'http://localhost:5000';
+  final String baseUrl = 'https://localhost:5000';
   static String? _authToken;
 
   /// Authenticates the user and retrieves a JWT token.
