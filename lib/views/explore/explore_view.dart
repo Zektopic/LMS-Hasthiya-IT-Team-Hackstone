@@ -91,14 +91,14 @@ class _ExploreViewState extends State<ExploreView> {
       _filteredVideos = _allVideos.where((v) {
         final matchesSearch = isQueryEmpty ||
             searchRegex!.hasMatch(v.title) ||
-            searchRegex!.hasMatch(v.description);
+            searchRegex.hasMatch(v.description);
         return matchesSearch;
       }).toList();
 
       _filteredCourses = _allCourses.where((c) {
         final matchesSearch = isQueryEmpty ||
             searchRegex!.hasMatch(c.title) ||
-            searchRegex!.hasMatch(c.description);
+            searchRegex.hasMatch(c.description);
         final matchesCategory =
             _selectedCategory == 'All' || c.category == _selectedCategory;
         return matchesSearch && matchesCategory;
