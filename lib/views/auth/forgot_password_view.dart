@@ -7,7 +7,6 @@ import '../../core/glass_widgets.dart';
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
 
-  @override
   State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
@@ -19,7 +18,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
 
-  @override
   void initState() {
     super.initState();
     _animController = AnimationController(
@@ -30,7 +28,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     _animController.forward();
   }
 
-  @override
   void dispose() {
     _animController.dispose();
     _emailController.dispose();
@@ -63,7 +60,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthViewModel>();
 
