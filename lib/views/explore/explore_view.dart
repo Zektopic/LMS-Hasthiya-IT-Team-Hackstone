@@ -83,28 +83,33 @@ class _ExploreViewState extends State<ExploreView> {
   void _filterContent() {
     final query = _searchController.text.trim();
     final isQueryEmpty = query.isEmpty;
+    final isCategoryAll = _selectedCategory == 'All';
     final searchRegex = isQueryEmpty
         ? null
         : RegExp(RegExp.escape(query), caseSensitive: false);
 
     setState(() {
-      _filteredVideos = _allVideos.where((v) {
-        final matchesSearch =
-            isQueryEmpty ||
-            searchRegex!.hasMatch(v.title) ||
-            searchRegex.hasMatch(v.description);
-        return matchesSearch;
-      }).toList();
+      // Optimization: Skip O(N) list traversal and object allocation when there are no active filters
+      _filteredVideos =
+          isQueryEmpty
+              ? _allVideos
+              : _allVideos.where((v) {
+                  return searchRegex!.hasMatch(v.title) ||
+                      searchRegex.hasMatch(v.description);
+                }).toList();
 
-      _filteredCourses = _allCourses.where((c) {
-        final matchesSearch =
-            isQueryEmpty ||
-            searchRegex!.hasMatch(c.title) ||
-            searchRegex.hasMatch(c.description);
-        final matchesCategory =
-            _selectedCategory == 'All' || c.category == _selectedCategory;
-        return matchesSearch && matchesCategory;
-      }).toList();
+      _filteredCourses =
+          (isQueryEmpty && isCategoryAll)
+              ? _allCourses
+              : _allCourses.where((c) {
+                  final matchesSearch =
+                      isQueryEmpty ||
+                      searchRegex!.hasMatch(c.title) ||
+                      searchRegex.hasMatch(c.description);
+                  final matchesCategory =
+                      isCategoryAll || c.category == _selectedCategory;
+                  return matchesSearch && matchesCategory;
+                }).toList();
     });
   }
 

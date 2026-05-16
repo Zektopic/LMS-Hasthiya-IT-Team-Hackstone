@@ -73,3 +73,6 @@
 ## 2024-05-18 - [List.generate closure allocations]
 **Learning:** In Flutter, higher-order functions like `List.generate` that take closures allocate new closure objects on every widget rebuild when used directly within a `build` method.
 **Action:** Use explicit collection `for` loops (e.g., `[for (var i = 0; i < n; i++) ...]`) instead of `List.generate` inside `build` methods to prevent unnecessary object allocation and reduce garbage collection pressure.
+## 2024-11-20 - Skip Unnecessary Filtering and Iterations
+**Learning:** In Dart/Flutter apps displaying large filtered lists, using `.where(...).toList()` unnecessarily allocates a completely new list structure even when the active filters do nothing (e.g., empty search string, "All" category). This places preventable pressure on the garbage collector and burns CPU cycles with $O(N)$ operations.
+**Action:** When creating filtered lists inside widget `build` or state updates, short-circuit the filter logic if the filter is empty. For empty filters, simply assign the original reference to the filtered variable instead of executing an $O(N)$ list traversal.
