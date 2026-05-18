@@ -147,6 +147,7 @@ class _LoginViewState extends State<LoginView>
                                   controller: _passwordController,
                                   obscureText: !_isPasswordVisible,
                                   textInputAction: TextInputAction.done,
+                                  autocorrect: false,
                                   autofillHints: const [AutofillHints.password],
                                   style: const TextStyle(color: Colors.white),
                                   onSubmitted: (_) {
