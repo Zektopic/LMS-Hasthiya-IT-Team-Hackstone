@@ -145,6 +145,7 @@ class _SignupViewState extends State<SignupView>
                                   controller: _nameController,
                                   textInputAction: TextInputAction.next,
                                   textCapitalization: TextCapitalization.words,
+                                  autocorrect: false,
                                   autofillHints: const [AutofillHints.name],
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
@@ -170,6 +171,7 @@ class _SignupViewState extends State<SignupView>
                                   controller: _passwordController,
                                   obscureText: !_isPasswordVisible,
                                   textInputAction: TextInputAction.done,
+                                  autocorrect: false,
                                   autofillHints: const [
                                     AutofillHints.newPassword,
                                   ],

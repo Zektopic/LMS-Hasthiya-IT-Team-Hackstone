@@ -64,6 +64,7 @@ class _LmsLoginScreenState extends State<LmsLoginScreen> {
               decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
               textInputAction: TextInputAction.done,
+              autocorrect: false,
               autofillHints: const [AutofillHints.password],
               onSubmitted: (_) => _login(),
             ),
