@@ -523,6 +523,9 @@ class _ExploreViewState extends State<ExploreView> {
   }
 
   Widget _buildEmptyState() {
+    final hasFilters =
+        _searchController.text.isNotEmpty || _selectedCategory != 'All';
+
     return Center(
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -532,17 +535,13 @@ class _ExploreViewState extends State<ExploreView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                _searchController.text.isNotEmpty
-                    ? Icons.search_off_rounded
-                    : Icons.explore_rounded,
+                hasFilters ? Icons.search_off_rounded : Icons.explore_rounded,
                 size: 64,
                 color: AppTheme.textMuted,
               ),
               const SizedBox(height: 16),
               Text(
-                _searchController.text.isNotEmpty
-                    ? 'No results found'
-                    : 'Nothing here yet',
+                hasFilters ? 'No results found' : 'Nothing here yet',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -550,7 +549,7 @@ class _ExploreViewState extends State<ExploreView> {
               ),
               const SizedBox(height: 8),
               Text(
-                _searchController.text.isNotEmpty
+                hasFilters
                     ? 'Try adjusting your search or filters.'
                     : 'New content will appear here once it\'s added.',
                 style: const TextStyle(
@@ -559,6 +558,21 @@ class _ExploreViewState extends State<ExploreView> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              if (hasFilters) ...[
+                const SizedBox(height: 24),
+                TextButton.icon(
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() => _selectedCategory = 'All');
+                    _filterContent();
+                  },
+                  icon: const Icon(Icons.clear_all_rounded),
+                  label: const Text('Clear Filters'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppTheme.primaryColor,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
