@@ -76,3 +76,6 @@
 ## 2024-11-20 - Skip Unnecessary Filtering and Iterations
 **Learning:** In Dart/Flutter apps displaying large filtered lists, using `.where(...).toList()` unnecessarily allocates a completely new list structure even when the active filters do nothing (e.g., empty search string, "All" category). This places preventable pressure on the garbage collector and burns CPU cycles with $O(N)$ operations.
 **Action:** When creating filtered lists inside widget `build` or state updates, short-circuit the filter logic if the filter is empty. For empty filters, simply assign the original reference to the filtered variable instead of executing an $O(N)$ list traversal.
+## 2024-05-20 - [Redundant List Allocations on Pre-sorted Firestore Data]
+**Learning:** The application streams pre-sorted data from Firestore (e.g., reviews sorted by newest). Re-allocating these into new lists (`List.from`) during the widget build cycle for the default sort state causes unnecessary O(N) memory allocations and garbage collection pressure on every stream emission or rebuild.
+**Action:** Always check if the default sort order matches the backend query's sort order. If it does, short-circuit the client-side sorting logic and return the original list reference directly.

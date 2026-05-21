@@ -75,10 +75,12 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   List<Review> _sorted(List<Review> reviews) {
-    final list = List<Review>.from(reviews);
-    if (_sortBy == _SortBy.topRated) {
-      list.sort((a, b) => b.rating.compareTo(a.rating));
+    if (_sortBy == _SortBy.newest) {
+      // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
+      return reviews;
     }
+    final list = List<Review>.from(reviews);
+    list.sort((a, b) => b.rating.compareTo(a.rating));
     return list;
   }
 
