@@ -64,3 +64,6 @@
 ## 2024-05-14 - Empty Callbacks Create Broken UX
 **Learning:** In Flutter, providing interactive elements (like `InkWell` or `GestureDetector`) with empty callbacks (e.g., `onTap: () {}`) for features that are not yet implemented creates a broken UX. Users tap the element expecting an action, but receive no feedback, leading them to assume the application is unresponsive or bugged.
 **Action:** Do not leave empty callbacks for unimplemented features. Provide immediate UX feedback by utilizing a `SnackBar` or similar non-intrusive alert indicating that the feature is "coming soon". This acknowledges the user's input and manages expectations correctly.
+## 2026-05-20 - Explore View Empty State Clear Filters
+**Learning:** Users can get trapped in a 'No results found' state when combining search queries with category filters, requiring multiple manual interactions to reset the view. Adding a single 'Clear Filters' CTA directly in the empty state significantly improves recovery time and UX flow.
+**Action:** Always provide an actionable 'reset' or 'clear' button within empty states that are triggered by active filters or search queries.
