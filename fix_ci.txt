@@ -1,0 +1,4 @@
+The CI failed not because of our code, but because of a rate limit error in the `copilot-pull-request-reviewer` workflow ("You've reached your weekly rate limit").
+We don't need to fix any of the application code or tests for this specific error since the code and tests all pass locally.
+
+I'll reply to the user.
