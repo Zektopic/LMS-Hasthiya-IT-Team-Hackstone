@@ -79,3 +79,6 @@
 ## 2024-05-20 - [Redundant List Allocations on Pre-sorted Firestore Data]
 **Learning:** The application streams pre-sorted data from Firestore (e.g., reviews sorted by newest). Re-allocating these into new lists (`List.from`) during the widget build cycle for the default sort state causes unnecessary O(N) memory allocations and garbage collection pressure on every stream emission or rebuild.
 **Action:** Always check if the default sort order matches the backend query's sort order. If it does, short-circuit the client-side sorting logic and return the original list reference directly.
+## 2026-04-09 - Optimize StreamBuilder by caching streams
+ **Learning:** Creating streams inside the 'build' method or its helpers causes StreamBuilder to re-subscribe on every rebuild, leading to redundant Firestore listener allocations and UI flickering.
+ **Action:** Always initialize and store streams in 'initState' (and update in 'didUpdateWidget' if needed) when using StreamBuilder in a StatefulWidget.
