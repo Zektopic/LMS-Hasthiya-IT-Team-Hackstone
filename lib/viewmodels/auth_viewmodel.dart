@@ -76,7 +76,10 @@ class AuthViewModel extends ChangeNotifier {
       case 'invalid-credential':
         return 'Invalid email or password.';
       default:
-        return e.message ?? 'Authentication failed.';
+        if (kDebugMode) {
+          debugPrint('Unhandled FirebaseAuthException: ${e.message}');
+        }
+        return 'Authentication failed.';
     }
   }
 
