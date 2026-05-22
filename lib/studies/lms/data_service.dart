@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../env.dart';
 
 class Video {
   final String id;
@@ -25,11 +26,7 @@ class Video {
 }
 
 class LmsDataService {
-  static const String baseUrl = String.fromEnvironment(
-    'LMS_API_BASE_URL',
-    defaultValue: 'https://api.hackston-lms.com',
-  );
-
+  String get baseUrl => Env.lmsBaseUrl;
   final http.Client _client;
   static String? _authToken;
 
