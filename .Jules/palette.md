@@ -67,3 +67,6 @@
 ## 2026-05-20 - Explore View Empty State Clear Filters
 **Learning:** Users can get trapped in a 'No results found' state when combining search queries with category filters, requiring multiple manual interactions to reset the view. Adding a single 'Clear Filters' CTA directly in the empty state significantly improves recovery time and UX flow.
 **Action:** Always provide an actionable 'reset' or 'clear' button within empty states that are triggered by active filters or search queries.
+## $(date +%Y-%m-%d) - Fix InkWell Ripple Visibility Over Opaque Widgets
+**Learning:** In Flutter, `InkWell` splashes are painted on the nearest ancestor `Material` widget. If child widgets inside the `InkWell` are opaque (like `CachedNetworkImage` or `Container`s with gradients), they completely hide the ripple effect, depriving users of critical visual feedback upon interaction.
+**Action:** When making custom cards or elements with opaque backgrounds interactive, avoid wrapping the content directly in an `InkWell`. Instead, use a `Stack` (often with `fit: StackFit.expand` if the parent is explicitly sized) where the content forms the base layer, and place `Positioned.fill(child: Material(color: Colors.transparent, child: InkWell(...)))` as the top layer so the ripple renders above everything.

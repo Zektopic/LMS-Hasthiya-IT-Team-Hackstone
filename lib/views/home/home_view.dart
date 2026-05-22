@@ -151,22 +151,10 @@ class _HomeViewState extends State<HomeView> {
               gradient: AppTheme.primaryGradient,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Profile settings coming soon!'),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  );
-                },
-                child: auth.photoUrl != null
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                auth.photoUrl != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: CachedNetworkImage(
@@ -176,7 +164,26 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       )
                     : _buildInitials(auth),
-              ),
+                Positioned.fill(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Profile settings coming soon!'),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
