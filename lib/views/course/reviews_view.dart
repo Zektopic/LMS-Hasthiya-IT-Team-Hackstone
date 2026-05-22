@@ -818,8 +818,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                  ? Icons.star_half_rounded
-                  : Icons.star_border_rounded,
+                      ? Icons.star_half_rounded
+                      : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
