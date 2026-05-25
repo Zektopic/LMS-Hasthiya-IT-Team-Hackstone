@@ -26,6 +26,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   );
   late Stream<List<Review>> _reviewsStream;
 
+  List<Review>? _cachedReviews;
+  double _cachedAverage = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -348,13 +351,17 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
-            // to avoid allocating a closure on every widget rebuild
-            var sum = 0.0;
-            for (final r in reviews) {
-              sum += r.rating;
+            // ⚡ Bolt: Memoize expensive O(N) list operations by caching the list reference and result.
+            // Use Dart's identical() for an O(1) identity check to quickly skip recalculations on widget rebuilds.
+            if (!identical(reviews, _cachedReviews)) {
+              var sum = 0.0;
+              for (final r in reviews) {
+                sum += r.rating;
+              }
+              _cachedAverage = reviews.isEmpty ? 0.0 : sum / reviews.length;
+              _cachedReviews = reviews;
             }
-            final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+            final avg = _cachedAverage;
 
             return Column(
               children: [
