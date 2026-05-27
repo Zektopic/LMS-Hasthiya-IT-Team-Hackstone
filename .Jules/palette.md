@@ -67,3 +67,6 @@
 ## 2026-05-20 - Explore View Empty State Clear Filters
 **Learning:** Users can get trapped in a 'No results found' state when combining search queries with category filters, requiring multiple manual interactions to reset the view. Adding a single 'Clear Filters' CTA directly in the empty state significantly improves recovery time and UX flow.
 **Action:** Always provide an actionable 'reset' or 'clear' button within empty states that are triggered by active filters or search queries.
+## 2026-05-27 - Semantics for Clickable Content Cards
+**Learning:** When using `InkWell` directly inside custom cards like Course or Video cards, screen readers might only announce the visible text inside without context that it is an interactive element representing a specific item. Adding `button: true` to the `InkWell` itself might not be enough if it contains complex nested UI.
+**Action:** When wrapping a custom content card in an `InkWell`, always wrap the `InkWell` itself in a `Semantics` widget. Set `button: true` and provide a clear, descriptive `label` combining the item type and its name (e.g., `label: "Course: ${course.title}"`) to provide explicit context to assistive technologies.
