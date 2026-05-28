@@ -79,3 +79,7 @@
 ## 2024-05-20 - [Redundant List Allocations on Pre-sorted Firestore Data]
 **Learning:** The application streams pre-sorted data from Firestore (e.g., reviews sorted by newest). Re-allocating these into new lists (`List.from`) during the widget build cycle for the default sort state causes unnecessary O(N) memory allocations and garbage collection pressure on every stream emission or rebuild.
 **Action:** Always check if the default sort order matches the backend query's sort order. If it does, short-circuit the client-side sorting logic and return the original list reference directly.
+
+## 2024-05-28 - Flutter List Memory Footprint
+**Learning:** O(N) array calculations and sorting within `StreamBuilder` logic generate unneeded memory footprint and CPU utilization on every subsequent UI rebuild.
+**Action:** In Flutter, memoize `StreamBuilder` payload outputs using `identical(list, cachedList)` to verify instance references instead of deep-checking payload equality.

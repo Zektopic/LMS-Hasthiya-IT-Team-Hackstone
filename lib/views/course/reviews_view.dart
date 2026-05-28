@@ -36,6 +36,15 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
+  // Memoization state
+  List<Review>? _cachedSortSource;
+  List<Review>? _cachedSortResult;
+  _SortBy? _cachedSortBy;
+
+  List<Review>? _cachedSummaryReviews;
+  double _cachedAvg = 0.0;
+  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+
   @override
   void initState() {
     super.initState();
@@ -79,8 +88,21 @@ class _ReviewsViewState extends State<ReviewsView> {
       // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
       return reviews;
     }
+
+    // ⚡ Bolt: Memoize the sorting calculation
+    if (identical(reviews, _cachedSortSource) &&
+        _sortBy == _cachedSortBy &&
+        _cachedSortResult != null) {
+      return _cachedSortResult!;
+    }
+
     final list = List<Review>.from(reviews);
     list.sort((a, b) => b.rating.compareTo(a.rating));
+
+    _cachedSortSource = reviews;
+    _cachedSortResult = list;
+    _cachedSortBy = _sortBy;
+
     return list;
   }
 
@@ -307,18 +329,26 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    var sum = 0.0;
-    final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+    // ⚡ Bolt: Memoize the summary aggregations to avoid O(N) operations on every rebuild
+    if (!identical(reviews, _cachedSummaryReviews)) {
+      var sum = 0.0;
+      final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
-    // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
-    // and avoid creating closures inside the render loop via .fold()
-    for (final r in reviews) {
-      sum += r.rating;
-      final key = r.rating.round().clamp(1, 5);
-      counts[key] = (counts[key] ?? 0) + 1;
+      // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
+      // and avoid creating closures inside the render loop via .fold()
+      for (final r in reviews) {
+        sum += r.rating;
+        final key = r.rating.round().clamp(1, 5);
+        counts[key] = (counts[key] ?? 0) + 1;
+      }
+
+      _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+      _cachedCounts = counts;
+      _cachedSummaryReviews = reviews;
     }
 
-    final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+    final avg = _cachedAvg;
+    final counts = _cachedCounts;
 
     return GlassCard(
       padding: const EdgeInsets.all(20),

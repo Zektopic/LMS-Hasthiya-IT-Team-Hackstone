@@ -26,6 +26,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   );
   late Stream<List<Review>> _reviewsStream;
 
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -348,13 +351,16 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
-            // to avoid allocating a closure on every widget rebuild
-            var sum = 0.0;
-            for (final r in reviews) {
-              sum += r.rating;
+            // ⚡ Bolt: Memoize the average calculation to avoid O(N) operations on every rebuild
+            if (!identical(reviews, _cachedReviews)) {
+              var sum = 0.0;
+              for (final r in reviews) {
+                sum += r.rating;
+              }
+              _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+              _cachedReviews = reviews;
             }
-            final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+            final avg = _cachedAvg;
 
             return Column(
               children: [
