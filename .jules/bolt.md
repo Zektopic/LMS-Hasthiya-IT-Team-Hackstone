@@ -79,3 +79,6 @@
 ## 2024-05-20 - [Redundant List Allocations on Pre-sorted Firestore Data]
 **Learning:** The application streams pre-sorted data from Firestore (e.g., reviews sorted by newest). Re-allocating these into new lists (`List.from`) during the widget build cycle for the default sort state causes unnecessary O(N) memory allocations and garbage collection pressure on every stream emission or rebuild.
 **Action:** Always check if the default sort order matches the backend query's sort order. If it does, short-circuit the client-side sorting logic and return the original list reference directly.
+## 2026-06-01 - [Memoizing StreamBuilder O(N) Operations]
+**Learning:** [identical() provides an O(1) way to check if a Stream has yielded a new dataset, allowing expensive O(N) derivations inside a StreamBuilder to be skipped on normal widget rebuilds.]
+**Action:** [Use identical(newList, _cachedList) to memoize expensive operations on Stream data in Flutter build methods.]
