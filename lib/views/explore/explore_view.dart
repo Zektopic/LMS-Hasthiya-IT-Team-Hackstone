@@ -426,12 +426,15 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CourseDetailView(course: course),
+                child: Semantics(
+                  label: 'Course: ${course.title}',
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CourseDetailView(course: course),
+                      ),
                     ),
                   ),
                 ),
@@ -505,12 +508,15 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => VideoPlayerView(video: video),
+                child: Semantics(
+                  label: 'Video: ${video.title}',
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VideoPlayerView(video: video),
+                      ),
                     ),
                   ),
                 ),
