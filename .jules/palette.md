@@ -5,3 +5,13 @@
 ## 2024-05-24 - Add Semantics to Stacked InkWell Custom Cards
 **Learning:** In Flutter, when building custom clickable cards (like Course or Video cards) using an `InkWell` inside a `Stack` (e.g. over other contents), wrapping the `InkWell` in a `Semantics` widget with a descriptive `label` ensures that screen readers announce the specific item content, preventing generic or unhelpful announcements.
 **Action:** Always wrap `InkWell` within custom generic cards with a `Semantics` widget supplying a specific, descriptive `label` (e.g., `label: 'Course: ${course.title}'`).
+## 2026-05-30 - Add specific semantics labels to custom clickable cards built with InkWell
+**Learning:** When building custom clickable cards (e.g., Course or Video cards) using `InkWell`, screen readers may not automatically announce the specific item content correctly.
+**Action:** Wrap the `InkWell` in a `Semantics` widget with a specific, descriptive `label` (e.g., `label: 'Course: ${course.title}'`) to ensure screen readers announce the specific item content, preventing generic or unhelpful announcements.
+
+## 2024-06-03 - Semantic labels for overlay InkWells
+**Learning:** When building custom clickable cards using a Stack where an InkWell overlay is separated from the visual content via Positioned.fill, screen readers will announce a generic or empty button because the InkWell has no semantic children.
+**Action:** Wrap the overlay InkWell in a Semantics widget with a specific, descriptive label (e.g., label: 'Course: ${course.title}') to ensure screen readers announce the specific item content.
+## 2024-05-23 - Retaining explicit semantics on parent containers
+**Learning:** In Flutter, while `InkWell` provides implicit button semantics, wrapping a structural layout widget (like `Container`) with `Semantics` requires retaining the `button: true` trait if that container acts as the overall interactive target, even if there is an `InkWell` deeper within it. Removing the explicit button semantics from the wrapping `Container` removes the button trait entirely from screen reader announcements.
+**Action:** When auditing redundant `button: true` traits, never remove them from `Semantics` widgets wrapping structural components like `Container`. Instead, look to add appropriate visual and auditory feedback, such as `Tooltip`, to icon-only custom widgets.

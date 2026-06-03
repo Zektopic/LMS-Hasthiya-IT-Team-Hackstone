@@ -141,41 +141,44 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        Semantics(
-          label: 'Profile settings',
-          button: true,
-          child: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
+        Tooltip(
+          message: 'Profile settings',
+          child: Semantics(
+            label: 'Profile settings',
+            button: true,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
                 borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Profile settings coming soon!'),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  );
-                },
-                child: auth.photoUrl != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: CachedNetworkImage(
-                          imageUrl: auth.photoUrl!,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => _buildInitials(auth),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Profile settings coming soon!'),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      )
-                    : _buildInitials(auth),
+                      ),
+                    );
+                  },
+                  child: auth.photoUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            imageUrl: auth.photoUrl!,
+                            fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => _buildInitials(auth),
+                          ),
+                        )
+                      : _buildInitials(auth),
+                ),
               ),
             ),
           ),

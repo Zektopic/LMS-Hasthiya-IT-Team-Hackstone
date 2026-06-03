@@ -35,6 +35,9 @@ class _ReviewsViewState extends State<ReviewsView> {
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
+  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
   @override
   void initState() {
@@ -307,18 +310,25 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    var sum = 0.0;
-    final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+    if (!identical(reviews, _cachedReviews)) {
+      var sum = 0.0;
+      final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
-    // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
-    // and avoid creating closures inside the render loop via .fold()
-    for (final r in reviews) {
-      sum += r.rating;
-      final key = r.rating.round().clamp(1, 5);
-      counts[key] = (counts[key] ?? 0) + 1;
+      // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
+      // and avoid creating closures inside the render loop via .fold()
+      for (final r in reviews) {
+        sum += r.rating;
+        final key = r.rating.round().clamp(1, 5);
+        counts[key] = (counts[key] ?? 0) + 1;
+      }
+
+      _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+      _cachedCounts = counts;
+      _cachedReviews = reviews;
     }
 
-    final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+    final avg = _cachedAvg;
+    final counts = _cachedCounts;
 
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -818,8 +828,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                  ? Icons.star_half_rounded
-                  : Icons.star_border_rounded,
+                      ? Icons.star_half_rounded
+                      : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
