@@ -90,26 +90,23 @@ class _ExploreViewState extends State<ExploreView> {
 
     setState(() {
       // Optimization: Skip O(N) list traversal and object allocation when there are no active filters
-      _filteredVideos =
-          isQueryEmpty
-              ? _allVideos
-              : _allVideos.where((v) {
-                  return searchRegex!.hasMatch(v.title) ||
-                      searchRegex.hasMatch(v.description);
-                }).toList();
+      _filteredVideos = isQueryEmpty
+          ? _allVideos
+          : _allVideos.where((v) {
+              return searchRegex!.hasMatch(v.title) ||
+                  searchRegex.hasMatch(v.description);
+            }).toList();
 
-      _filteredCourses =
-          (isQueryEmpty && isCategoryAll)
-              ? _allCourses
-              : _allCourses.where((c) {
-                  final matchesSearch =
-                      isQueryEmpty ||
-                      searchRegex!.hasMatch(c.title) ||
-                      searchRegex.hasMatch(c.description);
-                  final matchesCategory =
-                      isCategoryAll || c.category == _selectedCategory;
-                  return matchesSearch && matchesCategory;
-                }).toList();
+      _filteredCourses = (isQueryEmpty && isCategoryAll)
+          ? _allCourses
+          : _allCourses.where((c) {
+              final matchesSearch = isQueryEmpty ||
+                  searchRegex!.hasMatch(c.title) ||
+                  searchRegex.hasMatch(c.description);
+              final matchesCategory =
+                  isCategoryAll || c.category == _selectedCategory;
+              return matchesSearch && matchesCategory;
+            }).toList();
     });
   }
 
@@ -192,9 +189,8 @@ class _ExploreViewState extends State<ExploreView> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              gradient: isSelected
-                                  ? AppTheme.primaryGradient
-                                  : null,
+                              gradient:
+                                  isSelected ? AppTheme.primaryGradient : null,
                               color: isSelected
                                   ? null
                                   : Colors.white.withValues(alpha: 0.08),
@@ -426,12 +422,15 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CourseDetailView(course: course),
+                child: Semantics(
+                  label: 'Course: ${course.title}',
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CourseDetailView(course: course),
+                      ),
                     ),
                   ),
                 ),
@@ -505,12 +504,15 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => VideoPlayerView(video: video),
+                child: Semantics(
+                  label: 'Video: ${video.title}',
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VideoPlayerView(video: video),
+                      ),
                     ),
                   ),
                 ),
