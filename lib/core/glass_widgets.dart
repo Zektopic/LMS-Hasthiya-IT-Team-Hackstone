@@ -340,9 +340,8 @@ class _NavItem extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color: isSelected
-                        ? AppTheme.primaryColor
-                        : AppTheme.textMuted,
+                    color:
+                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
                     size: 24,
                   ),
                   const SizedBox(height: 4),
@@ -350,9 +349,8 @@ class _NavItem extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontSize: 11,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected
                           ? AppTheme.primaryColor
                           : AppTheme.textMuted,
