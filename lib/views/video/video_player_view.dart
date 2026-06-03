@@ -414,8 +414,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                             i < avg.floor()
                                                 ? Icons.star_rounded
                                                 : i < avg
-                                                ? Icons.star_half_rounded
-                                                : Icons.star_border_rounded,
+                                                    ? Icons.star_half_rounded
+                                                    : Icons.star_border_rounded,
                                             color: Colors.amber,
                                             size: 20,
                                           ),
