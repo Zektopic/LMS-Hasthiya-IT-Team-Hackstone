@@ -39,6 +39,10 @@ class _ReviewsViewState extends State<ReviewsView> {
   double _cachedAvg = 0.0;
   Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
+  List<Review>? _cachedSortedReviews;
+  List<Review>? _lastUnsortedReviews;
+  _SortBy? _lastSortBy;
+
   @override
   void initState() {
     super.initState();
@@ -82,8 +86,22 @@ class _ReviewsViewState extends State<ReviewsView> {
       // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
       return reviews;
     }
+
+    // ⚡ Bolt: Memoize the O(N log N) sort operation to prevent re-sorting on every widget rebuild
+    // by using an O(1) identity check on the stream data instance.
+    if (identical(reviews, _lastUnsortedReviews) &&
+        _sortBy == _lastSortBy &&
+        _cachedSortedReviews != null) {
+      return _cachedSortedReviews!;
+    }
+
     final list = List<Review>.from(reviews);
     list.sort((a, b) => b.rating.compareTo(a.rating));
+
+    _lastUnsortedReviews = reviews;
+    _lastSortBy = _sortBy;
+    _cachedSortedReviews = list;
+
     return list;
   }
 

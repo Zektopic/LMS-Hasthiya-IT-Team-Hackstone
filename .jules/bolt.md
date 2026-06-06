@@ -82,3 +82,6 @@
 ## YYYY-MM-DD - Flutter StreamBuilder Memoization
 **Learning:** In Flutter, `StreamBuilder` can rebuild multiple times with the same data instance (e.g., due to parent widget rebuilds or unrelated state changes). Running expensive O(N) operations (like computing averages or mapping data) directly inside the `build` method for every rebuild causes unnecessary CPU usage and stutter.
 **Action:** Always memoize expensive O(N) operations inside `build` methods (especially inside `StreamBuilder`) by caching the list reference and the result as state variables. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations when the stream data instance hasn't changed.
+## 2026-06-06 - Memoize Sorting in Build Methods
+**Learning:** Sorting operations (O(N log N)) directly inside `build` methods or `StreamBuilder` callbacks without memoization cause heavy recalculations on every rebuild.
+**Action:** Use `identical()` reference checks to cache sorted lists and skip recalculations when the incoming stream data instance hasn't changed.
