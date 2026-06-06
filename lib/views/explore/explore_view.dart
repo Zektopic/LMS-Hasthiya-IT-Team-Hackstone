@@ -206,7 +206,6 @@ class _ExploreViewState extends State<ExploreView> {
                             child: Material(
                               color: Colors.transparent,
                               child: Semantics(
-                                button: true,
                                 selected: isSelected,
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(20),

@@ -246,50 +246,47 @@ class ProfileView extends StatelessWidget {
                   children: [
                     Material(
                       color: Colors.transparent,
-                      child: Semantics(
-                        button: true,
-                        child: InkWell(
-                          borderRadius: index == 0 && items.length == 1
-                              ? BorderRadius.circular(16)
-                              : index == 0
-                                  ? const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    )
-                                  : index == items.length - 1
-                                      ? const BorderRadius.vertical(
-                                          bottom: Radius.circular(16),
-                                        )
-                                      : BorderRadius.zero,
-                          onTap: items[index].onTap,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 16,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  items[index].icon,
-                                  color: AppTheme.textSecondary,
+                      child: InkWell(
+                        borderRadius: index == 0 && items.length == 1
+                            ? BorderRadius.circular(16)
+                            : index == 0
+                                ? const BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  )
+                                : index == items.length - 1
+                                    ? const BorderRadius.vertical(
+                                        bottom: Radius.circular(16),
+                                      )
+                                    : BorderRadius.zero,
+                        onTap: items[index].onTap,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                items[index].icon,
+                                color: AppTheme.textSecondary,
+                                size: 22,
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  items[index].label,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              if (items[index].trailing != null)
+                                items[index].trailing!,
+                              if (items[index].trailing == null)
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppTheme.textMuted,
                                   size: 22,
                                 ),
-                                const SizedBox(width: 14),
-                                Expanded(
-                                  child: Text(
-                                    items[index].label,
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                                if (items[index].trailing != null)
-                                  items[index].trailing!,
-                                if (items[index].trailing == null)
-                                  const Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: AppTheme.textMuted,
-                                    size: 22,
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
                       ),
