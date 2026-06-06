@@ -70,7 +70,6 @@ class _MyLearningViewState extends State<MyLearningView> {
         child: Material(
           color: Colors.transparent,
           child: Semantics(
-            button: true,
             selected: isActive,
             child: InkWell(
               borderRadius: BorderRadius.circular(10),

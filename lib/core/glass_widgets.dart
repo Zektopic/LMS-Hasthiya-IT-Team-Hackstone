@@ -328,7 +328,6 @@ class _NavItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: Semantics(
-          button: true,
           selected: isSelected,
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
