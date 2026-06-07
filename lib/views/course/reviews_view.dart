@@ -35,22 +35,10 @@ class _ReviewsViewState extends State<ReviewsView> {
   bool _checkingUserReview = true;
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
-
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
-
-  List<Review>? _cachedOriginalReviews;
-  List<Review> _cachedSortedReviews = [];
-  _SortBy? _cachedSortBy;
 
   @override
   void initState() {
     super.initState();
-    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
   }
@@ -60,11 +48,6 @@ class _ReviewsViewState extends State<ReviewsView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contentId != widget.contentId) {
       _reviewsStream = _reviewService.getReviews(widget.contentId);
-      setState(() {
-        _userReview = null;
-        _checkingUserReview = true;
-      });
-      WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
     }
   }
 

@@ -18,22 +18,9 @@ class CourseDetailView extends StatefulWidget {
 }
 
 class _CourseDetailViewState extends State<CourseDetailView> {
-  final ReviewService _reviewService = ReviewService(
-    contentCollection: 'courses',
-  );
+  final ReviewService _reviewService =
+      ReviewService(contentCollection: 'courses');
   late Stream<List<Review>> _reviewsStream;
-  bool _isEnrolling = false;
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-
-  List<Review>? _cachedReviews;
-  double _cachedAverage = 0.0;
-
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-
-  List<Review>? _cachedReviewsForAvg;
-  double _cachedAvg = 0.0;
 
   @override
   void initState() {

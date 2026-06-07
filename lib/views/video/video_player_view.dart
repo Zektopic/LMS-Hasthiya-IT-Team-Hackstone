@@ -21,26 +21,13 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   bool _hasError = false;
-  final ReviewService _reviewService = ReviewService(
-    contentCollection: 'videos',
-  );
+  final ReviewService _reviewService =
+      ReviewService(contentCollection: 'videos');
   late Stream<List<Review>> _reviewsStream;
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-
-  List<Review>? _cachedReviews;
-  double _cachedAverage = 0.0;
-
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-
-  List<Review>? _cachedReviewsForAvg;
-  double _cachedAvg = 0.0;
 
   @override
   void initState() {
     super.initState();
-    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.video.id);
     _initializePlayer();
   }
