@@ -34,6 +34,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   List<Review>? _cachedReviews;
   double _cachedAvg = 0.0;
 
+  List<Review>? _cachedReviewsForAvg;
+  double _cachedAvg = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -356,16 +359,19 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            // ⚡ Bolt: Use identical() to skip O(N) recalculations on normal widget rebuilds
-            if (!identical(reviews, _cachedReviews)) {
+            // ⚡ Bolt: Memoize O(N) average rating calculation using identical check
+            double avg;
+            if (identical(reviews, _cachedReviewsForAvg)) {
+              avg = _cachedAvg;
+            } else {
               var sum = 0.0;
               for (final r in reviews) {
                 sum += r.rating;
               }
-              _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-              _cachedReviews = reviews;
+              avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+              _cachedReviewsForAvg = reviews;
+              _cachedAvg = avg;
             }
-            final avg = _cachedAvg;
 
             return Column(
               children: [

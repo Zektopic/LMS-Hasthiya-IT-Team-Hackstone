@@ -43,6 +43,10 @@ class _ReviewsViewState extends State<ReviewsView> {
   double _cachedAvg = 0.0;
   Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
+  List<Review>? _cachedOriginalReviews;
+  List<Review> _cachedSortedReviews = [];
+  _SortBy? _cachedSortBy;
+
   @override
   void initState() {
     super.initState();
@@ -87,18 +91,16 @@ class _ReviewsViewState extends State<ReviewsView> {
       return reviews;
     }
 
-    // ⚡ Bolt: Memoize the sorting calculation
-    if (identical(reviews, _cachedSortSource) &&
-        _sortBy == _cachedSortBy &&
-        _cachedSortResult != null) {
-      return _cachedSortResult!;
+    // ⚡ Bolt: Memoize O(N log N) sorting using O(1) identical check
+    if (identical(reviews, _cachedOriginalReviews) && _sortBy == _cachedSortBy) {
+      return _cachedSortedReviews;
     }
 
     final list = List<Review>.from(reviews);
     list.sort((a, b) => b.rating.compareTo(a.rating));
 
-    _cachedSortSource = reviews;
-    _cachedSortResult = list;
+    _cachedOriginalReviews = reviews;
+    _cachedSortedReviews = list;
     _cachedSortBy = _sortBy;
 
     return list;
