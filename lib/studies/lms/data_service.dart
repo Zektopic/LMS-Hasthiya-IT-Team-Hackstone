@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../env.dart';
 
 class Video {
   final String id;
@@ -25,7 +26,7 @@ class Video {
 }
 
 class LmsDataService {
-  final String baseUrl = 'https://localhost:5000';
+  String get baseUrl => Env.lmsBaseUrl;
   static String? _authToken;
 
   /// Authenticates the user and retrieves a JWT token.
