@@ -26,6 +26,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   List<Review>? _cachedReviews;
   double _cachedAvg = 0.0;
 
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -368,8 +371,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               }
 
               // Rating summary bar
-              // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
-              // to avoid allocating a closure on every widget rebuild
+              // ⚡ Bolt: Memoize the average calculation to avoid O(N) operations on every rebuild
               if (!identical(reviews, _cachedReviews)) {
                 var sum = 0.0;
                 for (final r in reviews) {
@@ -378,7 +380,6 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
                 _cachedReviews = reviews;
               }
-
               final avg = _cachedAvg;
 
               return Column(

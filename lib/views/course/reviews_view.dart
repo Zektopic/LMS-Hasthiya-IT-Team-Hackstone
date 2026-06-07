@@ -43,6 +43,15 @@ class _ReviewsViewState extends State<ReviewsView> {
   List<Review>? _lastUnsortedReviews;
   _SortBy? _lastSortBy;
 
+  // Memoization state
+  List<Review>? _cachedSortSource;
+  List<Review>? _cachedSortResult;
+  _SortBy? _cachedSortBy;
+
+  List<Review>? _cachedSummaryReviews;
+  double _cachedAvg = 0.0;
+  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+
   @override
   void initState() {
     super.initState();
@@ -87,20 +96,19 @@ class _ReviewsViewState extends State<ReviewsView> {
       return reviews;
     }
 
-    // ⚡ Bolt: Memoize the O(N log N) sort operation to prevent re-sorting on every widget rebuild
-    // by using an O(1) identity check on the stream data instance.
-    if (identical(reviews, _lastUnsortedReviews) &&
-        _sortBy == _lastSortBy &&
-        _cachedSortedReviews != null) {
-      return _cachedSortedReviews!;
+    // ⚡ Bolt: Memoize the sorting calculation
+    if (identical(reviews, _cachedSortSource) &&
+        _sortBy == _cachedSortBy &&
+        _cachedSortResult != null) {
+      return _cachedSortResult!;
     }
 
     final list = List<Review>.from(reviews);
     list.sort((a, b) => b.rating.compareTo(a.rating));
 
-    _lastUnsortedReviews = reviews;
-    _lastSortBy = _sortBy;
-    _cachedSortedReviews = list;
+    _cachedSortSource = reviews;
+    _cachedSortResult = list;
+    _cachedSortBy = _sortBy;
 
     return list;
   }
@@ -329,7 +337,8 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    if (!identical(reviews, _cachedReviews)) {
+    // ⚡ Bolt: Memoize the summary aggregations to avoid O(N) operations on every rebuild
+    if (!identical(reviews, _cachedSummaryReviews)) {
       var sum = 0.0;
       final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
@@ -343,7 +352,7 @@ class _ReviewsViewState extends State<ReviewsView> {
 
       _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
       _cachedCounts = counts;
-      _cachedReviews = reviews;
+      _cachedSummaryReviews = reviews;
     }
 
     final avg = _cachedAvg;
