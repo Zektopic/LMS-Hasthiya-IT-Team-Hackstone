@@ -18,9 +18,7 @@ class CourseService {
       final snapshot = await query.get();
       return snapshot.docs.map((doc) => Course.fromFirestore(doc)).toList();
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error fetching courses: $e');
-      }
+      debugPrint('Error fetching courses: $e');
       return [];
     }
   }
