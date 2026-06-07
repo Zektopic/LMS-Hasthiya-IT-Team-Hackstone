@@ -200,6 +200,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         ),
         actions: [
           PopupMenuButton<_SortBy>(
+            tooltip: 'Sort reviews',
             initialValue: _sortBy,
             onSelected: (v) => setState(() => _sortBy = v),
             color: AppTheme.surfaceColor,
