@@ -282,25 +282,117 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             final reviews = snapshot.data ?? [];
 
             if (reviews.isEmpty) {
-              return GlassCard(
-                padding: EdgeInsets.zero,
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ReviewsView(
-                          contentId: widget.video.id,
-                          contentTitle: widget.video.title,
-                          contentCollection: 'videos',
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReviewsView(
+                      contentId: widget.video.id,
+                      contentTitle: widget.video.title,
+                      contentCollection: 'videos',
+                    ),
+                  ),
+                ),
+                child: GlassCard(
+                  padding: EdgeInsets.zero,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ReviewsView(
+                            contentId: widget.video.id,
+                            contentTitle: widget.video.title,
+                            contentCollection: 'videos',
+                          ),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.rate_review_rounded,
+                            color: AppTheme.primaryColor, size: 22),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'No reviews yet',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Be the first to review this video.',
+                              style: TextStyle(
+                                color: AppTheme.textSecondary,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                            const Icon(Icons.chevron_right_rounded,
+                                color: AppTheme.textMuted),
+                          ],
                         ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
+                  ),
+                ),
+              );
+            }
+
+            final avg =
+                reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ReviewsView(
+                    contentId: widget.video.id,
+                    contentTitle: widget.video.title,
+                    contentCollection: 'videos',
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  GlassCard(
+                    padding: EdgeInsets.zero,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ReviewsView(
+                              contentId: widget.video.id,
+                              contentTitle: widget.video.title,
+                              contentCollection: 'videos',
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Semantics(
+                            excludeSemantics: true,
+                            label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                            child: Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
@@ -336,11 +428,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               ],
                             ),
                           ),
-                          const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppTheme.textMuted,
+                                const Icon(Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted),
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),

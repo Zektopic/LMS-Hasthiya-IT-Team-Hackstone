@@ -314,9 +314,54 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                           ),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
+                      const Icon(Icons.chevron_right_rounded,
+                          color: AppTheme.textMuted),
+                    ],
+                  ),
+                );
+              }
+
+              // Rating summary bar
+              final avg =
+                  reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReviewsView(
+                      contentId: widget.course.id,
+                      contentTitle: widget.course.title,
+                      contentCollection: 'courses',
+                    ),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Summary card
+                    GlassCard(
+                      padding: EdgeInsets.zero,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ReviewsView(
+                                contentId: widget.course.id,
+                                contentTitle: widget.course.title,
+                                contentCollection: 'courses',
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Semantics(
+                              excludeSemantics: true,
+                              label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
+                              child: Row(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(10),
@@ -354,107 +399,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                 ],
                               ),
                             ),
-                            const Icon(
-                              Icons.chevron_right_rounded,
-                              color: AppTheme.textMuted,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              // Rating summary bar
-              // ⚡ Bolt: Memoize the average calculation based on list identity
-              // to avoid O(N) iteration on every widget rebuild when the list hasn't changed.
-              if (!identical(reviews, _cachedReviews)) {
-                var sum = 0.0;
-                for (final r in reviews) {
-                  sum += r.rating;
-                }
-                _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-                _cachedReviews = reviews;
-              }
-              final avg = _cachedAvg;
-
-              return Column(
-                children: [
-                  // Summary card
-                  GlassCard(
-                    padding: EdgeInsets.zero,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ReviewsView(
-                              contentId: widget.course.id,
-                              contentTitle: widget.course.title,
-                              contentCollection: 'courses',
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Semantics(
-                            excludeSemantics: true,
-                            label:
-                                'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
-                            child: Row(
-                              children: [
-                                ShaderMask(
-                                  shaderCallback: (bounds) => AppTheme
-                                      .primaryGradient
-                                      .createShader(bounds),
-                                  child: Text(
-                                    avg.toStringAsFixed(1),
-                                    style: const TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 14),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          for (var i = 0; i < 5; i++)
-                                            Icon(
-                                              i < avg.floor()
-                                                  ? Icons.star_rounded
-                                                  : i < avg
-                                                      ? Icons.star_half_rounded
-                                                      : Icons
-                                                          .star_border_rounded,
-                                              color: Colors.amber,
-                                              size: 20,
-                                            ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '${reviews.length} review${reviews.length == 1 ? '' : 's'}',
-                                        style: const TextStyle(
-                                          color: AppTheme.textSecondary,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: AppTheme.textMuted,
-                                ),
+                                const Icon(Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted),
                               ],
                             ),
                           ),
@@ -463,25 +409,13 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // First 2 reviews inline
-                  // ⚡ Bolt: Optimize mapping with collection for better list generation performance
-                  for (var i = 0; i < reviews.length && i < 2; i++)
-                    _buildInlineReviewCard(reviews[i]),
-                  if (reviews.length > 2)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Center(
-                        child: TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ReviewsView(
-                                contentId: widget.course.id,
-                                contentTitle: widget.course.title,
-                                contentCollection: 'courses',
-                              ),
-                            ),
-                          ),
+                    // First 2 reviews inline
+                    // ⚡ Bolt: Optimize mapping with collection for better list generation performance
+                    for (final r in reviews.take(2)) _buildInlineReviewCard(r),
+                    if (reviews.length > 2)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Center(
                           child: Text(
                             '+ ${reviews.length - 2} more review${reviews.length - 2 == 1 ? '' : 's'}',
                             style: const TextStyle(
