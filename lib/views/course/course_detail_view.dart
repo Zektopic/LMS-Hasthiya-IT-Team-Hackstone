@@ -368,9 +368,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               }
 
               // Rating summary bar
-              // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
-              // to avoid allocating a closure on every widget rebuild
               if (!identical(reviews, _cachedReviews)) {
+                // ⚡ Bolt: Use a standard for loop to compute the average instead of .fold
+                // to avoid allocating a closure on every widget rebuild
                 var sum = 0.0;
                 for (final r in reviews) {
                   sum += r.rating;

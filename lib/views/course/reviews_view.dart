@@ -39,19 +39,6 @@ class _ReviewsViewState extends State<ReviewsView> {
   double _cachedAvg = 0.0;
   Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
-  List<Review>? _cachedSortedReviews;
-  List<Review>? _lastUnsortedReviews;
-  _SortBy? _lastSortBy;
-
-  // Memoization state
-  List<Review>? _cachedSortSource;
-  List<Review>? _cachedSortResult;
-  _SortBy? _cachedSortBy;
-
-  List<Review>? _cachedSummaryReviews;
-  double _cachedAvg = 0.0;
-  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
-
   @override
   void initState() {
     super.initState();
@@ -337,8 +324,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    // ⚡ Bolt: Memoize the summary aggregations to avoid O(N) operations on every rebuild
-    if (!identical(reviews, _cachedSummaryReviews)) {
+    if (!identical(reviews, _cachedReviews)) {
       var sum = 0.0;
       final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
@@ -352,7 +338,7 @@ class _ReviewsViewState extends State<ReviewsView> {
 
       _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
       _cachedCounts = counts;
-      _cachedSummaryReviews = reviews;
+      _cachedReviews = reviews;
     }
 
     final avg = _cachedAvg;

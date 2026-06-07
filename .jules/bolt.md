@@ -79,6 +79,6 @@
 ## 2024-05-20 - [Redundant List Allocations on Pre-sorted Firestore Data]
 **Learning:** The application streams pre-sorted data from Firestore (e.g., reviews sorted by newest). Re-allocating these into new lists (`List.from`) during the widget build cycle for the default sort state causes unnecessary O(N) memory allocations and garbage collection pressure on every stream emission or rebuild.
 **Action:** Always check if the default sort order matches the backend query's sort order. If it does, short-circuit the client-side sorting logic and return the original list reference directly.
-## 2026-06-03 - Memoize O(N) list operations in StreamBuilder
-**Learning:** In Flutter build methods, especially inside StreamBuilder, O(N) list operations can execute redundantly on widget rebuilds even when stream data hasn't changed.
-**Action:** Cache the list reference and result, and use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations.
+## 2024-05-24 - [Avoid redundant average calculations in build method using local caching]
+**Learning:** O(N) calculations (like summing reviews to find the average rating) in Dart within widget build loops should be avoided, especially inside components receiving frequently updating streams. We can use `identical(reviews, _cachedReviews)` to safely check if the list reference has changed and skip recounting when the list is identical to a prior frame.
+**Action:** In widgets parsing streams or lists, introduce local caching variables for aggregates or complex data manipulation, updating them only when the input object references change to avoid redundant calculations.
