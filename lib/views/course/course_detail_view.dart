@@ -29,6 +29,9 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   List<Review>? _cachedReviews;
   double _cachedAverage = 0.0;
 
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -371,17 +374,16 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               }
 
               // Rating summary bar
-              // ⚡ Bolt: Memoize expensive O(N) list operations by caching the list reference and result.
-              // Use Dart's identical() for an O(1) identity check to quickly skip recalculations on widget rebuilds.
+              // ⚡ Bolt: Use identical() to skip O(N) recalculations on normal widget rebuilds
               if (!identical(reviews, _cachedReviews)) {
                 var sum = 0.0;
                 for (final r in reviews) {
                   sum += r.rating;
                 }
-                _cachedAverage = reviews.isEmpty ? 0.0 : sum / reviews.length;
+                _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
                 _cachedReviews = reviews;
               }
-              final avg = _cachedAverage;
+              final avg = _cachedAvg;
 
               return Column(
                 children: [

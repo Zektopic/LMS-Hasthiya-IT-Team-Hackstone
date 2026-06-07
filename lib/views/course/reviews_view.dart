@@ -39,6 +39,10 @@ class _ReviewsViewState extends State<ReviewsView> {
   double _cachedAvg = 0.0;
   Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
+  Map<int, int> _cachedCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+
   @override
   void initState() {
     super.initState();
@@ -324,6 +328,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
+    // ⚡ Bolt: Use identical() to skip O(N) recalculations on normal widget rebuilds
     if (!identical(reviews, _cachedReviews)) {
       var sum = 0.0;
       final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};

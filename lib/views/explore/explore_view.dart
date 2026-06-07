@@ -100,8 +100,7 @@ class _ExploreViewState extends State<ExploreView> {
       _filteredCourses = (isQueryEmpty && isCategoryAll)
           ? _allCourses
           : _allCourses.where((c) {
-              final matchesSearch =
-                  isQueryEmpty ||
+              final matchesSearch = isQueryEmpty ||
                   searchRegex!.hasMatch(c.title) ||
                   searchRegex.hasMatch(c.description);
               final matchesCategory =
