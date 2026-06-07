@@ -24,6 +24,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   final ReviewService _reviewService =
       ReviewService(contentCollection: 'videos');
   late Stream<List<Review>> _reviewsStream;
+  List<Review>? _cachedReviews;
+  double _cachedAvg = 0.0;
 
   @override
   void initState() {
@@ -346,19 +348,17 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            // ⚡ Bolt: Memoize O(N) average rating calculation using identical check
-            double avg;
-            if (identical(reviews, _cachedReviewsForAvg)) {
-              avg = _cachedAvg;
-            } else {
+            // ⚡ Bolt: Memoize the average calculation based on list identity
+            // to avoid O(N) iteration on every widget rebuild when the list hasn't changed.
+            if (!identical(reviews, _cachedReviews)) {
               var sum = 0.0;
               for (final r in reviews) {
                 sum += r.rating;
               }
-              avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-              _cachedReviewsForAvg = reviews;
-              _cachedAvg = avg;
+              _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+              _cachedReviews = reviews;
             }
+            final avg = _cachedAvg;
 
             return Column(
               children: [
