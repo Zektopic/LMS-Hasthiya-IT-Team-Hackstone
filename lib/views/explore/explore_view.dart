@@ -422,6 +422,7 @@ class _ExploreViewState extends State<ExploreView> {
               child: Material(
                 color: Colors.transparent,
                 child: Semantics(
+                  button: true,
                   label: 'Course: ${course.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
@@ -504,6 +505,7 @@ class _ExploreViewState extends State<ExploreView> {
               child: Material(
                 color: Colors.transparent,
                 child: Semantics(
+                  button: true,
                   label: 'Video: ${video.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),

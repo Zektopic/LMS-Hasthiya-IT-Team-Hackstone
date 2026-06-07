@@ -460,6 +460,7 @@ class _HomeViewState extends State<HomeView> {
               child: Material(
                 color: Colors.transparent,
                 child: Semantics(
+                  button: true,
                   label: 'Course: ${course.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
@@ -565,6 +566,7 @@ class _HomeViewState extends State<HomeView> {
               child: Material(
                 color: Colors.transparent,
                 child: Semantics(
+                  button: true,
                   label: 'Video: ${video.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
