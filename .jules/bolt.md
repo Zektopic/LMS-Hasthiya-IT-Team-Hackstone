@@ -56,3 +56,7 @@
 ## 2026-04-09 - Optimize StreamBuilder by caching streams
  **Learning:** Creating streams inside the 'build' method or its helpers causes StreamBuilder to re-subscribe on every rebuild, leading to redundant Firestore listener allocations and UI flickering.
  **Action:** Always initialize and store streams in 'initState' (and update in 'didUpdateWidget' if needed) when using StreamBuilder in a StatefulWidget.
+
+## 2024-06-10 - Flutter .fold() and .take() Rebuild Overhead
+**Learning:** In Flutter, higher-order functions like .fold() and .take() create closures and intermediate iterable objects (like TakeIterable) on every widget rebuild, increasing garbage collection pressure. Furthermore, calculating an average using .fold() on every frame is an O(N) operation that should be avoided if the underlying list hasn't changed.
+**Action:** Replace .fold() with explicit loops and cache the result using identical() checks on the list reference. Replace .take() with explicit index-based collection for loops to avoid object allocation during rendering.

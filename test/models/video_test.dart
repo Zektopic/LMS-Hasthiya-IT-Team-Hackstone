@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hackston_lms/models/video.dart';
 
 // Manual Fake for DocumentSnapshot
-class FakeDocumentSnapshot extends Fake implements DocumentSnapshot<Map<String, dynamic>> {
+class FakeDocumentSnapshot extends Fake
+    implements DocumentSnapshot<Map<String, dynamic>> {
   final String _id;
   final Map<String, dynamic>? _data;
 
