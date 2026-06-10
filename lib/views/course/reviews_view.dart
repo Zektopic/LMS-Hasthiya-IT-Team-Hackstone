@@ -75,7 +75,8 @@ class _ReviewsViewState extends State<ReviewsView> {
     }
 
     // ⚡ Bolt: Memoize O(N log N) sorting using O(1) identical check
-    if (identical(reviews, _cachedOriginalReviews) && _sortBy == _cachedSortBy) {
+    if (identical(reviews, _cachedOriginalReviews) &&
+        _sortBy == _cachedSortBy) {
       return _cachedSortedReviews;
     }
 
