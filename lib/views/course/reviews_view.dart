@@ -141,7 +141,15 @@ class _ReviewsViewState extends State<ReviewsView> {
 
     if (confirm == true) {
       await _reviewService.deleteReview(widget.contentId, uid);
-      if (mounted) setState(() => _userReview = null);
+      if (mounted) {
+        setState(() => _userReview = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Review deleted successfully'),
+            backgroundColor: AppTheme.success,
+          ),
+        );
+      }
     }
   }
 
@@ -1069,6 +1077,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                       controller: _commentController,
                       maxLines: 4,
                       maxLength: 500,
+                      textCapitalization: TextCapitalization.sentences,
                       textInputAction: TextInputAction.newline,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
