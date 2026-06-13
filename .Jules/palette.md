@@ -27,3 +27,6 @@
 ## 2024-05-30 - Interactive Components Tap Feedback Regression Fix
 **Learning:** In Flutter, when moving a tap action from an outer `GestureDetector` to an inner `InkWell` to provide localized ripple feedback on a specific child element (like a card within a Column), sibling elements (like trailing text or inline elements) can inadvertently lose clickability.
 **Action:** To maintain a large interactive area (including empty spaces) while providing specific visual feedback on a child, wrap the entire parent container in a `GestureDetector` with `behavior: HitTestBehavior.opaque` to catch taps outside the specific `InkWell` area.
+## 2026-06-13 - [Visible Focus States for Custom InkWells]
+**Learning:** In Flutter, when building custom interactive components (like glassmorphic UI elements) using `InkWell` on top of transparent or heavily styled backgrounds, the default focus and hover indicators may become invisible or blend in too much, leading to poor keyboard and mouse accessibility.
+**Action:** Always explicitly define `focusColor` and `hoverColor` on `InkWell` widgets within custom interactive components to ensure clear visual feedback for non-touch device users.
