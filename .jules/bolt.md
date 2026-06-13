@@ -60,3 +60,6 @@
 ## 2024-06-10 - Flutter .fold() and .take() Rebuild Overhead
 **Learning:** In Flutter, higher-order functions like .fold() and .take() create closures and intermediate iterable objects (like TakeIterable) on every widget rebuild, increasing garbage collection pressure. Furthermore, calculating an average using .fold() on every frame is an O(N) operation that should be avoided if the underlying list hasn't changed.
 **Action:** Replace .fold() with explicit loops and cache the result using identical() checks on the list reference. Replace .take() with explicit index-based collection for loops to avoid object allocation during rendering.
+## 2026-06-13 - Replace .map().toList() with Collection For Loops
+**Learning:** In Dart, chaining `.map().toList()` creates an intermediate `MappedIterable` and its associated closure object before immediately consuming it into a list. For Firestore query snapshots, this allocates unnecessary objects on the heap.
+**Action:** Use a Dart collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to construct the list directly without intermediate iterables, reducing garbage collection pressure.

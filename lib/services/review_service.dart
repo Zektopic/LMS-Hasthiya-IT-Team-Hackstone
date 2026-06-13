@@ -23,7 +23,13 @@ class ReviewService {
     return _reviewsRef(contentId)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((s) => s.docs.map((doc) => Review.fromFirestore(doc)).toList());
+        .map((s) {
+      // ⚡ Bolt: Use collection for loop to directly construct list
+      // avoiding intermediate Iterable allocation from .map().toList()
+      return [
+        for (final doc in s.docs) Review.fromFirestore(doc),
+      ];
+    });
   }
 
   /// Returns the current user's review, or null if they haven't reviewed yet.

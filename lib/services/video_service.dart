@@ -16,7 +16,11 @@ class VideoService {
         query = query.limit(limit);
       }
       final snapshot = await query.get();
-      return snapshot.docs.map((doc) => Video.fromFirestore(doc)).toList();
+      // ⚡ Bolt: Use collection for loop to directly construct list
+      // avoiding intermediate Iterable allocation from .map().toList()
+      return [
+        for (final doc in snapshot.docs) Video.fromFirestore(doc),
+      ];
     } catch (e) {
       debugPrint('Error fetching videos: $e');
       return [];
