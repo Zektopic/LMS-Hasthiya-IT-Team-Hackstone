@@ -84,6 +84,8 @@ class GlassButton extends StatelessWidget {
           child: InkWell(
             onTap: isDisabled ? null : onPressed,
             borderRadius: BorderRadius.circular(borderRadius),
+            focusColor: Colors.white.withValues(alpha: 0.2),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             child: Padding(
               padding: padding,
               child: Center(
@@ -332,6 +334,8 @@ class _NavItem extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: onTap,
+            focusColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+            hoverColor: AppTheme.primaryColor.withValues(alpha: 0.1),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
@@ -339,8 +343,9 @@ class _NavItem extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color:
-                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textMuted,
                     size: 24,
                   ),
                   const SizedBox(height: 4),
@@ -348,8 +353,9 @@ class _NavItem extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontSize: 11,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       color: isSelected
                           ? AppTheme.primaryColor
                           : AppTheme.textMuted,
