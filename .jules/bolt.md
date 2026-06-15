@@ -63,3 +63,7 @@
 ## 2026-06-13 - Replace .map().toList() with Collection For Loops
 **Learning:** In Dart, chaining `.map().toList()` creates an intermediate `MappedIterable` and its associated closure object before immediately consuming it into a list. For Firestore query snapshots, this allocates unnecessary objects on the heap.
 **Action:** Use a Dart collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to construct the list directly without intermediate iterables, reducing garbage collection pressure.
+
+## 2026-06-15 - Replace .where().toList() with Collection For-If Loops
+**Learning:** In Dart, filtering a list using `.where(condition).toList()` creates an intermediate `WhereIterable` and closure object before consuming it into a list, creating unnecessary garbage collection overhead.
+**Action:** Use a Dart collection `for` loop with an `if` condition (e.g., `[for (final item in list) if (condition) item]`) to construct the filtered list directly without intermediate iterables, reducing garbage collection pressure.

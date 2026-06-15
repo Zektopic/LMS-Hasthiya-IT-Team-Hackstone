@@ -92,21 +92,27 @@ class _ExploreViewState extends State<ExploreView> {
       // Optimization: Skip O(N) list traversal and object allocation when there are no active filters
       _filteredVideos = isQueryEmpty
           ? _allVideos
-          : _allVideos.where((v) {
-              return searchRegex!.hasMatch(v.title) ||
-                  searchRegex.hasMatch(v.description);
-            }).toList();
+          // ⚡ Bolt: Use collection for-if loop to directly construct list
+          // avoiding intermediate WhereIterable allocation from .where().toList()
+          : [
+              for (final v in _allVideos)
+                if (searchRegex!.hasMatch(v.title) ||
+                    searchRegex.hasMatch(v.description))
+                  v,
+            ];
 
       _filteredCourses = (isQueryEmpty && isCategoryAll)
           ? _allCourses
-          : _allCourses.where((c) {
-              final matchesSearch = isQueryEmpty ||
-                  searchRegex!.hasMatch(c.title) ||
-                  searchRegex.hasMatch(c.description);
-              final matchesCategory =
-                  isCategoryAll || c.category == _selectedCategory;
-              return matchesSearch && matchesCategory;
-            }).toList();
+          // ⚡ Bolt: Use collection for-if loop to directly construct list
+          // avoiding intermediate WhereIterable allocation from .where().toList()
+          : [
+              for (final c in _allCourses)
+                if ((isQueryEmpty ||
+                        searchRegex!.hasMatch(c.title) ||
+                        searchRegex.hasMatch(c.description)) &&
+                    (isCategoryAll || c.category == _selectedCategory))
+                  c,
+            ];
     });
   }
 
@@ -189,8 +195,9 @@ class _ExploreViewState extends State<ExploreView> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              gradient:
-                                  isSelected ? AppTheme.primaryGradient : null,
+                              gradient: isSelected
+                                  ? AppTheme.primaryGradient
+                                  : null,
                               color: isSelected
                                   ? null
                                   : Colors.white.withValues(alpha: 0.08),
