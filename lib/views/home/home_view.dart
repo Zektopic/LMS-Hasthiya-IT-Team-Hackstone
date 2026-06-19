@@ -157,6 +157,8 @@ class _HomeViewState extends State<HomeView> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
+                  focusColor: Colors.white.withValues(alpha: 0.2),
+                  hoverColor: Colors.white.withValues(alpha: 0.1),
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -212,6 +214,8 @@ class _HomeViewState extends State<HomeView> {
           excludeSemantics: true,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
+            focusColor: Colors.white.withValues(alpha: 0.2),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             onTap: widget.onSearchTap,
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -464,6 +468,8 @@ class _HomeViewState extends State<HomeView> {
                   label: 'Course: ${course.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
+                    focusColor: Colors.white.withValues(alpha: 0.2),
+                    hoverColor: Colors.white.withValues(alpha: 0.1),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -570,6 +576,8 @@ class _HomeViewState extends State<HomeView> {
                   label: 'Video: ${video.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
+                    focusColor: Colors.white.withValues(alpha: 0.2),
+                    hoverColor: Colors.white.withValues(alpha: 0.1),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(

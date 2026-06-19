@@ -19,3 +19,7 @@
 ## 2026-06-06 - Remove redundant Semantics(button: true) wrappers around InkWell
 **Learning:** In Flutter, `InkWell` inherently provides button semantics to the accessibility tree when it has an interaction callback like `onTap`. Manually wrapping an `InkWell` with `Semantics(button: true)` causes screen readers (like TalkBack or VoiceOver) to redundantly announce the element as a "button" multiple times. However, if the wrapping `Semantics` widget uses `excludeSemantics: true`, the `InkWell`'s implicit traits are dropped, and `button: true` MUST be explicitly re-declared.
 **Action:** Audit and remove redundant `Semantics(button: true)` wrappers around `InkWell` widgets to clean up the semantic tree, except where `excludeSemantics: true` is used or when explicitly required on a parent structural widget.
+
+## 2026-06-19 - Explicit Hover and Focus Colors on Custom Backgrounds
+**Learning:** In Flutter, `InkWell` widgets placed over custom backgrounds (like glassmorphism) often lose their default hover and focus indicator visibility due to low contrast, impairing keyboard navigation accessibility.
+**Action:** Always explicitly define `focusColor` and `hoverColor` on `InkWell` elements to ensure focus indicators and mouse hover states remain visible and accessible.
