@@ -67,3 +67,7 @@
 ## 2026-06-15 - Replace .where().toList() with Collection For-If Loops
 **Learning:** In Dart, filtering a list using `.where(condition).toList()` creates an intermediate `WhereIterable` and closure object before consuming it into a list, creating unnecessary garbage collection overhead.
 **Action:** Use a Dart collection `for` loop with an `if` condition (e.g., `[for (final item in list) if (condition) item]`) to construct the filtered list directly without intermediate iterables, reducing garbage collection pressure.
+
+## 2024-06-20 - Replace .where().toList() and .map().toList() with Collection For Loops
+**Learning:** In Dart, using `.where(condition).toList()` or `.map(fn).toList()` creates an intermediate `WhereIterable` or `MappedIterable` along with their associated closure objects, before immediately iterating over them to create a list. This causes unnecessary intermediate allocations and increases garbage collection overhead, particularly when placed inside a rebuild path or used repeatedly on larger datasets.
+**Action:** Replace these patterns with Dart collection `for` and `if` loops (e.g., `[for (final item in list) if (condition) item]` or `[for (final item in list) fn(item)]`). This constructs the desired list directly without intermediate iterables, reducing garbage collection pressure.

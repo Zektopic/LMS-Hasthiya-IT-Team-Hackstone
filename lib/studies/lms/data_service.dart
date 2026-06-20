@@ -68,10 +68,9 @@ class LmsDataService {
 
     if (response.statusCode == 200) {
       final List<dynamic> videoJson = json.decode(response.body);
-      // ⚡ Bolt: Use collection for loop to directly construct list
-      // avoiding intermediate Iterable allocation from .map().toList()
+      // ⚡ Bolt: Use collection for loop to avoid intermediate Iterable allocation from .map().toList()
       return [
-        for (final json in videoJson) Video.fromJson(json),
+        for (final j in videoJson) Video.fromJson(j as Map<String, dynamic>),
       ];
     } else {
       throw Exception(
