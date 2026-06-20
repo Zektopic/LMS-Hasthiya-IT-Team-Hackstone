@@ -36,6 +36,16 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
+  // Memoization caches for _sorted()
+  List<Review>? _cachedOriginalReviews;
+  List<Review>? _cachedSortedReviews;
+  _SortBy? _cachedSortBy;
+
+  // Memoization caches for _buildRatingSummary()
+  List<Review>? _cachedReviews;
+  double? _cachedAvg;
+  Map<int, int>? _cachedCounts;
+
   @override
   void initState() {
     super.initState();
