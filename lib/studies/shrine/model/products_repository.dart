@@ -314,11 +314,12 @@ class ProductsRepository {
     if (category == categoryAll) {
       return allProducts;
     } else {
-      // ⚡ Bolt: Use collection for loop with condition to directly construct list
+      // ⚡ Bolt: Use collection for-if loop to directly construct list
       // avoiding intermediate WhereIterable allocation from .where().toList()
       return [
         for (final p in allProducts)
-          if (p.category == category) p
+          if (p.category == category) p,
+
       ];
     }
   }
