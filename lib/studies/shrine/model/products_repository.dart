@@ -314,7 +314,11 @@ class ProductsRepository {
     if (category == categoryAll) {
       return allProducts;
     } else {
-      return allProducts.where((p) => p.category == category).toList();
+      // ⚡ Bolt: Use collection for-if loop to avoid intermediate WhereIterable allocation
+      return [
+        for (final p in allProducts)
+          if (p.category == category) p,
+      ];
     }
   }
 }
