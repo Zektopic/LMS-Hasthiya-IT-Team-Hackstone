@@ -216,6 +216,8 @@ class _ExploreViewState extends State<ExploreView> {
                                 selected: isSelected,
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(20),
+                                  focusColor: Colors.white.withValues(alpha: 0.2),
+                                  hoverColor: Colors.white.withValues(alpha: 0.1),
                                   onTap: () {
                                     setState(
                                       () => _selectedCategory = category,
@@ -433,6 +435,8 @@ class _ExploreViewState extends State<ExploreView> {
                   label: 'Course: ${course.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
+                    focusColor: Colors.white.withValues(alpha: 0.2),
+                    hoverColor: Colors.white.withValues(alpha: 0.1),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -516,6 +520,8 @@ class _ExploreViewState extends State<ExploreView> {
                   label: 'Video: ${video.title}',
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
+                    focusColor: Colors.white.withValues(alpha: 0.2),
+                    hoverColor: Colors.white.withValues(alpha: 0.1),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
