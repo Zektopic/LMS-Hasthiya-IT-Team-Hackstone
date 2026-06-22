@@ -354,8 +354,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            final avg =
-                reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+            // ⚡ Bolt: Replace .fold() with explicit loop to avoid closure and iterable allocation on every rebuild
+            var sum = 0.0;
+            for (final r in reviews) {
+              sum += r.rating;
+            }
+            final avg = sum / reviews.length;
 
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
