@@ -23,3 +23,7 @@
 ## 2026-06-19 - Explicit Hover and Focus Colors on Custom Backgrounds
 **Learning:** In Flutter, `InkWell` widgets placed over custom backgrounds (like glassmorphism) often lose their default hover and focus indicator visibility due to low contrast, impairing keyboard navigation accessibility.
 **Action:** Always explicitly define `focusColor` and `hoverColor` on `InkWell` elements to ensure focus indicators and mouse hover states remain visible and accessible.
+
+## 2026-06-25 - Missing Focus/Hover colors on Custom InkWells
+**Learning:** In custom glassmorphic components, standard InkWells lack adequate focus and hover indicators because the custom background obscures standard framework defaults.
+**Action:** Always explicitly define `focusColor` and `hoverColor` on InkWell widgets within custom containers to ensure keyboard focus indicators and mouse hover states remain visible.
