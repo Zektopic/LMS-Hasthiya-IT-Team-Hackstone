@@ -73,6 +73,8 @@ class _MyLearningViewState extends State<MyLearningView> {
             selected: isActive,
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
+              focusColor: Colors.white.withValues(alpha: 0.2),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
               onTap: () {
                 setState(() {
                   _selectedTabIndex = index;

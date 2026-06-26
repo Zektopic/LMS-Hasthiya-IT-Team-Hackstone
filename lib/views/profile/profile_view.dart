@@ -260,6 +260,8 @@ class ProfileView extends StatelessWidget {
                                           bottom: Radius.circular(16),
                                         )
                                       : BorderRadius.zero,
+                          focusColor: Colors.white.withValues(alpha: 0.2),
+                          hoverColor: Colors.white.withValues(alpha: 0.1),
                           onTap: items[index].onTap,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

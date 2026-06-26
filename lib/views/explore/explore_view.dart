@@ -195,9 +195,8 @@ class _ExploreViewState extends State<ExploreView> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              gradient: isSelected
-                                  ? AppTheme.primaryGradient
-                                  : null,
+                              gradient:
+                                  isSelected ? AppTheme.primaryGradient : null,
                               color: isSelected
                                   ? null
                                   : Colors.white.withValues(alpha: 0.08),
@@ -216,8 +215,10 @@ class _ExploreViewState extends State<ExploreView> {
                                 selected: isSelected,
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(20),
-                                  focusColor: Colors.white.withValues(alpha: 0.2),
-                                  hoverColor: Colors.white.withValues(alpha: 0.1),
+                                  focusColor:
+                                      Colors.white.withValues(alpha: 0.2),
+                                  hoverColor:
+                                      Colors.white.withValues(alpha: 0.1),
                                   onTap: () {
                                     setState(
                                       () => _selectedCategory = category,

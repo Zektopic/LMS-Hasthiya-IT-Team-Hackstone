@@ -304,6 +304,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
+                      focusColor: Colors.white.withValues(alpha: 0.2),
+                      hoverColor: Colors.white.withValues(alpha: 0.1),
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -355,6 +357,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(16),
+                          focusColor: Colors.white.withValues(alpha: 0.2),
+                          hoverColor: Colors.white.withValues(alpha: 0.1),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -573,6 +577,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(14),
+            focusColor: Colors.white.withValues(alpha: 0.2),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
