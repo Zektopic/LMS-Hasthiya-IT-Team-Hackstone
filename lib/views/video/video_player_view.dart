@@ -356,8 +356,17 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               );
             }
 
-            final avg =
-                reviews.fold(0.0, (s, r) => s + r.rating) / reviews.length;
+            // ⚡ Bolt: Memoize the average calculation based on list identity
+            // to avoid O(N) iteration and closure allocation on every widget rebuild when the list hasn't changed.
+            if (!identical(reviews, _cachedReviews)) {
+              var sum = 0.0;
+              for (final r in reviews) {
+                sum += r.rating;
+              }
+              _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
+              _cachedReviews = reviews;
+            }
+            final avg = _cachedAvg;
 
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
