@@ -71,3 +71,6 @@
 ## 2024-06-20 - Replace .where().toList() and .map().toList() with Collection For Loops
 **Learning:** In Dart, using `.where(condition).toList()` or `.map(fn).toList()` creates an intermediate `WhereIterable` or `MappedIterable` along with their associated closure objects, before immediately iterating over them to create a list. This causes unnecessary intermediate allocations and increases garbage collection overhead, particularly when placed inside a rebuild path or used repeatedly on larger datasets.
 **Action:** Replace these patterns with Dart collection `for` and `if` loops (e.g., `[for (final item in list) if (condition) item]` or `[for (final item in list) fn(item)]`). This constructs the desired list directly without intermediate iterables, reducing garbage collection pressure.
+## 2024-06-25 - Avoid .fold() in Widget Build Methods
+**Learning:** In Flutter, higher-order functions like `.fold()` create closures and intermediate iterable objects on every widget rebuild, increasing garbage collection pressure. Furthermore, calculating an average using `.fold()` on every frame is an O(N) operation that should be avoided if the underlying list hasn't changed.
+**Action:** Replace `.fold()` with explicit loops and cache the result using `identical()` checks on the list reference to avoid object allocation during rendering.
