@@ -184,71 +184,73 @@ class _ExploreViewState extends State<ExploreView> {
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 40,
-                    child: ListView.builder(
+                    // ⚡ Bolt: Replace ListView.builder with SingleChildScrollView + Row and collection for loop for small, static lists to eliminate builder overhead and closure allocation on rebuilds.
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      itemCount: _categories.length,
-                      itemBuilder: (context, index) {
-                        final category = _categories[index];
-                        final isSelected = category == _selectedCategory;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            decoration: BoxDecoration(
-                              gradient:
-                                  isSelected ? AppTheme.primaryGradient : null,
-                              color: isSelected
-                                  ? null
-                                  : Colors.white.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(20),
-                              border: isSelected
-                                  ? null
-                                  : Border.all(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.1,
-                                      ),
-                                    ),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: Semantics(
-                                selected: isSelected,
-                                child: InkWell(
+                      child: Row(
+                        children: [
+                          for (final category in _categories)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                decoration: BoxDecoration(
+                                  gradient: category == _selectedCategory
+                                      ? AppTheme.primaryGradient
+                                      : null,
+                                  color: category == _selectedCategory
+                                      ? null
+                                      : Colors.white.withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.circular(20),
-                                  focusColor:
-                                      Colors.white.withValues(alpha: 0.2),
-                                  hoverColor:
-                                      Colors.white.withValues(alpha: 0.1),
-                                  onTap: () {
-                                    setState(
-                                      () => _selectedCategory = category,
-                                    );
-                                    _filterContent();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 18,
-                                      vertical: 8,
-                                    ),
-                                    child: Text(
-                                      category,
-                                      style: TextStyle(
-                                        color: isSelected
-                                            ? Colors.white
-                                            : AppTheme.textSecondary,
-                                        fontWeight: isSelected
-                                            ? FontWeight.w600
-                                            : FontWeight.w500,
-                                        fontSize: 14,
+                                  border: category == _selectedCategory
+                                      ? null
+                                      : Border.all(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                        ),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Semantics(
+                                    selected: category == _selectedCategory,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(20),
+                                      focusColor:
+                                          Colors.white.withValues(alpha: 0.2),
+                                      hoverColor:
+                                          Colors.white.withValues(alpha: 0.1),
+                                      onTap: () {
+                                        setState(
+                                          () => _selectedCategory = category,
+                                        );
+                                        _filterContent();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 18,
+                                          vertical: 8,
+                                        ),
+                                        child: Text(
+                                          category,
+                                          style: TextStyle(
+                                            color: category == _selectedCategory
+                                                ? Colors.white
+                                                : AppTheme.textSecondary,
+                                            fontWeight: category == _selectedCategory
+                                                ? FontWeight.w600
+                                                : FontWeight.w500,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
                   ),
                 ],
