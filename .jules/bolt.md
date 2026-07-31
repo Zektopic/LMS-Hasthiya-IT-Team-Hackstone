@@ -75,3 +75,6 @@
 ## 2024-06-29 - Flutter StreamBuilder Memoization
 **Learning:** In Flutter, using .fold() inside a StreamBuilder's builder method executes an O(N) operation and allocates a closure on every widget rebuild, even when the stream snapshot hasn't changed.
 **Action:** Use identical() to check if the stream data instance has changed, and only perform O(N) calculations (using a standard for-loop to avoid closures) when a new instance is received, caching the result otherwise.
+## 2024-05-18 - Avoid ListView.builder for small static lists
+**Learning:** For small, static lists (like a handful of categories), `ListView.builder` introduces unnecessary closure allocation and indexing overhead on every rebuild.
+**Action:** Use `SingleChildScrollView` with a `Row` and a collection `for` loop to inline the widget creation and avoid closure allocation.
