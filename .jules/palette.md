@@ -1,29 +1,3 @@
-## 2026-04-12 - Add tooltip to icon-only back buttons
-**Learning:** In Flutter, ensure icon-only buttons (like `IconButton`) always have a descriptive `tooltip` attribute added. This provides proper accessibility labels for screen readers and helpful context for mouse hover states.
-**Action:** Always include a `tooltip` string on `IconButton` widgets, especially when they act as standalone navigational elements.
-
-## 2024-05-24 - Add Semantics to Stacked InkWell Custom Cards
-**Learning:** In Flutter, when building custom clickable cards (like Course or Video cards) using an `InkWell` inside a `Stack` (e.g. over other contents), wrapping the `InkWell` in a `Semantics` widget with a descriptive `label` ensures that screen readers announce the specific item content, preventing generic or unhelpful announcements.
-**Action:** Always wrap `InkWell` within custom generic cards with a `Semantics` widget supplying a specific, descriptive `label` (e.g., `label: 'Course: ${course.title}'`).
-## 2026-05-30 - Add specific semantics labels to custom clickable cards built with InkWell
-**Learning:** When building custom clickable cards (e.g., Course or Video cards) using `InkWell`, screen readers may not automatically announce the specific item content correctly.
-**Action:** Wrap the `InkWell` in a `Semantics` widget with a specific, descriptive `label` (e.g., `label: 'Course: ${course.title}'`) to ensure screen readers announce the specific item content, preventing generic or unhelpful announcements.
-
-## 2024-06-03 - Semantic labels for overlay InkWells
-**Learning:** When building custom clickable cards using a Stack where an InkWell overlay is separated from the visual content via Positioned.fill, screen readers will announce a generic or empty button because the InkWell has no semantic children.
-**Action:** Wrap the overlay InkWell in a Semantics widget with a specific, descriptive label (e.g., label: 'Course: ${course.title}') to ensure screen readers announce the specific item content.
-## 2024-05-23 - Retaining explicit semantics on parent containers
-**Learning:** In Flutter, while `InkWell` provides implicit button semantics, wrapping a structural layout widget (like `Container`) with `Semantics` requires retaining the `button: true` trait if that container acts as the overall interactive target, even if there is an `InkWell` deeper within it. Removing the explicit button semantics from the wrapping `Container` removes the button trait entirely from screen reader announcements.
-**Action:** When auditing redundant `button: true` traits, never remove them from `Semantics` widgets wrapping structural components like `Container`. Instead, look to add appropriate visual and auditory feedback, such as `Tooltip`, to icon-only custom widgets.
-
-## 2026-06-06 - Remove redundant Semantics(button: true) wrappers around InkWell
-**Learning:** In Flutter, `InkWell` inherently provides button semantics to the accessibility tree when it has an interaction callback like `onTap`. Manually wrapping an `InkWell` with `Semantics(button: true)` causes screen readers (like TalkBack or VoiceOver) to redundantly announce the element as a "button" multiple times. However, if the wrapping `Semantics` widget uses `excludeSemantics: true`, the `InkWell`'s implicit traits are dropped, and `button: true` MUST be explicitly re-declared.
-**Action:** Audit and remove redundant `Semantics(button: true)` wrappers around `InkWell` widgets to clean up the semantic tree, except where `excludeSemantics: true` is used or when explicitly required on a parent structural widget.
-
-## 2026-06-19 - Explicit Hover and Focus Colors on Custom Backgrounds
-**Learning:** In Flutter, `InkWell` widgets placed over custom backgrounds (like glassmorphism) often lose their default hover and focus indicator visibility due to low contrast, impairing keyboard navigation accessibility.
-**Action:** Always explicitly define `focusColor` and `hoverColor` on `InkWell` elements to ensure focus indicators and mouse hover states remain visible and accessible.
-
-## 2026-06-25 - Missing Focus/Hover colors on Custom InkWells
-**Learning:** In custom glassmorphic components, standard InkWells lack adequate focus and hover indicators because the custom background obscures standard framework defaults.
-**Action:** Always explicitly define `focusColor` and `hoverColor` on InkWell widgets within custom containers to ensure keyboard focus indicators and mouse hover states remain visible.
+## 2024-08-18 - [Add Semantic Button traits]
+**Learning:** Adding explicit semantic wrappers with `button: true` to custom interactive components that utilize `InkWell` internally improves how screen readers identify and present these components to users. Without this, standard buttons might not be announced with the proper traits.
+**Action:** When building custom interactive components and nesting `InkWell` deep within other widgets like layout wrappers or containers without default semantics, always make sure to apply the appropriate `Semantics` wrappers. Ensure to manage states such as disabled (`enabled: !isDisabled`).

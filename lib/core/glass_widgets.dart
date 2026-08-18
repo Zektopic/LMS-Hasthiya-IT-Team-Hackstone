@@ -81,27 +81,31 @@ class GlassButton extends StatelessWidget {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: isDisabled ? null : onPressed,
-            borderRadius: BorderRadius.circular(borderRadius),
-            focusColor: Colors.white.withValues(alpha: 0.2),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            child: Padding(
-              padding: padding,
-              child: Center(
-                child: isLoading
-                    ? Semantics(
-                        label: 'Loading',
-                        child: const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
+          child: Semantics(
+            button: true,
+            enabled: !isDisabled,
+            child: InkWell(
+              onTap: isDisabled ? null : onPressed,
+              borderRadius: BorderRadius.circular(borderRadius),
+              focusColor: Colors.white.withValues(alpha: 0.2),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              child: Padding(
+                padding: padding,
+                child: Center(
+                  child: isLoading
+                      ? Semantics(
+                          label: 'Loading',
+                          child: const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                    : child,
+                        )
+                      : child,
+                ),
               ),
             ),
           ),
@@ -343,8 +347,9 @@ class _NavItem extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color:
-                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textMuted,
                     size: 24,
                   ),
                   const SizedBox(height: 4),
@@ -352,8 +357,9 @@ class _NavItem extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontSize: 11,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       color: isSelected
                           ? AppTheme.primaryColor
                           : AppTheme.textMuted,
