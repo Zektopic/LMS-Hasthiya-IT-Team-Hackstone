@@ -272,6 +272,8 @@ class CourseDetailView extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(14),
             onTap: () {},
             child: Padding(

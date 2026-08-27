@@ -154,6 +154,8 @@ class _HomeViewState extends State<HomeView> {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
+                focusColor: Colors.white.withValues(alpha: 0.1),
+                hoverColor: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
                 onTap: () {},
                 child: auth.photoUrl != null
@@ -194,6 +196,8 @@ class _HomeViewState extends State<HomeView> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
+          focusColor: Colors.white.withValues(alpha: 0.1),
+          hoverColor: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
           onTap: widget.onSearchTap,
           child: const Padding(
@@ -320,11 +324,14 @@ class _HomeViewState extends State<HomeView> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => CourseDetailView(course: course)),
+                builder: (_) => CourseDetailView(course: course),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,6 +466,8 @@ class _HomeViewState extends State<HomeView> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,

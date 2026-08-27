@@ -233,6 +233,8 @@ class ProfileView extends StatelessWidget {
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        focusColor: Colors.white.withValues(alpha: 0.1),
+                        hoverColor: Colors.white.withValues(alpha: 0.1),
                         borderRadius: index == 0 && items.length == 1
                             ? BorderRadius.circular(16)
                             : index == 0

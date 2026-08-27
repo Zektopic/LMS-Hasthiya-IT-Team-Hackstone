@@ -311,6 +311,8 @@ class _ExploreViewState extends State<ExploreView> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
@@ -423,6 +425,8 @@ class _ExploreViewState extends State<ExploreView> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
