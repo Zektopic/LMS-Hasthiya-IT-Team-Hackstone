@@ -83,28 +83,41 @@ class _ExploreViewState extends State<ExploreView> {
   void _filterContent() {
     final query = _searchController.text.trim();
     final isQueryEmpty = query.isEmpty;
+    final isCategoryAll = _selectedCategory == 'All';
+
+    // ⚡ Bolt: Short-circuit filtering when filters are empty or default to avoid O(N) operations
+    // Directly assign the original list reference instead of allocating a new list
+    if (isQueryEmpty && isCategoryAll) {
+      setState(() {
+        _filteredVideos = _allVideos;
+        _filteredCourses = _allCourses;
+      });
+      return;
+    }
+
     final searchRegex = isQueryEmpty
         ? null
         : RegExp(RegExp.escape(query), caseSensitive: false);
 
     setState(() {
-      _filteredVideos = _allVideos.where((v) {
-        final matchesSearch =
-            isQueryEmpty ||
-            searchRegex!.hasMatch(v.title) ||
-            searchRegex.hasMatch(v.description);
-        return matchesSearch;
-      }).toList();
+      // ⚡ Bolt: Use collection for-if loops instead of .where(...).toList()
+      // to avoid allocating intermediate WhereIterable and closure objects
+      _filteredVideos = [
+        for (final v in _allVideos)
+          if (isQueryEmpty ||
+              searchRegex!.hasMatch(v.title) ||
+              searchRegex.hasMatch(v.description))
+            v,
+      ];
 
-      _filteredCourses = _allCourses.where((c) {
-        final matchesSearch =
-            isQueryEmpty ||
-            searchRegex!.hasMatch(c.title) ||
-            searchRegex.hasMatch(c.description);
-        final matchesCategory =
-            _selectedCategory == 'All' || c.category == _selectedCategory;
-        return matchesSearch && matchesCategory;
-      }).toList();
+      _filteredCourses = [
+        for (final c in _allCourses)
+          if ((isQueryEmpty ||
+                  searchRegex!.hasMatch(c.title) ||
+                  searchRegex.hasMatch(c.description)) &&
+              (isCategoryAll || c.category == _selectedCategory))
+            c,
+      ];
     });
   }
 
