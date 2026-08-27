@@ -43,17 +43,17 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.person_outline_rounded,
                   label: 'Edit Profile',
-                  onTap: () => _showComingSoon(context, 'Edit Profile'),
+                  onTap: () {},
                 ),
                 _SettingItem(
                   icon: Icons.notifications_none_rounded,
                   label: 'Notifications',
-                  onTap: () => _showComingSoon(context, 'Notifications'),
+                  onTap: () {},
                 ),
                 _SettingItem(
                   icon: Icons.download_rounded,
                   label: 'Downloads',
-                  onTap: () => _showComingSoon(context, 'Downloads'),
+                  onTap: () {},
                 ),
               ]),
               const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class ProfileView extends StatelessWidget {
                     'Dark',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () => _showComingSoon(context, 'Appearance settings'),
+                  onTap: () {},
                 ),
                 _SettingItem(
                   icon: Icons.language_rounded,
@@ -74,7 +74,7 @@ class ProfileView extends StatelessWidget {
                     'English',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () => _showComingSoon(context, 'Language settings'),
+                  onTap: () {},
                 ),
               ]),
               const SizedBox(height: 20),
@@ -82,12 +82,12 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.help_outline_rounded,
                   label: 'Help Center',
-                  onTap: () => _showComingSoon(context, 'Help Center'),
+                  onTap: () {},
                 ),
                 _SettingItem(
                   icon: Icons.info_outline_rounded,
                   label: 'About',
-                  onTap: () => _showComingSoon(context, 'About information'),
+                  onTap: () {},
                 ),
               ]),
               const SizedBox(height: 28),
@@ -192,32 +192,18 @@ class ProfileView extends StatelessWidget {
   }
 
   Widget _buildStatItem(String value, String label) {
-    return Semantics(
-      label: '$value $label',
-      excludeSemantics: true,
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showComingSoon(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature coming soon!'),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+        ),
+      ],
     );
   }
 
@@ -239,40 +225,50 @@ class ProfileView extends StatelessWidget {
         GlassCard(
           borderRadius: 16,
           child: Column(
-            // ⚡ Bolt: Optimize mapping with explicit loop for better performance and reduced object allocation
+            // ⚡ Bolt: Optimize mapping with .indexed for better performance and reduced object allocation
             children: [
-              for (var index = 0; index < items.length; index++)
+              for (final (index, item) in items.indexed)
                 Column(
                   children: [
                     Material(
                       color: Colors.transparent,
-                      child: Semantics(
-                        button: true,
-                        child: InkWell(
-                          borderRadius: index == 0 && items.length == 1
-                              ? BorderRadius.circular(16)
-                              : index == 0
-                                  ? const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    )
-                                  : index == items.length - 1
-                                      ? const BorderRadius.vertical(
-                                          bottom: Radius.circular(16),
-                                        )
-                                      : BorderRadius.zero,
-                          focusColor: Colors.white.withValues(alpha: 0.2),
-                          hoverColor: Colors.white.withValues(alpha: 0.1),
-                          onTap: items[index].onTap,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 16,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  items[index].icon,
-                                  color: AppTheme.textSecondary,
+                      child: InkWell(
+                        borderRadius: index == 0 && items.length == 1
+                            ? BorderRadius.circular(16)
+                            : index == 0
+                            ? const BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              )
+                            : index == items.length - 1
+                            ? const BorderRadius.vertical(
+                                bottom: Radius.circular(16),
+                              )
+                            : BorderRadius.zero,
+                        onTap: item.onTap,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                item.icon,
+                                color: AppTheme.textSecondary,
+                                size: 22,
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  item.label,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              if (item.trailing != null) item.trailing!,
+                              if (item.trailing == null)
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppTheme.textMuted,
                                   size: 22,
                                 ),
                             ],
