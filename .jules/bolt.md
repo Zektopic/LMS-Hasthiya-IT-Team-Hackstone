@@ -36,3 +36,7 @@
 ## 2024-05-25 - Flutter Collection For and .indexed Performance
 **Learning:** In the 'hackston_lms' project (Dart 3.0+), generating lists of widgets within a `build` method using the pattern `.asMap().entries.map((entry) { ... }).toList()` is highly inefficient. It allocates unnecessary intermediate objects (a `Map`, multiple `MapEntry` objects, a closure, and an `Iterable`) which creates extra work for the garbage collector and slows down UI rendering.
 **Action:** Always replace this pattern with Dart 3's collection `for` loop combined with the `.indexed` extension: `for (final (index, item) in collection.indexed)`. This approach eliminates the intermediate object allocations and provides a significant performance improvement (up to 45% in micro-benchmarks) during list generation while improving readability.
+
+## 2024-05-26 - Flutter List Filtering Optimization
+**Learning:** In Dart/Flutter, executing O(N) operations like `.where(...).toList()` on lists for filtering allocates intermediate `WhereIterable` and closure objects, which increases garbage collection pressure. Furthermore, when search or category filters are empty or default, executing the filter logic is redundant and inefficient.
+**Action:** Short-circuit list filtering operations by directly assigning the original list reference when filters are empty. When filtering is required, use collection `for-if` loops (e.g., `[for (final item in list) if (condition) item]`) instead of `.where().toList()` to eliminate intermediate allocations.
