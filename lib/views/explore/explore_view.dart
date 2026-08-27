@@ -92,27 +92,21 @@ class _ExploreViewState extends State<ExploreView> {
       // Optimization: Skip O(N) list traversal and object allocation when there are no active filters
       _filteredVideos = isQueryEmpty
           ? _allVideos
-          // ⚡ Bolt: Use collection for-if loop to directly construct list
-          // avoiding intermediate WhereIterable allocation from .where().toList()
-          : [
-              for (final v in _allVideos)
-                if (searchRegex!.hasMatch(v.title) ||
-                    searchRegex.hasMatch(v.description))
-                  v,
-            ];
+          : _allVideos.where((v) {
+              return searchRegex!.hasMatch(v.title) ||
+                  searchRegex.hasMatch(v.description);
+            }).toList();
 
       _filteredCourses = (isQueryEmpty && isCategoryAll)
           ? _allCourses
-          // ⚡ Bolt: Use collection for-if loop to directly construct list
-          // avoiding intermediate WhereIterable allocation from .where().toList()
-          : [
-              for (final c in _allCourses)
-                if ((isQueryEmpty ||
-                        searchRegex!.hasMatch(c.title) ||
-                        searchRegex.hasMatch(c.description)) &&
-                    (isCategoryAll || c.category == _selectedCategory))
-                  c,
-            ];
+          : _allCourses.where((c) {
+              final matchesSearch = isQueryEmpty ||
+                  searchRegex!.hasMatch(c.title) ||
+                  searchRegex.hasMatch(c.description);
+              final matchesCategory =
+                  isCategoryAll || c.category == _selectedCategory;
+              return matchesSearch && matchesCategory;
+            }).toList();
     });
   }
 
@@ -184,73 +178,68 @@ class _ExploreViewState extends State<ExploreView> {
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 40,
-                    // ⚡ Bolt: Replace ListView.builder with SingleChildScrollView + Row and collection for loop for small, static lists to eliminate builder overhead and closure allocation on rebuilds.
-                    child: SingleChildScrollView(
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (final category in _categories)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: BoxDecoration(
-                                  gradient: category == _selectedCategory
-                                      ? AppTheme.primaryGradient
-                                      : null,
-                                  color: category == _selectedCategory
-                                      ? null
-                                      : Colors.white.withValues(alpha: 0.08),
+                      itemCount: _categories.length,
+                      itemBuilder: (context, index) {
+                        final category = _categories[index];
+                        final isSelected = category == _selectedCategory;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: BoxDecoration(
+                              gradient:
+                                  isSelected ? AppTheme.primaryGradient : null,
+                              color: isSelected
+                                  ? null
+                                  : Colors.white.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(20),
+                              border: isSelected
+                                  ? null
+                                  : Border.all(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Semantics(
+                                button: true,
+                                selected: isSelected,
+                                child: InkWell(
                                   borderRadius: BorderRadius.circular(20),
-                                  border: category == _selectedCategory
-                                      ? null
-                                      : Border.all(
-                                          color: Colors.white.withValues(
-                                            alpha: 0.1,
-                                          ),
-                                        ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Semantics(
-                                    selected: category == _selectedCategory,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(20),
-                                      focusColor:
-                                          Colors.white.withValues(alpha: 0.2),
-                                      hoverColor:
-                                          Colors.white.withValues(alpha: 0.1),
-                                      onTap: () {
-                                        setState(
-                                          () => _selectedCategory = category,
-                                        );
-                                        _filterContent();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 18,
-                                          vertical: 8,
-                                        ),
-                                        child: Text(
-                                          category,
-                                          style: TextStyle(
-                                            color: category == _selectedCategory
-                                                ? Colors.white
-                                                : AppTheme.textSecondary,
-                                            fontWeight: category == _selectedCategory
-                                                ? FontWeight.w600
-                                                : FontWeight.w500,
-                                            fontSize: 14,
-                                          ),
-                                        ),
+                                  onTap: () {
+                                    setState(
+                                      () => _selectedCategory = category,
+                                    );
+                                    _filterContent();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 18,
+                                      vertical: 8,
+                                    ),
+                                    child: Text(
+                                      category,
+                                      style: TextStyle(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : AppTheme.textSecondary,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w600
+                                            : FontWeight.w500,
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -433,18 +422,12 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Course: ${course.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CourseDetailView(course: course),
-                      ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
                     ),
                   ),
                 ),
@@ -518,18 +501,12 @@ class _ExploreViewState extends State<ExploreView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Video: ${video.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VideoPlayerView(video: video),
-                      ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerView(video: video),
                     ),
                   ),
                 ),

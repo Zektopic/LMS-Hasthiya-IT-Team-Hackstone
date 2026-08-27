@@ -141,47 +141,49 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        Tooltip(
-          message: 'Profile settings',
-          child: Semantics(
-            label: 'Profile settings',
-            button: true,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: AppTheme.primaryGradient,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  focusColor: Colors.white.withValues(alpha: 0.2),
-                  hoverColor: Colors.white.withValues(alpha: 0.1),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Profile settings coming soon!'),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+        Semantics(
+          label: 'Profile settings',
+          button: true,
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                auth.photoUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: auth.photoUrl!,
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => _buildInitials(auth),
                         ),
-                      ),
-                    );
-                  },
-                  child: auth.photoUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: auth.photoUrl!,
-                            fit: BoxFit.cover,
-                            errorWidget: (_, __, ___) => _buildInitials(auth),
+                      )
+                    : _buildInitials(auth),
+                Positioned.fill(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Profile settings coming soon!'),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                        )
-                      : _buildInitials(auth),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -214,8 +216,6 @@ class _HomeViewState extends State<HomeView> {
           excludeSemantics: true,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
-            focusColor: Colors.white.withValues(alpha: 0.2),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
             onTap: widget.onSearchTap,
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -463,18 +463,12 @@ class _HomeViewState extends State<HomeView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Course: ${course.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CourseDetailView(course: course),
-                      ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CourseDetailView(course: course),
                     ),
                   ),
                 ),
@@ -571,18 +565,12 @@ class _HomeViewState extends State<HomeView> {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Video: ${video.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VideoPlayerView(video: video),
-                      ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerView(video: video),
                     ),
                   ),
                 ),

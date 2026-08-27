@@ -26,11 +26,7 @@ class Video {
 }
 
 class LmsDataService {
-  static const String baseUrl = String.fromEnvironment(
-    'LMS_API_BASE_URL',
-    defaultValue: 'https://api.hackston-lms.com',
-  );
-
+  String get baseUrl => Env.lmsBaseUrl;
   final http.Client _client;
   static String? _authToken;
 
@@ -68,10 +64,7 @@ class LmsDataService {
 
     if (response.statusCode == 200) {
       final List<dynamic> videoJson = json.decode(response.body);
-      // ⚡ Bolt: Use collection for loop to avoid intermediate Iterable allocation from .map().toList()
-      return [
-        for (final j in videoJson) Video.fromJson(j as Map<String, dynamic>),
-      ];
+      return videoJson.map((json) => Video.fromJson(json)).toList();
     } else {
       throw Exception(
         'Failed to load videos. Status code: ${response.statusCode}',

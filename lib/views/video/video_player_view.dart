@@ -21,8 +21,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   bool _hasError = false;
-  final ReviewService _reviewService =
-      ReviewService(contentCollection: 'videos');
+  final ReviewService _reviewService = ReviewService(
+    contentCollection: 'videos',
+  );
   late Stream<List<Review>> _reviewsStream;
   List<Review>? _cachedReviews;
   double _cachedAvg = 0.0;
@@ -30,6 +31,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   @override
   void initState() {
     super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.video.id);
     _initializePlayer();
   }
@@ -282,130 +284,25 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             final reviews = snapshot.data ?? [];
 
             if (reviews.isEmpty) {
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ReviewsView(
-                      contentId: widget.video.id,
-                      contentTitle: widget.video.title,
-                      contentCollection: 'videos',
-                    ),
-                  ),
-                ),
-                child: GlassCard(
-                  padding: EdgeInsets.zero,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      focusColor: Colors.white.withValues(alpha: 0.2),
-                      hoverColor: Colors.white.withValues(alpha: 0.1),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ReviewsView(
-                            contentId: widget.video.id,
-                            contentTitle: widget.video.title,
-                            contentCollection: 'videos',
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(Icons.rate_review_rounded,
-                            color: AppTheme.primaryColor, size: 22),
-                      ),
-                      const SizedBox(width: 14),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'No reviews yet',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'Be the first to review this video.',
-                              style: TextStyle(
-                                color: AppTheme.textSecondary,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                            const Icon(Icons.chevron_right_rounded,
-                                color: AppTheme.textMuted),
-                          ],
+              return GlassCard(
+                padding: EdgeInsets.zero,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ReviewsView(
+                          contentId: widget.video.id,
+                          contentTitle: widget.video.title,
+                          contentCollection: 'videos',
                         ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            }
-
-            // ⚡ Bolt: Memoize the average calculation based on list identity
-            // to avoid O(N) iteration and closure allocation on every widget rebuild when the list hasn't changed.
-            if (!identical(reviews, _cachedReviews)) {
-              var sum = 0.0;
-              for (final r in reviews) {
-                sum += r.rating;
-              }
-              _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-              _cachedReviews = reviews;
-            }
-            final avg = _cachedAvg;
-
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ReviewsView(
-                    contentId: widget.video.id,
-                    contentTitle: widget.video.title,
-                    contentCollection: 'videos',
-                  ),
-                ),
-              ),
-              child: Column(
-                children: [
-                  GlassCard(
-                    padding: EdgeInsets.zero,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        focusColor: Colors.white.withValues(alpha: 0.2),
-                        hoverColor: Colors.white.withValues(alpha: 0.1),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ReviewsView(
-                              contentId: widget.video.id,
-                              contentTitle: widget.video.title,
-                              contentCollection: 'videos',
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Semantics(
-                            excludeSemantics: true,
-                            label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
-                            child: Row(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
@@ -441,12 +338,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               ],
                             ),
                           ),
-                                const Icon(Icons.chevron_right_rounded,
-                                    color: AppTheme.textMuted),
-                              ],
-                            ),
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppTheme.textMuted,
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -474,8 +370,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
-                      focusColor: Colors.white.withValues(alpha: 0.2),
-                      hoverColor: Colors.white.withValues(alpha: 0.1),
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
