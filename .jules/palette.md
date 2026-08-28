@@ -4,3 +4,6 @@
 ## 2026-08-27 - Explicit focus and hover states
 **Learning:** InkWell widgets placed on top of custom dark or glassmorphic backgrounds lose their default focus and hover visibility, making keyboard navigation and mouse interactions inaccessible.
 **Action:** Explicitly define `focusColor` and `hoverColor` (e.g., `Colors.white.withValues(alpha: 0.1)`) on `InkWell` widgets within custom interactive components to ensure keyboard focus indicators and mouse hover states remain visible against custom backgrounds.
+## 2024-06-25 - Focus and hover colors for Glass widgets
+**Learning:** Glassmorphism UI elements using `Colors.white.withValues(alpha: opacity)` for their background can mask default `InkWell` keyboard focus and mouse hover states.
+**Action:** Always explicitly define `focusColor` and `hoverColor` (e.g. `Colors.white.withValues(alpha: 0.1)`) on `InkWell` components used within glassmorphism widgets to maintain accessibility for keyboard and mouse users.
