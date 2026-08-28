@@ -1,7 +1,11 @@
-💡 **What:** Replaced the usage of chained iterable methods like `.take(n)` and `.indexed` inside the `build` methods of `HomeView`, `CourseDetailView`, and `VideoPlayerView` with explicitly bounds-checked `for` loops.
+💡 **What:**
+Replaced `.map().toList()` chains with Dart collection `for` loops when parsing Firestore query snapshots into models (e.g., `Course.fromFirestore` and `Video.fromFirestore`) within `CourseService`, `VideoService`, and `Course` models.
 
-🎯 **Why:** In Dart, calling methods like `.take()` on iterables inside a widget's build method creates intermediate `TakeIterable` objects on every UI frame/rebuild. In list generation logic, this creates entirely unnecessary intermediate allocations that immediately become garbage. By using a standard explicit loop (`for (var i = 0; i < collection.length && i < n; i++)`), we skip these intermediate object allocations completely, avoiding extra work for the garbage collector and maintaining smooth 60fps rendering, especially on lower-end devices.
+🎯 **Why:**
+Using `.map().toList()` on iterables like `snapshot.docs` creates an intermediate `MappedIterable` and a closure object. This allocates unnecessary memory objects that are immediately discarded after `.toList()` is called, which places unnecessary pressure on the garbage collector. This can lead to dropped frames during UI updates or background operations, especially on large lists.
 
-📊 **Impact:** Reduces object allocation and garbage collection pressure linearly correlated with the frequency of widget rebuilds and list generation occurrences.
+📊 **Impact:**
+Reduces heap allocation and memory pressure. Avoiding the intermediate allocations provides a performance improvement to list parsing, and translates directly to smoother scrolling and snappier UI when fetching recommended courses and videos.
 
-🔬 **Measurement:** Verify the codebase compiles and tests pass. Direct GPU/GC measurement in a headless runner is impractical, but the technical reduction of object allocation per-frame is verified via Dart's documentation for lazy iterables.
+🔬 **Measurement:**
+This can be verified by profiling memory allocations in the Dart DevTools during list data fetching (e.g., loading recommended courses in `HomeView`). The number of allocated `MappedIterable` instances will be observably reduced.
