@@ -7,3 +7,7 @@
 ## 2024-06-25 - Focus and hover colors for Glass widgets
 **Learning:** Glassmorphism UI elements using `Colors.white.withValues(alpha: opacity)` for their background can mask default `InkWell` keyboard focus and mouse hover states.
 **Action:** Always explicitly define `focusColor` and `hoverColor` (e.g. `Colors.white.withValues(alpha: 0.1)`) on `InkWell` components used within glassmorphism widgets to maintain accessibility for keyboard and mouse users.
+
+## 2024-09-02 - Add Semantic Button traits to custom filter pills
+**Learning:** Filter chips built with AnimatedContainer and GestureDetector lack standard button semantics and keyboard focus states, making them inaccessible.
+**Action:** Replace GestureDetector with InkWell inside a Semantics(button: true) wrapper to explicitly add button traits, and define hoverColor/focusColor to ensure keyboard accessibility.
