@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/course.dart';
 
 class CourseService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db;
+
+  CourseService({FirebaseFirestore? db})
+      : _db = db ?? FirebaseFirestore.instance;
 
   // Optimization: Added optional limit parameter to prevent unbounded reads
   Future<List<Course>> getRecommendedCourses({int? limit}) async {

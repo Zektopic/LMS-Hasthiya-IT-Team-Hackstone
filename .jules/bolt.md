@@ -44,3 +44,7 @@
 ## 2026-08-28 - Dart Collection For Loops over .map().toList()
 **Learning:** In Dart, chaining `.map().toList()` when parsing collections like Firestore query snapshots creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
 **Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation.
+
+## 2026-09-02 - Flutter Iterable Chaining Performance
+**Learning:** In Flutter, chaining iterable methods like `.take(n)` or `.indexed` within widget `build` methods allocates intermediate iterable objects on every rebuild, unnecessarily increasing garbage collection pressure.
+**Action:** Replace chained iterable methods in widget `build` methods with explicit collection `for` loops or standard aggregation loops to prevent unnecessary object allocation.
