@@ -44,3 +44,6 @@
 ## 2026-08-28 - Dart Collection For Loops over .map().toList()
 **Learning:** In Dart, chaining `.map().toList()` when parsing collections like Firestore query snapshots creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
 **Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation.
+## 2024-09-03 - Dart Collection For Loops over .map().toList()
+**Learning:** In Dart, chaining `.map().toList()` when parsing collections creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
+**Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation. However, only apply this change to large collections, as it is a micro-optimization with negligible impact on small payloads.
