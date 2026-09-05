@@ -48,6 +48,12 @@
 ## 2026-09-02 - Flutter Iterable Chaining Performance
 **Learning:** In Flutter, chaining iterable methods like `.take(n)` or `.indexed` within widget `build` methods allocates intermediate iterable objects on every rebuild, unnecessarily increasing garbage collection pressure.
 **Action:** Replace chained iterable methods in widget `build` methods with explicit collection `for` loops or standard aggregation loops to prevent unnecessary object allocation.
+
 ## 2024-09-03 - Dart Collection For Loops over .map().toList()
 **Learning:** In Dart, chaining `.map().toList()` when parsing collections creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
 **Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation. However, only apply this change to large collections, as it is a micro-optimization with negligible impact on small payloads.
+
+## 2026-09-05 - StreamBuilder Memoization Optimization
+**Learning:** In Flutter build methods (especially inside StreamBuilder), evaluating expensive O(N) list operations like sorting every time the widget rebuilds causes redundant CPU cycles and increases garbage collection overhead. Since StreamBuilder rebuilds frequently during its lifecycle, and the list reference often remains unchanged between state updates (e.g. keyboard focus, unrelated setStates), repeating the sort is inefficient.
+**Action:** Memoize expensive O(N) list operations by caching the list reference and result. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations on widget rebuilds when the stream data instance hasn't changed.
+
