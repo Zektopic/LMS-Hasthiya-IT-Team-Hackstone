@@ -36,6 +36,11 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
+  // Optimization: Cache variables for StreamBuilder memoization
+  List<Review>? _cachedInputList;
+  List<Review>? _cachedSortedList;
+  _SortBy? _cachedSortBy;
+
   @override
   void initState() {
     super.initState();
@@ -75,12 +80,26 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   List<Review> _sorted(List<Review> reviews) {
+    // ⚡ Bolt: Memoize expensive O(N) sorting operations using an O(1) identity check.
+    // This prevents redundant list allocations and sorting when the StreamBuilder rebuilds
+    // without new data (e.g. during typing in the review textfield or keyboard appearance).
+    if (identical(reviews, _cachedInputList) &&
+        _sortBy == _cachedSortBy &&
+        _cachedSortedList != null) {
+      return _cachedSortedList!;
+    }
+
+    _cachedInputList = reviews;
+    _cachedSortBy = _sortBy;
+
     if (_sortBy == _SortBy.newest) {
       // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
+      _cachedSortedList = reviews;
       return reviews;
     }
     final list = List<Review>.from(reviews);
     list.sort((a, b) => b.rating.compareTo(a.rating));
+    _cachedSortedList = list;
     return list;
   }
 
@@ -818,8 +837,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                      ? Icons.star_half_rounded
-                      : Icons.star_border_rounded,
+                  ? Icons.star_half_rounded
+                  : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
