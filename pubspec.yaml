@@ -9,16 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.5
-  firebase_core: ^4.14.0
-  firebase_auth: ^6.6.1
-  cloud_firestore: ^6.9.0
-  firebase_storage: ^13.5.0
+  cupertino_icons: ^1.0.9
+  firebase_core: ^2.15.0
+  firebase_auth: ^4.7.0
+  cloud_firestore: ^4.8.2
+  firebase_storage: ^11.2.4
   provider: ^6.0.5
   google_fonts: ^6.2.1
   http: ^1.1.0
   cached_network_image: ^3.2.3
-  intl: ^0.20.3
+  intl: ^0.18.1
   video_player: ^2.11.1
   chewie: ^1.7.0
   package_info_plus: ^9.0.0
