@@ -11,3 +11,6 @@
 ## 2024-09-02 - Add Semantic Button traits to custom filter pills
 **Learning:** Filter chips built with AnimatedContainer and GestureDetector lack standard button semantics and keyboard focus states, making them inaccessible.
 **Action:** Replace GestureDetector with InkWell inside a Semantics(button: true) wrapper to explicitly add button traits, and define hoverColor/focusColor to ensure keyboard accessibility.
+## 2026-09-06 - Add tooltip to PopupMenuButton
+**Learning:** Icon-only interactive elements like `PopupMenuButton` default to generic screen reader announcements (e.g. 'Show menu'). This can be confusing for users relying on accessibility tools or needing context on desktop via hover states.
+**Action:** Always provide a descriptive `tooltip` attribute (e.g. `tooltip: 'Sort reviews'`) to `PopupMenuButton` and similar icon-only widgets to ensure screen readers announce the element's specific purpose clearly.
