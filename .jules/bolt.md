@@ -57,3 +57,6 @@
 **Learning:** In Flutter build methods (especially inside StreamBuilder), evaluating expensive O(N) list operations like sorting every time the widget rebuilds causes redundant CPU cycles and increases garbage collection overhead. Since StreamBuilder rebuilds frequently during its lifecycle, and the list reference often remains unchanged between state updates (e.g. keyboard focus, unrelated setStates), repeating the sort is inefficient.
 **Action:** Memoize expensive O(N) list operations by caching the list reference and result. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations on widget rebuilds when the stream data instance hasn't changed.
 
+## 2026-09-06 - Flutter .indexed Performance
+**Learning:** In Flutter, using the `.indexed` property on collections inside a `build` method allocates an intermediate `IndexedIterable` object on every rebuild, unnecessarily increasing garbage collection pressure, particularly when iterating over small static lists.
+**Action:** Replace the `.indexed` iteration (`for (final (index, item) in items.indexed)`) with a traditional `for` loop (`for (var index = 0; index < items.length; index++)`) to prevent intermediate iterable allocation during widget rebuilds.
