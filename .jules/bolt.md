@@ -78,3 +78,7 @@
 ## 2024-05-18 - Avoid ListView.builder for small static lists
 **Learning:** For small, static lists (like a handful of categories), `ListView.builder` introduces unnecessary closure allocation and indexing overhead on every rebuild.
 **Action:** Use `SingleChildScrollView` with a `Row` and a collection `for` loop to inline the widget creation and avoid closure allocation.
+
+## 2026-09-06 - Reverting ListView.builder replace anti-pattern
+**Learning:** Replacing ListView.builder with SingleChildScrollView and a Row is a micro-optimization that has zero measurable positive impact in Dart and harms app scalability by removing lazy loading (virtualization).
+**Action:** Retain ListView.builder over collection for loops inside Columns or Rows to preserve performance as lists grow.
