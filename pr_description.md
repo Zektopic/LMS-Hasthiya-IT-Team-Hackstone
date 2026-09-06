@@ -1,11 +1,11 @@
 💡 **What:**
-Replaced `.map().toList()` chains with Dart collection `for` loops when parsing Firestore query snapshots into models (e.g., `Course.fromFirestore` and `Video.fromFirestore`) within `CourseService`, `VideoService`, and `Course` models.
+Wrapped the `InkWell` components for the course and video cards in `home_view.dart` and `explore_view.dart` with `Semantics(button: true, enabled: true, label: ...)` wrappers, using the respective course or video title as the label. Excluded the use of `excludeSemantics: true` to preserve the screen reading of child text elements like duration and descriptions.
 
 🎯 **Why:**
-Using `.map().toList()` on iterables like `snapshot.docs` creates an intermediate `MappedIterable` and a closure object. This allocates unnecessary memory objects that are immediately discarded after `.toList()` is called, which places unnecessary pressure on the garbage collector. This can lead to dropped frames during UI updates or background operations, especially on large lists.
+Custom interactive components that use `InkWell` internally do not always expose proper button traits or specific, descriptive labels to screen readers by default. This makes navigation confusing for users relying on assistive technologies.
 
-📊 **Impact:**
-Reduces heap allocation and memory pressure. Avoiding the intermediate allocations provides a performance improvement to list parsing, and translates directly to smoother scrolling and snappier UI when fetching recommended courses and videos.
+📸 **Before/After:**
+Before, screen readers would interact with the custom glass cards without explicitly recognizing them as tappable interactive buttons, and without a high-level label announcing the primary content (the title). Now, they announce "Course: [Title]" or "Video: [Title]" while still correctly reading the child contents.
 
-🔬 **Measurement:**
-This can be verified by profiling memory allocations in the Dart DevTools during list data fetching (e.g., loading recommended courses in `HomeView`). The number of allocated `MappedIterable` instances will be observably reduced.
+♿ **Accessibility:**
+Significantly improves screen reader navigation by correctly identifying tappable custom cards as buttons and announcing their specific content titles upfront.
