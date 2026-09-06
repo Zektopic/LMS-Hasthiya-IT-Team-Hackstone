@@ -248,6 +248,7 @@ class ProfileView extends StatelessWidget {
                       color: Colors.transparent,
                       child: Semantics(
                         button: true,
+                        label: items[index].label,
                         child: InkWell(
                           borderRadius: index == 0 && items.length == 1
                               ? BorderRadius.circular(16)
