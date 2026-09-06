@@ -67,8 +67,8 @@ class _ExploreViewState extends State<ExploreView> {
     setState(() => _isLoading = true);
 
     final results = await Future.wait([
-      _videoService.getVideos(),
-      _courseService.getRecommendedCourses(),
+      _videoService.getVideos(limit: 50),
+      _courseService.getRecommendedCourses(limit: 50),
     ]);
 
     if (!mounted) return;

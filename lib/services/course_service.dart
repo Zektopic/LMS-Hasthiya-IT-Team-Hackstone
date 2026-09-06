@@ -12,9 +12,8 @@ class CourseService {
   Future<List<Course>> getRecommendedCourses({int? limit}) async {
     try {
       Query<Map<String, dynamic>> query = _db.collection('courses');
-      if (limit != null) {
-        query = query.limit(limit);
-      }
+      // ⚡ Bolt: Enforced default limit of 10 to prevent unbounded data retrieval and excessive memory allocation.
+      query = query.limit(limit ?? 10);
       final snapshot = await query.get();
       // ⚡ Bolt: Use collection for loop to directly construct list
       // avoiding intermediate Iterable allocation from .map().toList()
