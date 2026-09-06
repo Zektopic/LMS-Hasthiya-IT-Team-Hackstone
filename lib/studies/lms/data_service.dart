@@ -64,7 +64,8 @@ class LmsDataService {
 
     if (response.statusCode == 200) {
       final List<dynamic> videoJson = json.decode(response.body);
-      return videoJson.map((json) => Video.fromJson(json)).toList();
+      // ⚡ Bolt Optimization: Use collection for loop instead of .map().toList() to avoid allocating an intermediate MappedIterable and closure object.
+      return [for (final json in videoJson) Video.fromJson(json)];
     } else {
       throw Exception(
         'Failed to load videos. Status code: ${response.statusCode}',

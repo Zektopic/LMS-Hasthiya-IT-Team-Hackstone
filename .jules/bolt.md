@@ -40,3 +40,7 @@
 ## 2024-05-26 - Flutter List Filtering Optimization
 **Learning:** In Dart/Flutter, executing O(N) operations like `.where(...).toList()` on lists for filtering allocates intermediate `WhereIterable` and closure objects, which increases garbage collection pressure. Furthermore, when search or category filters are empty or default, executing the filter logic is redundant and inefficient.
 **Action:** Short-circuit list filtering operations by directly assigning the original list reference when filters are empty. When filtering is required, use collection `for-if` loops (e.g., `[for (final item in list) if (condition) item]`) instead of `.where().toList()` to eliminate intermediate allocations.
+
+## 2024-08-29 - Dart Iterable .map().toList() Allocation Overhead
+**Learning:** In Dart, chaining `.map().toList()` when parsing collections like Firestore query snapshots creates an intermediate `MappedIterable` and closure object, unnecessarily increasing heap allocation and garbage collection pressure.
+**Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and reduce overhead.
