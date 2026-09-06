@@ -274,6 +274,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   padding: EdgeInsets.all(24),
                   child: CircularProgressIndicator(
                     color: AppTheme.primaryColor,
+                    semanticsLabel: 'Loading reviews',
                   ),
                 ),
               );
@@ -718,7 +719,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     return Container(
       color: AppTheme.surfaceColor,
       child: const Center(
-        child: CircularProgressIndicator(color: AppTheme.primaryColor),
+        child: CircularProgressIndicator(
+          color: AppTheme.primaryColor,
+          semanticsLabel: 'Loading video player',
+        ),
       ),
     );
   }

@@ -234,7 +234,10 @@ class _ReviewsViewState extends State<ReviewsView> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(color: AppTheme.primaryColor),
+                child: CircularProgressIndicator(
+                  color: AppTheme.primaryColor,
+                  semanticsLabel: 'Loading reviews',
+                ),
               );
             }
 
@@ -1112,6 +1115,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: Colors.white,
+                                  semanticsLabel: 'Submitting review',
                                 ),
                               )
                             : Text(

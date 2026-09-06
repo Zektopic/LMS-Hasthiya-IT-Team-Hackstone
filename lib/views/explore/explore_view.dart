@@ -237,9 +237,10 @@ class _ExploreViewState extends State<ExploreView> {
                                             color: category == _selectedCategory
                                                 ? Colors.white
                                                 : AppTheme.textSecondary,
-                                            fontWeight: category == _selectedCategory
-                                                ? FontWeight.w600
-                                                : FontWeight.w500,
+                                            fontWeight:
+                                                category == _selectedCategory
+                                                    ? FontWeight.w600
+                                                    : FontWeight.w500,
                                             fontSize: 14,
                                           ),
                                         ),
@@ -262,6 +263,7 @@ class _ExploreViewState extends State<ExploreView> {
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: AppTheme.primaryColor,
+                        semanticsLabel: 'Loading content',
                       ),
                     )
                   : RefreshIndicator(

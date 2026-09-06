@@ -1,32 +1,3 @@
-## 2024-05-15 - [Keyboard Navigation in Flutter Forms]
-**Learning:** Found that basic `TextField`s in Flutter do not automatically provide a great keyboard UX out of the box. Specifically, users need `textInputAction: TextInputAction.next` on intermediate fields to jump to the next one quickly, and `textInputAction: TextInputAction.done` with `onSubmitted` on the final field to let them submit directly from the keyboard instead of requiring a tap on the submit button. `keyboardType` should also be set correctly (like `TextInputType.emailAddress`) so the OS can display the optimal virtual keyboard (e.g. showing `@` prominently).
-**Action:** Always verify keyboard navigation and add `textInputAction` and `onSubmitted` handlers to any form in a Flutter application for a smoother typing experience, particularly on mobile devices.
-## 2026-03-14 - [Interactive List Items with InkWell]
-**Learning:** In Flutter, static `Container` widgets used as list items lack visual tap feedback and implicit button accessibility semantics. A pattern was observed where actionable lesson items appeared static when tapped.
-**Action:** Always wrap actionable list items in `Material` and `InkWell` (with `onTap` defined). This automatically adds the standard ripple visual feedback and exposes the element to screen readers as a semantic button without requiring manual ARIA-like attributes.
-## 2026-03-16 - [Group Information in Cards for Accessibility]
-**Learning:** Found that visual cards displaying statistics or ratings (like a star icon next to a number) are read separately by screen readers, leading to a disjointed user experience (e.g. reading 'star' then '4.8').
-**Action:** Use `Semantics` with `excludeSemantics: true` around the grouped widgets, and provide a single, clean `label` (e.g. 'Rating: 4.8 stars') to ensure screen readers announce the combined information cohesively.
-## 2026-03-25 - Interactive Components Tap Feedback
-**Learning:** When replacing `GestureDetector` with `Material` and `InkWell` for visual tap feedback inside `GlassCard` components, applying padding globally inside the `InkWell` can break edge-to-edge layouts (like cover images/thumbnails).
-**Action:** Always maintain the exact padding structure of the original component. Shift padding selectively to inner children only where needed, ensuring elements designed to be flush with the card's border retain their styling.
-\n## 2024-05-30 - Replace GestureDetector with Material+InkWell for Interactive Elements\n**Learning:** Using `GestureDetector` for interactive widgets like cards, chips, and navigation items fails to provide visual tap feedback and misses out on implicit accessibility semantics (like screen readers identifying the element as a button). \n**Action:** When wrapping a widget to make it interactive, prefer using `Material` combined with `InkWell` inside the container to automatically provide visual ripple effects and implicit semantic button traits.
-## 2026-03-29 - [Form Accessibility and Feedback]
-**Learning:** Found that when buttons submit forms using `GlassButton` or similar custom buttons, if they only change opacity to indicate an inactive/loading state, it may be insufficient for accessibility and clear user feedback, especially without an ARIA label or `Semantics` equivalent in Flutter.
-**Action:** Always ensure buttons used for async actions show a visible loading state (like `CircularProgressIndicator`) and have explicit `Semantics` or descriptive labels to indicate their current state (e.g., 'Loading, please wait') to screen readers.
-## 2024-04-01 - Wrap visual data groups in Semantics
-**Learning:** In Flutter, when displaying data groups like a statistic (e.g., a number followed by a label like "12 Courses"), standard layout widgets (like `Column`) cause screen readers to read each element disjointedly, creating a poor experience.
-**Action:** Wrap grouped visual elements (like statistics or ratings) in a `Semantics` widget with `excludeSemantics: true` and provide a single cohesive `label` (e.g., `'$value $label'`) to prevent screen readers from reading individual elements disjointedly.
-
-## 2024-05-31 - [Interactive Tabs and Dynamic Content]
-**Learning:** Found that custom tab-like navigation elements in Flutter are often built as static `Container`s within `StatelessWidget`s, meaning they lack visual feedback (ripple effect) when tapped, and the surrounding view doesn't update its content based on the active tab, resulting in a confusing UX.
-**Action:** When implementing or fixing custom tabs, convert the parent to a `StatefulWidget` to track the active index, wrap the tab items in `Material` and `InkWell` for visual feedback, and ensure the content view dynamically updates its state based on the selected tab index.
-## 2024-06-18 - Replacing GestureDetector for Filter Chips
-**Learning:** Replacing `GestureDetector` with `Material` + `InkWell` for horizontal scrollable filter chips provides immediate visual feedback, making the app feel more responsive and accessible.
-**Action:** Use `Material` and `InkWell` instead of `GestureDetector` for custom button-like elements such as category filter chips. Ensure padding is moved inside the `InkWell` so the ripple effect covers the entire interactive area.
-## 2024-05-30 - Interactive Components Tap Feedback Regression Fix
-**Learning:** In Flutter, when moving a tap action from an outer `GestureDetector` to an inner `InkWell` to provide localized ripple feedback on a specific child element (like a card within a Column), sibling elements (like trailing text or inline elements) can inadvertently lose clickability.
-**Action:** To maintain a large interactive area (including empty spaces) while providing specific visual feedback on a child, wrap the entire parent container in a `GestureDetector` with `behavior: HitTestBehavior.opaque` to catch taps outside the specific `InkWell` area.
-## 2026-06-13 - [Visible Focus States for Custom InkWells]
-**Learning:** In Flutter, when building custom interactive components (like glassmorphic UI elements) using `InkWell` on top of transparent or heavily styled backgrounds, the default focus and hover indicators may become invisible or blend in too much, leading to poor keyboard and mouse accessibility.
-**Action:** Always explicitly define `focusColor` and `hoverColor` on `InkWell` widgets within custom interactive components to ensure clear visual feedback for non-touch device users.
+## 2024-08-23 - Add Semantics Label to CircularProgressIndicator
+**Learning:** Screen readers do not announce anything when a native `CircularProgressIndicator` appears, which creates a frustrating experience during async loading states. Adding a `semanticsLabel` ensures visually impaired users are aware of the loading state.
+**Action:** Always add a descriptive `semanticsLabel` (e.g., 'Loading dashboard', 'Submitting review') to `CircularProgressIndicator` when it is used to indicate async operations.

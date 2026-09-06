@@ -290,6 +290,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                     padding: EdgeInsets.all(24),
                     child: CircularProgressIndicator(
                       color: AppTheme.primaryColor,
+                      semanticsLabel: 'Loading reviews',
                     ),
                   ),
                 );

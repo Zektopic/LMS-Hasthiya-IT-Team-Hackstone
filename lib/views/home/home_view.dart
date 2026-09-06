@@ -88,6 +88,7 @@ class _HomeViewState extends State<HomeView> {
                       padding: EdgeInsets.all(40),
                       child: CircularProgressIndicator(
                         color: AppTheme.primaryColor,
+                        semanticsLabel: 'Loading dashboard',
                       ),
                     ),
                   )
