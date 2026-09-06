@@ -27,3 +27,6 @@
 ## 2026-06-25 - Missing Focus/Hover colors on Custom InkWells
 **Learning:** In custom glassmorphic components, standard InkWells lack adequate focus and hover indicators because the custom background obscures standard framework defaults.
 **Action:** Always explicitly define `focusColor` and `hoverColor` on InkWell widgets within custom containers to ensure keyboard focus indicators and mouse hover states remain visible.
+## 2026-09-06 - Explicit Semantics for Disabled Buttons
+**Learning:** When a button's interactive callback (e.g., `onTap` on an `InkWell`) is set to null to indicate a disabled state, Flutter automatically drops its implicit button semantics. Screen readers will no longer announce it as a button at all, rather than announcing it as a disabled button, causing a loss of context for users navigating via assistive technologies.
+**Action:** Always explicitly wrap custom interactive components (like `GlassButton`) with `Semantics(button: true, enabled: !isDisabled)` to ensure the element is consistently announced as a button and its enabled/disabled state is correctly communicated to screen readers.
