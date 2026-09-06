@@ -6,7 +6,7 @@ class CourseService {
   final FirebaseFirestore _db;
 
   CourseService({FirebaseFirestore? db})
-      : _db = db ?? FirebaseFirestore.instance;
+    : _db = db ?? FirebaseFirestore.instance;
 
   // Optimization: Added optional limit parameter to prevent unbounded reads
   Future<List<Course>> getRecommendedCourses({int? limit}) async {
@@ -18,9 +18,7 @@ class CourseService {
       final snapshot = await query.get();
       // ⚡ Bolt: Use collection for loop to directly construct list
       // avoiding intermediate Iterable allocation from .map().toList()
-      return [
-        for (final doc in snapshot.docs) Course.fromFirestore(doc),
-      ];
+      return [for (final doc in snapshot.docs) Course.fromFirestore(doc)];
     } catch (e) {
       debugPrint('Error fetching courses: $e');
       return [];

@@ -252,14 +252,14 @@ class ProfileView extends StatelessWidget {
                           borderRadius: index == 0 && items.length == 1
                               ? BorderRadius.circular(16)
                               : index == 0
-                                  ? const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    )
-                                  : index == items.length - 1
-                                      ? const BorderRadius.vertical(
-                                          bottom: Radius.circular(16),
-                                        )
-                                      : BorderRadius.zero,
+                              ? const BorderRadius.vertical(
+                                  top: Radius.circular(16),
+                                )
+                              : index == items.length - 1
+                              ? const BorderRadius.vertical(
+                                  bottom: Radius.circular(16),
+                                )
+                              : BorderRadius.zero,
                           focusColor: Colors.white.withValues(alpha: 0.2),
                           hoverColor: Colors.white.withValues(alpha: 0.1),
                           onTap: items[index].onTap,
@@ -275,7 +275,26 @@ class ProfileView extends StatelessWidget {
                                   color: AppTheme.textSecondary,
                                   size: 22,
                                 ),
-                            ],
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    items[index].label,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                if (items[index].trailing != null)
+                                  items[index].trailing!,
+                                if (items[index].trailing == null)
+                                  const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted,
+                                    size: 20,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -54,7 +54,9 @@ void main() {
       expect(review.comment, '');
       // Cannot exactly match DateTime.now(), so checking if it is close
       expect(
-          DateTime.now().difference(review.createdAt).inSeconds, lessThan(5));
+        DateTime.now().difference(review.createdAt).inSeconds,
+        lessThan(5),
+      );
     });
 
     test('fromFirestore handles null data from DocumentSnapshot', () {
@@ -69,7 +71,9 @@ void main() {
       expect(review.rating, 0.0);
       expect(review.comment, '');
       expect(
-          DateTime.now().difference(review.createdAt).inSeconds, lessThan(5));
+        DateTime.now().difference(review.createdAt).inSeconds,
+        lessThan(5),
+      );
     });
 
     test('fromFirestore parses rating correctly when provided as int', () {

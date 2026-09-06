@@ -20,15 +20,12 @@ class ReviewService {
 
   /// Real-time stream of all reviews for a piece of content, newest first.
   Stream<List<Review>> getReviews(String contentId) {
-    return _reviewsRef(contentId)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((s) {
+    return _reviewsRef(
+      contentId,
+    ).orderBy('createdAt', descending: true).snapshots().map((s) {
       // ⚡ Bolt: Use collection for loop to directly construct list
       // avoiding intermediate Iterable allocation from .map().toList()
-      return [
-        for (final doc in s.docs) Review.fromFirestore(doc),
-      ];
+      return [for (final doc in s.docs) Review.fromFirestore(doc)];
     });
   }
 

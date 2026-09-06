@@ -216,10 +216,12 @@ class _ExploreViewState extends State<ExploreView> {
                                     selected: category == _selectedCategory,
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(20),
-                                      focusColor:
-                                          Colors.white.withValues(alpha: 0.2),
-                                      hoverColor:
-                                          Colors.white.withValues(alpha: 0.1),
+                                      focusColor: Colors.white.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      hoverColor: Colors.white.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       onTap: () {
                                         setState(
                                           () => _selectedCategory = category,
@@ -237,7 +239,8 @@ class _ExploreViewState extends State<ExploreView> {
                                             color: category == _selectedCategory
                                                 ? Colors.white
                                                 : AppTheme.textSecondary,
-                                            fontWeight: category == _selectedCategory
+                                            fontWeight:
+                                                category == _selectedCategory
                                                 ? FontWeight.w600
                                                 : FontWeight.w500,
                                             fontSize: 14,
