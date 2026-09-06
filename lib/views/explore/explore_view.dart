@@ -333,17 +333,21 @@ class _ExploreViewState extends State<ExploreView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
+          child: Semantics(
+            label: 'Course: ${course.title}',
+            button: true,
+            enabled: true,
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseDetailView(course: course),
+                ),
               ),
-            ),
-            child: Padding(
+              child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -436,6 +440,7 @@ class _ExploreViewState extends State<ExploreView> {
             ),
           ),
         ),
+        ),
       ),
     );
   }
@@ -447,17 +452,23 @@ class _ExploreViewState extends State<ExploreView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
+          child: Semantics(
+            label: 'Video: ${video.title}',
+            button: true,
+            enabled: true,
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => VideoPlayerView(video: video),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
                 children: [
                   Container(
                     width: 60,
@@ -507,6 +518,7 @@ class _ExploreViewState extends State<ExploreView> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

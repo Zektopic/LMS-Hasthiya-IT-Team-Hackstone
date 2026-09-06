@@ -1,13 +1,3 @@
-## 2024-08-18 - [Add Semantic Button traits]
-**Learning:** Adding explicit semantic wrappers with `button: true` to custom interactive components that utilize `InkWell` internally improves how screen readers identify and present these components to users. Without this, standard buttons might not be announced with the proper traits.
-**Action:** When building custom interactive components and nesting `InkWell` deep within other widgets like layout wrappers or containers without default semantics, always make sure to apply the appropriate `Semantics` wrappers. Ensure to manage states such as disabled (`enabled: !isDisabled`).
-## 2026-08-27 - Explicit focus and hover states
-**Learning:** InkWell widgets placed on top of custom dark or glassmorphic backgrounds lose their default focus and hover visibility, making keyboard navigation and mouse interactions inaccessible.
-**Action:** Explicitly define `focusColor` and `hoverColor` (e.g., `Colors.white.withValues(alpha: 0.1)`) on `InkWell` widgets within custom interactive components to ensure keyboard focus indicators and mouse hover states remain visible against custom backgrounds.
-## 2024-06-25 - Focus and hover colors for Glass widgets
-**Learning:** Glassmorphism UI elements using `Colors.white.withValues(alpha: opacity)` for their background can mask default `InkWell` keyboard focus and mouse hover states.
-**Action:** Always explicitly define `focusColor` and `hoverColor` (e.g. `Colors.white.withValues(alpha: 0.1)`) on `InkWell` components used within glassmorphism widgets to maintain accessibility for keyboard and mouse users.
-
-## 2024-09-02 - Add Semantic Button traits to custom filter pills
-**Learning:** Filter chips built with AnimatedContainer and GestureDetector lack standard button semantics and keyboard focus states, making them inaccessible.
-**Action:** Replace GestureDetector with InkWell inside a Semantics(button: true) wrapper to explicitly add button traits, and define hoverColor/focusColor to ensure keyboard accessibility.
+## 2024-05-13 - Add Semantics wrapper for GlassCard InkWells
+**Learning:** `InkWell` implicitly adds `button: true` when it has an `onTap` callback, but when complex custom widgets like `GlassCard` abstract this away, relying on the implicit traits can result in poor screen reader announcements if the widget contents are complex. Furthermore, explicit `Semantics` wrappers with a specific label improve screen reader clarity, particularly when the inner components are wrapped in multiple presentation layers.
+**Action:** When creating custom tappable cards using `InkWell` and custom UI wrappers, always consider wrapping the `InkWell` in an explicit `Semantics` widget with `button: true`, `enabled: true`, and a descriptive `label` to override default or overly noisy tree announcements.

@@ -195,22 +195,31 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          focusColor: Colors.white.withValues(alpha: 0.1),
-          hoverColor: Colors.white.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          onTap: widget.onSearchTap,
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
-                SizedBox(width: 12),
-                Text(
-                  'Search courses, videos...',
-                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
-                ),
-              ],
+        child: Semantics(
+          label: 'Search courses and videos',
+          button: true,
+          enabled: true,
+          child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            onTap: widget.onSearchTap,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search_rounded,
+                    color: AppTheme.textMuted,
+                    size: 22,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Search courses, videos...',
+                    style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -323,18 +332,22 @@ class _HomeViewState extends State<HomeView> {
         borderRadius: 20,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(20),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
+          child: Semantics(
+            label: 'Course: ${course.title}',
+            button: true,
+            enabled: true,
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseDetailView(course: course),
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   height: 110,
@@ -441,6 +454,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ),
+        ),
       ),
     );
   }
@@ -467,17 +481,23 @@ class _HomeViewState extends State<HomeView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
+          child: Semantics(
+            label: 'Video: ${video.title}',
+            button: true,
+            enabled: true,
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => VideoPlayerView(video: video),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
                 children: [
                   Container(
                     width: 60,
@@ -537,6 +557,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );
