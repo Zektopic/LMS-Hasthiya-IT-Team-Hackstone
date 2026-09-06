@@ -12,9 +12,8 @@ class VideoService {
   Future<List<Video>> getVideos({int? limit}) async {
     try {
       Query<Map<String, dynamic>> query = _db.collection('videos');
-      if (limit != null) {
-        query = query.limit(limit);
-      }
+      // ⚡ Bolt: Enforce a default limit (e.g. 10) on unbounded collection queries to prevent fetching massive datasets unintentionally.
+      query = query.limit(limit ?? 10);
       final snapshot = await query.get();
       // ⚡ Bolt: Use collection for loop to directly construct list
       // avoiding intermediate Iterable allocation from .map().toList()
