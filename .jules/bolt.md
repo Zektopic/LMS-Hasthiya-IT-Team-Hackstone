@@ -78,3 +78,6 @@
 ## 2024-05-18 - Avoid ListView.builder for small static lists
 **Learning:** For small, static lists (like a handful of categories), `ListView.builder` introduces unnecessary closure allocation and indexing overhead on every rebuild.
 **Action:** Use `SingleChildScrollView` with a `Row` and a collection `for` loop to inline the widget creation and avoid closure allocation.
+## 2026-09-06 - List copy optimization
+**Learning:** In Dart, using the spread operator `[...list]` is more efficient than `List.from(list)` for copying lists as it avoids intermediate allocations and type checking.
+**Action:** Use spread operators `[...list]` instead of `List.from()` or `.toList()` when copying collections.

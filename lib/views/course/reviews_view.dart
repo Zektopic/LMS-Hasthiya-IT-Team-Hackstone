@@ -90,7 +90,8 @@ class _ReviewsViewState extends State<ReviewsView> {
       return _cachedSortedReviews;
     }
 
-    final list = List<Review>.from(reviews);
+    // ⚡ Bolt: Replaced List.from with spread operator for O(N) allocation efficiency
+    final list = [...reviews];
     list.sort((a, b) => b.rating.compareTo(a.rating));
 
     _cachedOriginalReviews = reviews;
@@ -851,8 +852,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                      ? Icons.star_half_rounded
-                      : Icons.star_border_rounded,
+                  ? Icons.star_half_rounded
+                  : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
