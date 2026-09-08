@@ -243,7 +243,8 @@ class _ReviewsViewState extends State<ReviewsView> {
             return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top + kToolbarHeight + 16,
+                // ⚡ Bolt: Use MediaQuery.paddingOf/viewInsetsOf instead of MediaQuery.of to avoid unnecessary rebuilds when unrelated MediaQueryData properties change.
+                MediaQuery.paddingOf(context).top + kToolbarHeight + 16,
                 20,
                 40,
               ),
@@ -972,7 +973,8 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
     final isEditing = widget.existingReview != null;
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        // ⚡ Bolt: Use MediaQuery.paddingOf/viewInsetsOf instead of MediaQuery.of to avoid unnecessary rebuilds when unrelated MediaQueryData properties change.
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
       ),
       child: Container(
         decoration: const BoxDecoration(

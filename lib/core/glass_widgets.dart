@@ -159,7 +159,8 @@ class GradientBackground extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.4,
+            // ⚡ Bolt: Use MediaQuery.sizeOf/paddingOf instead of MediaQuery.of to avoid unnecessary rebuilds when unrelated MediaQueryData properties change.
+            top: MediaQuery.sizeOf(context).height * 0.4,
             right: -40,
             child: Container(
               width: 200,
@@ -259,7 +260,8 @@ class GlassNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom,
+        // ⚡ Bolt: Use MediaQuery.sizeOf/paddingOf instead of MediaQuery.of to avoid unnecessary rebuilds when unrelated MediaQueryData properties change.
+        bottom: MediaQuery.paddingOf(context).bottom,
         top: 4,
       ),
       decoration: BoxDecoration(
