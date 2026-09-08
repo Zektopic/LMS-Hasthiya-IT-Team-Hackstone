@@ -11,3 +11,6 @@
 ## 2024-09-02 - Add Semantic Button traits to custom filter pills
 **Learning:** Filter chips built with AnimatedContainer and GestureDetector lack standard button semantics and keyboard focus states, making them inaccessible.
 **Action:** Replace GestureDetector with InkWell inside a Semantics(button: true) wrapper to explicitly add button traits, and define hoverColor/focusColor to ensure keyboard accessibility.
+## 2024-11-20 - Add explicit semantics to disabled GlassButton
+**Learning:** In Flutter, when an `InkWell` (wrapped in a `Material` widget) has its `onTap` callback set to `null` to indicate a disabled state, it loses its implicit interactive button semantic traits. This can cause screen readers to ignore the element or fail to announce its interactive nature and disabled state.
+**Action:** When creating custom tappable components like `GlassButton` that handle their own enabled/disabled state by dynamically passing `null` to the child `InkWell`s `onTap` property, always explicitly wrap the `InkWell` in a `Semantics` widget with `button: true` and `enabled: !isDisabled` to ensure the disabled button is still recognized and announced correctly by screen readers.
