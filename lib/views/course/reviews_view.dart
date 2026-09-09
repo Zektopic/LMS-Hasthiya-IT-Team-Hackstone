@@ -198,6 +198,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         ),
         actions: [
           PopupMenuButton<_SortBy>(
+            tooltip: 'Sort reviews',
             initialValue: _sortBy,
             onSelected: (v) => setState(() => _sortBy = v),
             color: AppTheme.surfaceColor,
@@ -228,7 +229,10 @@ class _ReviewsViewState extends State<ReviewsView> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(color: AppTheme.primaryColor),
+                child: CircularProgressIndicator(
+                  color: AppTheme.primaryColor,
+                  semanticsLabel: 'Loading reviews',
+                ),
               );
             }
 
@@ -243,7 +247,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top + kToolbarHeight + 16,
+                MediaQuery.paddingOf(context).top + kToolbarHeight + 16,
                 20,
                 40,
               ),
@@ -972,7 +976,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
     final isEditing = widget.existingReview != null;
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
       ),
       child: Container(
         decoration: const BoxDecoration(
@@ -1097,6 +1101,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: Colors.white,
+                                  semanticsLabel: 'Submitting review',
                                 ),
                               )
                             : Text(

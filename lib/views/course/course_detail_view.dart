@@ -340,7 +340,7 @@ class CourseDetailView extends StatelessWidget {
             20,
             16,
             20,
-            16 + MediaQuery.of(context).padding.bottom,
+            16 + MediaQuery.paddingOf(context).bottom,
           ),
           decoration: BoxDecoration(
             color: AppTheme.surfaceColor.withValues(alpha: 0.9),

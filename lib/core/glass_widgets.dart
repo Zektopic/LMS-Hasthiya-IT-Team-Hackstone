@@ -81,27 +81,32 @@ class GlassButton extends StatelessWidget {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            onTap: isDisabled ? null : onPressed,
-            borderRadius: BorderRadius.circular(borderRadius),
-            child: Padding(
-              padding: padding,
-              child: Center(
-                child: isLoading
-                    ? Semantics(
-                        label: 'Loading',
-                        child: const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
+          child: Semantics(
+            container: true,
+            button: true,
+            enabled: !isDisabled,
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              onTap: isDisabled ? null : onPressed,
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: Padding(
+                padding: padding,
+                child: Center(
+                  child: isLoading
+                      ? Semantics(
+                          label: 'Loading',
+                          child: const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                    : child,
+                        )
+                      : child,
+                ),
               ),
             ),
           ),
@@ -159,7 +164,7 @@ class GradientBackground extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.4,
+            top: MediaQuery.sizeOf(context).height * 0.4,
             right: -40,
             child: Container(
               width: 200,
@@ -259,7 +264,7 @@ class GlassNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom,
+        bottom: MediaQuery.paddingOf(context).bottom,
         top: 4,
       ),
       decoration: BoxDecoration(

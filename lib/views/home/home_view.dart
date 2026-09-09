@@ -323,10 +323,11 @@ class _HomeViewState extends State<HomeView> {
         borderRadius: 20,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(20),
+          child: MergeSemantics(
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -442,7 +443,8 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildVideoList() {
@@ -467,10 +469,11 @@ class _HomeViewState extends State<HomeView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
+          child: MergeSemantics(
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
@@ -539,7 +542,8 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildEmptyState() {

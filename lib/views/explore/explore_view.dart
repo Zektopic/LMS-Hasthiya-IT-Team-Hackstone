@@ -67,8 +67,8 @@ class _ExploreViewState extends State<ExploreView> {
     setState(() => _isLoading = true);
 
     final results = await Future.wait([
-      _videoService.getVideos(),
-      _courseService.getRecommendedCourses(),
+      _videoService.getVideos(limit: VideoService.defaultQueryLimit),
+      _courseService.getRecommendedCourses(limit: CourseService.defaultQueryLimit),
     ]);
 
     if (!mounted) return;
@@ -333,10 +333,11 @@ class _ExploreViewState extends State<ExploreView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
+          child: MergeSemantics(
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -447,10 +448,11 @@ class _ExploreViewState extends State<ExploreView> {
         borderRadius: 16,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
+          child: MergeSemantics(
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
