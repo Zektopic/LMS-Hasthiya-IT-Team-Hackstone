@@ -16,8 +16,7 @@ class CourseService {
         query = query.limit(limit);
       }
       final snapshot = await query.get();
-      // ⚡ Bolt: Use collection for loop to directly construct list
-      // avoiding intermediate Iterable allocation from .map().toList()
+      // ⚡ Bolt: Use collection for loop to directly construct list avoiding intermediate Iterable allocation
       return [
         for (final doc in snapshot.docs) Course.fromFirestore(doc),
       ];

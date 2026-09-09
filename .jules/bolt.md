@@ -37,44 +37,23 @@
 **Learning:** In the 'hackston_lms' project (Dart 3.0+), generating lists of widgets within a `build` method using the pattern `.asMap().entries.map((entry) { ... }).toList()` is highly inefficient. It allocates unnecessary intermediate objects (a `Map`, multiple `MapEntry` objects, a closure, and an `Iterable`) which creates extra work for the garbage collector and slows down UI rendering.
 **Action:** Always replace this pattern with Dart 3's collection `for` loop combined with the `.indexed` extension: `for (final (index, item) in collection.indexed)`. This approach eliminates the intermediate object allocations and provides a significant performance improvement (up to 45% in micro-benchmarks) during list generation while improving readability.
 
-## 2024-05-26 - Flutter String Allocation Overheads
-**Learning:** In Flutter, optimizing simple string parsing (like generating initials from a name) is crucial when placed inside a `ListView.builder`. Chained operations like `.split(' ').where((s) => s.isNotEmpty).take(2).map((s) => s[0]).join().toUpperCase()` allocate multiple intermediate objects (Lists, Iterables, strings) creating unnecessary O(N) memory allocations per item, which triggers frequent garbage collection and causes stutter.
-**Action:** Replace expensive chained operations with a single-pass character loop (`for (var i = 0; i < str.length; i++)`) to construct the necessary string in-place without generating intermediate collections. Avoid micro-optimizing small fixed-size widget lists (like `List.generate(5)`), as the impact is infinitesimal.
+## 2024-05-26 - Flutter List Filtering Optimization
+**Learning:** In Dart/Flutter, executing O(N) operations like `.where(...).toList()` on lists for filtering allocates intermediate `WhereIterable` and closure objects, which increases garbage collection pressure. Furthermore, when search or category filters are empty or default, executing the filter logic is redundant and inefficient.
+**Action:** Short-circuit list filtering operations by directly assigning the original list reference when filters are empty. When filtering is required, use collection `for-if` loops (e.g., `[for (final item in list) if (condition) item]`) instead of `.where().toList()` to eliminate intermediate allocations.
 
-## 2024-05-27 - Flutter .map() Iterable Allocation in Widget Trees
-**Learning:** In Flutter, generating widget lists inside the `build` method using spread operators combined with `.map()` (e.g., `...reviews.take(2).map((r) => _buildInlineReviewCard(r))`) allocates intermediate Iterable objects and closures. While seemingly minor, this pattern creates unnecessary garbage collection pressure when the widget tree rebuilds, degrading performance.
-**Action:** Always replace `...collection.map(...)` patterns with Dart's collection `for` loop (e.g., `for (final r in collection) _buildInlineReviewCard(r)`). This constructs the widget list directly in place without creating any intermediate iterable objects, optimizing rendering performance.
-## 2024-05-28 - Flutter .map() and Spread Operator Overhead
-**Learning:** In Flutter/Dart, using the spread operator on a mapped iterable (e.g., `...items.map(...)`) inside a widget's `build` method allocates an intermediate `MappedIterable` object and its associated iterator closures on every build frame. This causes unnecessary garbage collection pressure.
-**Action:** Always replace the `...collection.map(...)` pattern with a collection `for` loop (e.g., `for (final item in items) ...`) inside lists and widget trees to avoid intermediate object allocations and improve rendering performance.
-## 2024-05-15 - [Avoid eagerly rendering lists to replace ListView.builder]
-**Learning:** [Replacing ListView.builder with SingleChildScrollView containing a Row or Column actually degrades performance by destroying virtualization if the list is not guaranteed to be extremely small and fixed-length.]
-**Action:** [Do not replace ListView.builder with eager rendering wrappers without verifying list bounds and constraints.]
-## 2024-05-15 - [Avoid flawed cache-first Firestore patterns]
-**Learning:** [A manual cache-first fetching approach (fetching from cache, then fallback) permanently serves stale data once cache is populated.]
-**Action:** [Rely on Firestore's native Source.serverAndCache default behavior instead.]
-## 2026-04-09 - Optimize StreamBuilder by caching streams
- **Learning:** Creating streams inside the 'build' method or its helpers causes StreamBuilder to re-subscribe on every rebuild, leading to redundant Firestore listener allocations and UI flickering.
- **Action:** Always initialize and store streams in 'initState' (and update in 'didUpdateWidget' if needed) when using StreamBuilder in a StatefulWidget.
+## 2026-08-28 - Dart Collection For Loops over .map().toList()
+**Learning:** In Dart, chaining `.map().toList()` when parsing collections like Firestore query snapshots creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
+**Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation.
 
-## 2024-06-10 - Flutter .fold() and .take() Rebuild Overhead
-**Learning:** In Flutter, higher-order functions like .fold() and .take() create closures and intermediate iterable objects (like TakeIterable) on every widget rebuild, increasing garbage collection pressure. Furthermore, calculating an average using .fold() on every frame is an O(N) operation that should be avoided if the underlying list hasn't changed.
-**Action:** Replace .fold() with explicit loops and cache the result using identical() checks on the list reference. Replace .take() with explicit index-based collection for loops to avoid object allocation during rendering.
-## 2026-06-13 - Replace .map().toList() with Collection For Loops
-**Learning:** In Dart, chaining `.map().toList()` creates an intermediate `MappedIterable` and its associated closure object before immediately consuming it into a list. For Firestore query snapshots, this allocates unnecessary objects on the heap.
-**Action:** Use a Dart collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to construct the list directly without intermediate iterables, reducing garbage collection pressure.
+## 2026-09-02 - Flutter Iterable Chaining Performance
+**Learning:** In Flutter, chaining iterable methods like `.take(n)` or `.indexed` within widget `build` methods allocates intermediate iterable objects on every rebuild, unnecessarily increasing garbage collection pressure.
+**Action:** Replace chained iterable methods in widget `build` methods with explicit collection `for` loops or standard aggregation loops to prevent unnecessary object allocation.
 
-## 2026-06-15 - Replace .where().toList() with Collection For-If Loops
-**Learning:** In Dart, filtering a list using `.where(condition).toList()` creates an intermediate `WhereIterable` and closure object before consuming it into a list, creating unnecessary garbage collection overhead.
-**Action:** Use a Dart collection `for` loop with an `if` condition (e.g., `[for (final item in list) if (condition) item]`) to construct the filtered list directly without intermediate iterables, reducing garbage collection pressure.
+## 2024-09-03 - Dart Collection For Loops over .map().toList()
+**Learning:** In Dart, chaining `.map().toList()` when parsing collections creates an intermediate `MappedIterable` and closure object, which increases heap allocation and garbage collection pressure.
+**Action:** Use a collection `for` loop (e.g., `[for (final doc in snapshot.docs) Model.fromFirestore(doc)]`) to directly construct the list and avoid unnecessary object allocation. However, only apply this change to large collections, as it is a micro-optimization with negligible impact on small payloads.
 
-## 2024-06-20 - Replace .where().toList() and .map().toList() with Collection For Loops
-**Learning:** In Dart, using `.where(condition).toList()` or `.map(fn).toList()` creates an intermediate `WhereIterable` or `MappedIterable` along with their associated closure objects, before immediately iterating over them to create a list. This causes unnecessary intermediate allocations and increases garbage collection overhead, particularly when placed inside a rebuild path or used repeatedly on larger datasets.
-**Action:** Replace these patterns with Dart collection `for` and `if` loops (e.g., `[for (final item in list) if (condition) item]` or `[for (final item in list) fn(item)]`). This constructs the desired list directly without intermediate iterables, reducing garbage collection pressure.
+## 2026-09-05 - StreamBuilder Memoization Optimization
+**Learning:** In Flutter build methods (especially inside StreamBuilder), evaluating expensive O(N) list operations like sorting every time the widget rebuilds causes redundant CPU cycles and increases garbage collection overhead. Since StreamBuilder rebuilds frequently during its lifecycle, and the list reference often remains unchanged between state updates (e.g. keyboard focus, unrelated setStates), repeating the sort is inefficient.
+**Action:** Memoize expensive O(N) list operations by caching the list reference and result. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations on widget rebuilds when the stream data instance hasn't changed.
 
-## 2024-06-29 - Flutter StreamBuilder Memoization
-**Learning:** In Flutter, using .fold() inside a StreamBuilder's builder method executes an O(N) operation and allocates a closure on every widget rebuild, even when the stream snapshot hasn't changed.
-**Action:** Use identical() to check if the stream data instance has changed, and only perform O(N) calculations (using a standard for-loop to avoid closures) when a new instance is received, caching the result otherwise.
-## 2024-05-18 - Avoid ListView.builder for small static lists
-**Learning:** For small, static lists (like a handful of categories), `ListView.builder` introduces unnecessary closure allocation and indexing overhead on every rebuild.
-**Action:** Use `SingleChildScrollView` with a `Row` and a collection `for` loop to inline the widget creation and avoid closure allocation.

@@ -17,7 +17,7 @@ jobs:
       version: ${{ steps.extract.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Extract version
         id: extract
@@ -32,7 +32,7 @@ jobs:
     needs: get-version
     steps:
       - name: Set up JDK 17
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
         with:
           java-version: "17"
           distribution: temurin
@@ -43,7 +43,7 @@ jobs:
           channel: stable
 
       - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - run: flutter pub get
       - run: flutter build apk --release
@@ -66,7 +66,7 @@ jobs:
           channel: stable
 
       - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - run: flutter pub get
       - run: flutter build web --release
@@ -101,7 +101,7 @@ jobs:
           path: artifacts/web
 
       - name: Create release and upload assets
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
         with:
           tag_name: ${{ needs.get-version.outputs.version }}
           name: Release ${{ needs.get-version.outputs.version }}

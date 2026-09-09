@@ -31,12 +31,14 @@ class Course {
       rating: (data?['rating'] ?? 0.0).toDouble(),
       category: data?['category'] ?? 'General',
       studentCount: data?['studentCount'] ?? 0,
-      lessons: [
-        // ⚡ Bolt: Use collection for loop to avoid intermediate Iterable allocation from .map().toList()
-        if (data?['lessons'] is List)
-          for (final lessonData in data!['lessons'] as List<dynamic>)
-            Lesson.fromJson(lessonData as Map<String, dynamic>),
-      ],
+      lessons:
+          // ⚡ Bolt: Use collection for loop to directly construct list avoiding intermediate Iterable allocation
+          data?['lessons'] != null
+              ? [
+                  for (final lessonData in data!['lessons'] as List<dynamic>)
+                    Lesson.fromJson(lessonData as Map<String, dynamic>),
+                ]
+              : [],
     );
   }
 }

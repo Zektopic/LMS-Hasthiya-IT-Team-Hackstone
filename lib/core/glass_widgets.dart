@@ -82,13 +82,14 @@ class GlassButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Semantics(
+            container: true,
             button: true,
             enabled: !isDisabled,
             child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
               onTap: isDisabled ? null : onPressed,
               borderRadius: BorderRadius.circular(borderRadius),
-              focusColor: Colors.white.withValues(alpha: 0.2),
-              hoverColor: Colors.white.withValues(alpha: 0.1),
               child: Padding(
                 padding: padding,
                 child: Center(
@@ -163,7 +164,7 @@ class GradientBackground extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.4,
+            top: MediaQuery.sizeOf(context).height * 0.4,
             right: -40,
             child: Container(
               width: 200,
@@ -263,7 +264,7 @@ class GlassNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom,
+        bottom: MediaQuery.paddingOf(context).bottom,
         top: 4,
       ),
       decoration: BoxDecoration(
@@ -333,38 +334,35 @@ class _NavItem extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        child: Semantics(
-          selected: isSelected,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: onTap,
-            focusColor: AppTheme.primaryColor.withValues(alpha: 0.2),
-            hoverColor: AppTheme.primaryColor.withValues(alpha: 0.1),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    icon,
-                    color:
-                        isSelected ? AppTheme.primaryColor : AppTheme.textMuted,
-                    size: 24,
+        child: InkWell(
+          focusColor: Colors.white.withValues(alpha: 0.1),
+          hoverColor: Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isSelected
+                      ? AppTheme.primaryColor
+                      : AppTheme.textMuted,
+                  size: 24,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textMuted,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
-                      color: isSelected
-                          ? AppTheme.primaryColor
-                          : AppTheme.textMuted,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

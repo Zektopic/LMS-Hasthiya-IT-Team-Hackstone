@@ -88,7 +88,6 @@ class _HomeViewState extends State<HomeView> {
                       padding: EdgeInsets.all(40),
                       child: CircularProgressIndicator(
                         color: AppTheme.primaryColor,
-                        semanticsLabel: 'Loading dashboard',
                       ),
                     ),
                   )
@@ -142,46 +141,33 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        Tooltip(
-          message: 'Profile settings',
-          child: Semantics(
-            label: 'Profile settings',
-            button: true,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: AppTheme.primaryGradient,
+        Semantics(
+          label: 'Profile settings',
+          button: true,
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                focusColor: Colors.white.withValues(alpha: 0.1),
+                hoverColor: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  focusColor: Colors.white.withValues(alpha: 0.2),
-                  hoverColor: Colors.white.withValues(alpha: 0.1),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Profile settings coming soon!'),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                onTap: () {},
+                child: auth.photoUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: auth.photoUrl!,
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => _buildInitials(auth),
                         ),
-                      ),
-                    );
-                  },
-                  child: auth.photoUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: auth.photoUrl!,
-                            fit: BoxFit.cover,
-                            errorWidget: (_, __, ___) => _buildInitials(auth),
-                          ),
-                        )
-                      : _buildInitials(auth),
-                ),
+                      )
+                    : _buildInitials(auth),
               ),
             ),
           ),
@@ -209,31 +195,22 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
-        child: Semantics(
-          button: true,
-          label: 'Search courses, videos...',
-          excludeSemantics: true,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            focusColor: Colors.white.withValues(alpha: 0.2),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            onTap: widget.onSearchTap,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.search_rounded,
-                    color: AppTheme.textMuted,
-                    size: 22,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'Search courses, videos...',
-                    style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
-                  ),
-                ],
-              ),
+        child: InkWell(
+          focusColor: Colors.white.withValues(alpha: 0.1),
+          hoverColor: Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          onTap: widget.onSearchTap,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
+                SizedBox(width: 12),
+                Text(
+                  'Search courses, videos...',
+                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                ),
+              ],
             ),
           ),
         ),
@@ -276,37 +253,30 @@ class _HomeViewState extends State<HomeView> {
       child: GlassCard(
         borderRadius: 16,
         padding: const EdgeInsets.all(16),
-        child: Semantics(
-          label: '$value $label',
-          excludeSemantics: true,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: colors),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(icon, color: Colors.white, size: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: colors),
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 12),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Icon(icon, color: Colors.white, size: 20),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
               ),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -351,11 +321,19 @@ class _HomeViewState extends State<HomeView> {
       margin: const EdgeInsets.only(right: 16),
       child: GlassCard(
         borderRadius: 20,
-        padding: EdgeInsets.zero,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Column(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CourseDetailView(course: course),
+              ),
+            ),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -461,27 +439,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Course: ${course.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CourseDetailView(course: course),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -489,12 +447,14 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildVideoList() {
     return Column(
-      // ⚡ Bolt: Optimize mapping with explicit loop for better list generation performance
+      // ⚡ Bolt: Replaced .take(5).indexed with an explicit for loop to avoid intermediate iterable allocations during rebuilds.
       children: [
-        for (var i = 0; i < _videos.length && i < 5; i++)
+        for (var index = 0;
+            index < (_videos.length < 5 ? _videos.length : 5);
+            index++)
           _buildVideoCard(
-            _videos[i],
-            AppTheme.cardGradients[i % AppTheme.cardGradients.length],
+            _videos[index],
+            AppTheme.cardGradients[index % AppTheme.cardGradients.length],
           ),
       ],
     );
@@ -505,10 +465,17 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.only(bottom: 12),
       child: GlassCard(
         borderRadius: 16,
-        padding: EdgeInsets.zero,
-        child: Stack(
-          children: [
-            Padding(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
+            ),
+            child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -569,27 +536,7 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Video: ${video.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VideoPlayerView(video: video),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

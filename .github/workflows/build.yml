@@ -18,21 +18,21 @@ jobs:
         target: ["apk --debug", "appbundle --debug", "ios --no-codesign", macos, web]
     steps:
       - name: Set up JDK 17
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
         with:
           java-version: 17
           distribution: temurin
       # Set up Flutter.
-      - name: Clone Flutter repository with stable channel
+      - name: Clone Flutter repository with master channel
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          channel: stable
+          channel: master
       - run: flutter config --enable-macos-desktop
       - run: flutter doctor -v
 
       # Checkout gallery code and get packages.
       - name: Checkout gallery code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - run: flutter pub get
 
       - run: flutter build ${{ matrix.target }}

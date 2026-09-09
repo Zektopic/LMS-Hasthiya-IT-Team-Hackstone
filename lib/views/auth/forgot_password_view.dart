@@ -7,6 +7,7 @@ import '../../core/glass_widgets.dart';
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
 
+  @override
   State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
@@ -18,6 +19,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
 
+  @override
   void initState() {
     super.initState();
     _animController = AnimationController(
@@ -28,6 +30,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     _animController.forward();
   }
 
+  @override
   void dispose() {
     _animController.dispose();
     _emailController.dispose();
@@ -60,6 +63,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthViewModel>();
 
@@ -69,45 +73,41 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
-              // ⚡ Bolt: Wrap continuously updating animations (FadeTransition/SlideTransition) in a RepaintBoundary
-              // to prevent expensive repaints in the parent widget tree during the animation.
-              child: RepaintBoundary(
-                child: FadeTransition(
-                  opacity: _fadeAnim,
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 32,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 20),
-                        // Back button
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: GlassCard(
-                            borderRadius: 12,
-                            padding: EdgeInsets.zero,
-                            child: IconButton(
-                              tooltip: 'Back',
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(
-                                Icons.arrow_back_rounded,
-                                color: Colors.white,
-                              ),
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 20),
+                      // Back button
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GlassCard(
+                          borderRadius: 12,
+                          padding: EdgeInsets.zero,
+                          child: IconButton(
+                            tooltip: 'Back',
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(
+                              Icons.arrow_back_rounded,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 32),
-                        GlassCard(
-                          padding: const EdgeInsets.all(28),
-                          child: _emailSent
-                              ? _buildSuccessContent()
-                              : _buildFormContent(auth),
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 32),
+                      GlassCard(
+                        padding: const EdgeInsets.all(28),
+                        child: _emailSent
+                            ? _buildSuccessContent()
+                            : _buildFormContent(auth),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -158,8 +158,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
-          autocorrect: false,
-          autofillHints: const [AutofillHints.email],
           style: const TextStyle(color: Colors.white),
           onSubmitted: (_) {
             if (!auth.isLoading) _handleReset(auth);

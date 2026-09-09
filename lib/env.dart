@@ -1,9 +1,6 @@
-import 'package:envied/envied.dart';
-
-part 'env.g.dart';
-
-@Envied(path: '.env')
 abstract class Env {
-  @EnviedField(varName: 'LMS_BASE_URL', obfuscate: true)
-  static final String lmsBaseUrl = _Env.lmsBaseUrl;
+  static const String lmsBaseUrl = String.fromEnvironment(
+    'LMS_BASE_URL',
+    defaultValue: 'https://localhost:5000',
+  );
 }

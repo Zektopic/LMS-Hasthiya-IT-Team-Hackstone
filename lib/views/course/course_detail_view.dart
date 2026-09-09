@@ -2,42 +2,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/course.dart';
-import '../../models/review.dart';
 import '../../core/app_theme.dart';
 import '../../core/glass_widgets.dart';
-import '../../services/review_service.dart';
-import 'reviews_view.dart';
 
-class CourseDetailView extends StatefulWidget {
+class CourseDetailView extends StatelessWidget {
   final Course course;
 
   const CourseDetailView({super.key, required this.course});
-
-  @override
-  State<CourseDetailView> createState() => _CourseDetailViewState();
-}
-
-class _CourseDetailViewState extends State<CourseDetailView> {
-  final ReviewService _reviewService =
-      ReviewService(contentCollection: 'courses');
-  late Stream<List<Review>> _reviewsStream;
-  bool _isEnrolling = false;
-  List<Review>? _cachedReviews;
-  double _cachedAvg = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _reviewsStream = _reviewService.getReviews(widget.course.id);
-  }
-
-  @override
-  void didUpdateWidget(covariant CourseDetailView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.course.id != widget.course.id) {
-      _reviewsStream = _reviewService.getReviews(widget.course.id);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +19,6 @@ class _CourseDetailViewState extends State<CourseDetailView> {
             _buildAppBar(context),
             SliverToBoxAdapter(child: _buildContentHeader(context)),
             ..._buildLessonsSlivers(context),
-            SliverToBoxAdapter(child: _buildReviewsPreview(context)),
             const SliverToBoxAdapter(child: SizedBox(height: 80)),
           ],
         ),
@@ -58,8 +28,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final colors = AppTheme.cardGradients[
-        widget.course.title.length % AppTheme.cardGradients.length];
+    final colors = AppTheme
+        .cardGradients[course.title.length % AppTheme.cardGradients.length];
 
     return SliverAppBar(
       expandedHeight: 260,
@@ -90,12 +60,13 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 ),
               ),
             ),
-            if (widget.course.thumbnailUrl.isNotEmpty)
+            if (course.thumbnailUrl.isNotEmpty)
               CachedNetworkImage(
-                imageUrl: widget.course.thumbnailUrl,
+                imageUrl: course.thumbnailUrl,
                 fit: BoxFit.cover,
                 errorWidget: (_, __, ___) => const SizedBox(),
               ),
+            // Gradient overlay
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -122,7 +93,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               left: 20,
               right: 20,
               child: Text(
-                widget.course.title,
+                course.title,
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
@@ -142,42 +113,45 @@ class _CourseDetailViewState extends State<CourseDetailView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Badges row
           Wrap(
             spacing: 10,
             runSpacing: 8,
             children: [
               _buildBadge(
                 icon: Icons.star_rounded,
-                label: widget.course.rating.toStringAsFixed(1),
+                label: course.rating.toStringAsFixed(1),
                 color: Colors.amber,
               ),
               _buildBadge(
                 icon: Icons.play_lesson_rounded,
-                label: '${widget.course.lessons.length} lessons',
+                label: '${course.lessons.length} lessons',
                 color: AppTheme.secondaryColor,
               ),
-              if (widget.course.studentCount > 0)
+              if (course.studentCount > 0)
                 _buildBadge(
                   icon: Icons.people_rounded,
-                  label: '${widget.course.studentCount} students',
+                  label: '${course.studentCount} students',
                   color: AppTheme.accentColor,
                 ),
               _buildBadge(
                 icon: Icons.category_rounded,
-                label: widget.course.category,
+                label: course.category,
                 color: AppTheme.primaryColor,
               ),
             ],
           ),
           const SizedBox(height: 28),
+
+          // About section
           const Text(
             'About this course',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           Text(
-            widget.course.description.isNotEmpty
-                ? widget.course.description
+            course.description.isNotEmpty
+                ? course.description
                 : 'No description available for this course.',
             style: const TextStyle(
               color: AppTheme.textSecondary,
@@ -186,6 +160,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
             ),
           ),
           const SizedBox(height: 32),
+
+          // Course Content
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -194,7 +170,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Text(
-                '${widget.course.lessons.length} lessons',
+                '${course.lessons.length} lessons',
                 style: const TextStyle(
                   color: AppTheme.textSecondary,
                   fontSize: 14,
@@ -209,7 +185,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   }
 
   List<Widget> _buildLessonsSlivers(BuildContext context) {
-    if (widget.course.lessons.isEmpty) {
+    if (course.lessons.isEmpty) {
       return [
         SliverToBoxAdapter(
           child: Padding(
@@ -242,294 +218,13 @@ class _CourseDetailViewState extends State<CourseDetailView> {
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         sliver: SliverList.builder(
-          itemCount: widget.course.lessons.length,
-          itemBuilder: (context, index) =>
-              _buildLessonItem(index + 1, widget.course.lessons[index]),
+          itemCount: course.lessons.length,
+          itemBuilder: (context, index) {
+            return _buildLessonItem(index + 1, course.lessons[index]);
+          },
         ),
       ),
     ];
-  }
-
-  Widget _buildReviewsPreview(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Reviews',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              TextButton.icon(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ReviewsView(
-                      contentId: widget.course.id,
-                      contentTitle: widget.course.title,
-                      contentCollection: 'courses',
-                    ),
-                  ),
-                ),
-                icon: const Icon(Icons.arrow_forward_rounded, size: 16),
-                label: const Text('See All'),
-                iconAlignment: IconAlignment.end,
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          StreamBuilder<List<Review>>(
-            stream: _reviewsStream,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: CircularProgressIndicator(
-                      color: AppTheme.primaryColor,
-                      semanticsLabel: 'Loading reviews',
-                    ),
-                  ),
-                );
-              }
-
-              final reviews = snapshot.data ?? [];
-
-              if (reviews.isEmpty) {
-                return GlassCard(
-                  padding: EdgeInsets.zero,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      focusColor: Colors.white.withValues(alpha: 0.2),
-                      hoverColor: Colors.white.withValues(alpha: 0.1),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ReviewsView(
-                            contentId: widget.course.id,
-                            contentTitle: widget.course.title,
-                            contentCollection: 'courses',
-                          ),
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: AppTheme.textMuted),
-                    ],
-                  ),
-                );
-              }
-
-              // Rating summary bar
-              // ⚡ Bolt: Memoize the average calculation based on list identity
-              // to avoid O(N) iteration on every widget rebuild when the list hasn't changed.
-              if (!identical(reviews, _cachedReviews)) {
-                var sum = 0.0;
-                for (final r in reviews) {
-                  sum += r.rating;
-                }
-                _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-                _cachedReviews = reviews;
-              }
-              final avg = _cachedAvg;
-
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ReviewsView(
-                      contentId: widget.course.id,
-                      contentTitle: widget.course.title,
-                      contentCollection: 'courses',
-                    ),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    // Summary card
-                    GlassCard(
-                      padding: EdgeInsets.zero,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(16),
-                          focusColor: Colors.white.withValues(alpha: 0.2),
-                          hoverColor: Colors.white.withValues(alpha: 0.1),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ReviewsView(
-                                contentId: widget.course.id,
-                                contentTitle: widget.course.title,
-                                contentCollection: 'courses',
-                              ),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Semantics(
-                              excludeSemantics: true,
-                              label: 'Rating: ${avg.toStringAsFixed(1)} stars, ${reviews.length} reviews',
-                              child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: AppTheme.primaryColor.withValues(
-                                  alpha: 0.12,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(
-                                Icons.rate_review_rounded,
-                                color: AppTheme.primaryColor,
-                                size: 22,
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'No reviews yet',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'Be the first to review this course.',
-                                    style: TextStyle(
-                                      color: AppTheme.textSecondary,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                                const Icon(Icons.chevron_right_rounded,
-                                    color: AppTheme.textMuted),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                    // First 2 reviews inline
-                    // ⚡ Bolt: Optimize mapping with collection for better list generation performance
-                    // Avoid intermediate TakeIterable allocation
-                    for (var i = 0; i < reviews.length && i < 2; i++)
-                      _buildInlineReviewCard(reviews[i]),
-                    if (reviews.length > 2)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Center(
-                          child: Text(
-                            '+ ${reviews.length - 2} more review${reviews.length - 2 == 1 ? '' : 's'}',
-                            style: const TextStyle(
-                              color: AppTheme.textSecondary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInlineReviewCard(Review review) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GlassCard(
-        borderRadius: 14,
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Avatar
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.primaryGradient,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      review.userName.isNotEmpty
-                          ? review.userName[0].toUpperCase()
-                          : 'U',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    review.userName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-                Semantics(
-                  label: 'Rating: ${review.rating.toStringAsFixed(1)} stars',
-                  excludeSemantics: true,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < 5; i++)
-                        Icon(
-                          i < review.rating
-                              ? Icons.star_rounded
-                              : Icons.star_border_rounded,
-                          color: Colors.amber,
-                          size: 14,
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (review.comment.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                review.comment,
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 13,
-                  height: 1.4,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildBadge({
@@ -577,20 +272,10 @@ class _CourseDetailViewState extends State<CourseDetailView> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(14),
-            focusColor: Colors.white.withValues(alpha: 0.2),
+            focusColor: Colors.white.withValues(alpha: 0.1),
             hoverColor: Colors.white.withValues(alpha: 0.1),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Lesson playback coming soon!'),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
-            },
+            borderRadius: BorderRadius.circular(14),
+            onTap: () {},
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -655,7 +340,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
             20,
             16,
             20,
-            16 + MediaQuery.of(context).padding.bottom,
+            16 + MediaQuery.paddingOf(context).bottom,
           ),
           decoration: BoxDecoration(
             color: AppTheme.surfaceColor.withValues(alpha: 0.9),
@@ -693,12 +378,7 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                 ),
               ),
               GlassButton(
-                isLoading: _isEnrolling,
-                onPressed: () async {
-                  setState(() => _isEnrolling = true);
-                  await Future.delayed(const Duration(seconds: 1));
-                  if (!mounted) return;
-                  setState(() => _isEnrolling = false);
+                onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Enrolled successfully!'),

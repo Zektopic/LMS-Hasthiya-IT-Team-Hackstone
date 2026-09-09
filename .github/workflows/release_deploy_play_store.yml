@@ -21,22 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Set up Flutter.
-      - name: Clone Flutter repository with stable channel
+      - name: Clone Flutter repository with master channel
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          channel: stable
+          channel: master
       - run: flutter doctor -v
 
       # Checkout gallery code and get packages.
       - name: Checkout gallery code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - run: flutter pub get
 
       # Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
-        uses: ruby/setup-ruby@0dafeac902942906541bc140009cdbf32665b601
+        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
         with:
-          ruby-version: "3.1"
+          ruby-version: "2.6"
           bundler-cache: true
           working-directory: android
 

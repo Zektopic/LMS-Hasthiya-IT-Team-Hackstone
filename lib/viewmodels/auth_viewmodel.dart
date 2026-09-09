@@ -24,19 +24,13 @@ class AuthViewModel extends ChangeNotifier {
 
   String get initials {
     if (_cachedInitials != null) return _cachedInitials!;
-    // ⚡ Bolt: Optimize initials generation to prevent O(N) string allocations from split, where, and map
-    var calculated = '';
-    var isNewWord = true;
-    for (var i = 0; i < displayName.length; i++) {
-      final char = displayName[i];
-      if (char == ' ') {
-        isNewWord = true;
-      } else if (isNewWord) {
-        calculated += char.toUpperCase();
-        isNewWord = false;
-        if (calculated.length >= 2) break;
-      }
-    }
+    final calculated = displayName
+        .split(' ')
+        .where((s) => s.isNotEmpty)
+        .take(2)
+        .map((s) => s[0])
+        .join()
+        .toUpperCase();
     _cachedInitials = calculated.isEmpty ? 'U' : calculated;
     return _cachedInitials!;
   }
@@ -76,10 +70,7 @@ class AuthViewModel extends ChangeNotifier {
       case 'invalid-credential':
         return 'Invalid email or password.';
       default:
-        if (kDebugMode) {
-          debugPrint('Unhandled FirebaseAuthException: ${e.message}');
-        }
-        return 'Authentication failed.';
+        return e.message ?? 'Authentication failed.';
     }
   }
 
@@ -129,8 +120,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser =
-          await GoogleSignIn.instance.authenticate();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();

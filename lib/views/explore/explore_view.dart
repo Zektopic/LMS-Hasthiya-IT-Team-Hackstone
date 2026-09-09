@@ -84,35 +84,40 @@ class _ExploreViewState extends State<ExploreView> {
     final query = _searchController.text.trim();
     final isQueryEmpty = query.isEmpty;
     final isCategoryAll = _selectedCategory == 'All';
+
+    // ⚡ Bolt: Short-circuit filtering when filters are empty or default to avoid O(N) operations
+    // Directly assign the original list reference instead of allocating a new list
+    if (isQueryEmpty && isCategoryAll) {
+      setState(() {
+        _filteredVideos = _allVideos;
+        _filteredCourses = _allCourses;
+      });
+      return;
+    }
+
     final searchRegex = isQueryEmpty
         ? null
         : RegExp(RegExp.escape(query), caseSensitive: false);
 
     setState(() {
-      // Optimization: Skip O(N) list traversal and object allocation when there are no active filters
-      _filteredVideos = isQueryEmpty
-          ? _allVideos
-          // ⚡ Bolt: Use collection for-if loop to directly construct list
-          // avoiding intermediate WhereIterable allocation from .where().toList()
-          : [
-              for (final v in _allVideos)
-                if (searchRegex!.hasMatch(v.title) ||
-                    searchRegex.hasMatch(v.description))
-                  v,
-            ];
+      // ⚡ Bolt: Use collection for-if loops instead of .where(...).toList()
+      // to avoid allocating intermediate WhereIterable and closure objects
+      _filteredVideos = [
+        for (final v in _allVideos)
+          if (isQueryEmpty ||
+              searchRegex!.hasMatch(v.title) ||
+              searchRegex.hasMatch(v.description))
+            v,
+      ];
 
-      _filteredCourses = (isQueryEmpty && isCategoryAll)
-          ? _allCourses
-          // ⚡ Bolt: Use collection for-if loop to directly construct list
-          // avoiding intermediate WhereIterable allocation from .where().toList()
-          : [
-              for (final c in _allCourses)
-                if ((isQueryEmpty ||
-                        searchRegex!.hasMatch(c.title) ||
-                        searchRegex.hasMatch(c.description)) &&
-                    (isCategoryAll || c.category == _selectedCategory))
-                  c,
-            ];
+      _filteredCourses = [
+        for (final c in _allCourses)
+          if ((isQueryEmpty ||
+                  searchRegex!.hasMatch(c.title) ||
+                  searchRegex.hasMatch(c.description)) &&
+              (isCategoryAll || c.category == _selectedCategory))
+            c,
+      ];
     });
   }
 
@@ -154,10 +159,6 @@ class _ExploreViewState extends State<ExploreView> {
                       builder: (context, value, child) {
                         return TextField(
                           controller: _searchController,
-                          textInputAction: TextInputAction.search,
-                          onSubmitted: (_) {
-                            FocusScope.of(context).unfocus();
-                          },
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Search courses and videos...',
@@ -184,74 +185,67 @@ class _ExploreViewState extends State<ExploreView> {
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 40,
-                    // ⚡ Bolt: Replace ListView.builder with SingleChildScrollView + Row and collection for loop for small, static lists to eliminate builder overhead and closure allocation on rebuilds.
-                    child: SingleChildScrollView(
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (final category in _categories)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: BoxDecoration(
-                                  gradient: category == _selectedCategory
-                                      ? AppTheme.primaryGradient
-                                      : null,
-                                  color: category == _selectedCategory
-                                      ? null
-                                      : Colors.white.withValues(alpha: 0.08),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: category == _selectedCategory
-                                      ? null
-                                      : Border.all(
-                                          color: Colors.white.withValues(
-                                            alpha: 0.1,
+                      itemCount: _categories.length,
+                      itemBuilder: (context, index) {
+                        final category = _categories[index];
+                        final isSelected = category == _selectedCategory;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Semantics(
+                            button: true,
+                            enabled: true,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                focusColor: Colors.white.withValues(alpha: 0.1),
+                                hoverColor: Colors.white.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(20),
+                                onTap: () {
+                                  setState(() => _selectedCategory = category);
+                                  _filterContent();
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 18,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: isSelected
+                                        ? AppTheme.primaryGradient
+                                        : null,
+                                    color: isSelected
+                                        ? null
+                                        : Colors.white.withValues(alpha: 0.08),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: isSelected
+                                        ? null
+                                        : Border.all(
+                                            color: Colors.white.withValues(
+                                              alpha: 0.1,
+                                            ),
                                           ),
-                                        ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Semantics(
-                                    selected: category == _selectedCategory,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(20),
-                                      focusColor:
-                                          Colors.white.withValues(alpha: 0.2),
-                                      hoverColor:
-                                          Colors.white.withValues(alpha: 0.1),
-                                      onTap: () {
-                                        setState(
-                                          () => _selectedCategory = category,
-                                        );
-                                        _filterContent();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 18,
-                                          vertical: 8,
-                                        ),
-                                        child: Text(
-                                          category,
-                                          style: TextStyle(
-                                            color: category == _selectedCategory
-                                                ? Colors.white
-                                                : AppTheme.textSecondary,
-                                            fontWeight:
-                                                category == _selectedCategory
-                                                    ? FontWeight.w600
-                                                    : FontWeight.w500,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
+                                  ),
+                                  child: Text(
+                                    category,
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : AppTheme.textSecondary,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -263,7 +257,6 @@ class _ExploreViewState extends State<ExploreView> {
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: AppTheme.primaryColor,
-                        semanticsLabel: 'Loading content',
                       ),
                     )
                   : RefreshIndicator(
@@ -338,10 +331,19 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        padding: EdgeInsets.zero,
-        child: Stack(
-          children: [
-            Padding(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CourseDetailView(course: course),
+              ),
+            ),
+            child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -432,27 +434,7 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Course: ${course.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CourseDetailView(course: course),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -463,10 +445,17 @@ class _ExploreViewState extends State<ExploreView> {
       padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
       child: GlassCard(
         borderRadius: 16,
-        padding: EdgeInsets.zero,
-        child: Stack(
-          children: [
-            Padding(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            focusColor: Colors.white.withValues(alpha: 0.1),
+            hoverColor: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
+            ),
+            child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
                 children: [
@@ -517,36 +506,13 @@ class _ExploreViewState extends State<ExploreView> {
                 ],
               ),
             ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: Semantics(
-                  button: true,
-                  label: 'Video: ${video.title}',
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    focusColor: Colors.white.withValues(alpha: 0.2),
-                    hoverColor: Colors.white.withValues(alpha: 0.1),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VideoPlayerView(video: video),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildEmptyState() {
-    final hasFilters =
-        _searchController.text.isNotEmpty || _selectedCategory != 'All';
-
     return Center(
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -556,13 +522,17 @@ class _ExploreViewState extends State<ExploreView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                hasFilters ? Icons.search_off_rounded : Icons.explore_rounded,
+                _searchController.text.isNotEmpty
+                    ? Icons.search_off_rounded
+                    : Icons.explore_rounded,
                 size: 64,
                 color: AppTheme.textMuted,
               ),
               const SizedBox(height: 16),
               Text(
-                hasFilters ? 'No results found' : 'Nothing here yet',
+                _searchController.text.isNotEmpty
+                    ? 'No results found'
+                    : 'Nothing here yet',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -570,7 +540,7 @@ class _ExploreViewState extends State<ExploreView> {
               ),
               const SizedBox(height: 8),
               Text(
-                hasFilters
+                _searchController.text.isNotEmpty
                     ? 'Try adjusting your search or filters.'
                     : 'New content will appear here once it\'s added.',
                 style: const TextStyle(
@@ -579,21 +549,6 @@ class _ExploreViewState extends State<ExploreView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (hasFilters) ...[
-                const SizedBox(height: 24),
-                TextButton.icon(
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() => _selectedCategory = 'All');
-                    _filterContent();
-                  },
-                  icon: const Icon(Icons.clear_all_rounded),
-                  label: const Text('Clear Filters'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppTheme.primaryColor,
-                  ),
-                ),
-              ],
             ],
           ),
         ),

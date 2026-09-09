@@ -2,17 +2,10 @@ import 'package:flutter/material.dart';
 import '../../core/app_theme.dart';
 import '../../core/glass_widgets.dart';
 
-class MyLearningView extends StatefulWidget {
+class MyLearningView extends StatelessWidget {
   final VoidCallback? onExplore;
 
   const MyLearningView({super.key, this.onExplore});
-
-  @override
-  State<MyLearningView> createState() => _MyLearningViewState();
-}
-
-class _MyLearningViewState extends State<MyLearningView> {
-  int _selectedTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +36,9 @@ class _MyLearningViewState extends State<MyLearningView> {
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Row(
                   children: [
-                    _buildTab('In Progress', 0),
-                    _buildTab('Completed', 1),
-                    _buildTab('Saved', 2),
+                    _buildTab('In Progress', true),
+                    _buildTab('Completed', false),
+                    _buildTab('Saved', false),
                   ],
                 ),
               ),
@@ -58,41 +51,21 @@ class _MyLearningViewState extends State<MyLearningView> {
     );
   }
 
-  Widget _buildTab(String label, int index) {
-    final isActive = _selectedTabIndex == index;
-
+  Widget _buildTab(String label, bool isActive) {
     return Expanded(
       child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           gradient: isActive ? AppTheme.primaryGradient : null,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Material(
-          color: Colors.transparent,
-          child: Semantics(
-            selected: isActive,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              focusColor: Colors.white.withValues(alpha: 0.2),
-              hoverColor: Colors.white.withValues(alpha: 0.1),
-              onTap: () {
-                setState(() {
-                  _selectedTabIndex = index;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isActive ? Colors.white : AppTheme.textSecondary,
-                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: isActive ? Colors.white : AppTheme.textSecondary,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 14,
           ),
         ),
       ),
@@ -100,30 +73,6 @@ class _MyLearningViewState extends State<MyLearningView> {
   }
 
   Widget _buildEmptyState() {
-    IconData icon;
-    String title;
-    String subtitle;
-
-    switch (_selectedTabIndex) {
-      case 1:
-        icon = Icons.emoji_events_rounded;
-        title = 'No Completed Courses';
-        subtitle = 'Keep learning! Your completed\ncourses will appear here.';
-        break;
-      case 2:
-        icon = Icons.bookmark_rounded;
-        title = 'No Saved Courses';
-        subtitle =
-            'Save courses you are interested in\nto find them quickly later.';
-        break;
-      case 0:
-      default:
-        icon = Icons.school_rounded;
-        title = 'Start Learning';
-        subtitle = 'Your enrolled courses and progress\nwill appear here.';
-        break;
-    }
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -137,17 +86,21 @@ class _MyLearningViewState extends State<MyLearningView> {
                 color: AppTheme.secondaryColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 44, color: AppTheme.secondaryColor),
+              child: const Icon(
+                Icons.school_rounded,
+                size: 44,
+                color: AppTheme.secondaryColor,
+              ),
             ),
             const SizedBox(height: 24),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            const Text(
+              'Start Learning',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
+            const Text(
+              'Your enrolled courses and progress\nwill appear here.',
+              style: TextStyle(
                 color: AppTheme.textSecondary,
                 fontSize: 15,
                 height: 1.5,
@@ -156,7 +109,7 @@ class _MyLearningViewState extends State<MyLearningView> {
             ),
             const SizedBox(height: 28),
             GlassButton(
-              onPressed: widget.onExplore,
+              onPressed: onExplore,
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,

@@ -36,19 +36,15 @@ class _ReviewsViewState extends State<ReviewsView> {
   _SortBy _sortBy = _SortBy.newest;
   late Stream<List<Review>> _reviewsStream;
 
-  // Memoization caches for _sorted()
-  List<Review>? _cachedOriginalReviews;
-  List<Review>? _cachedSortedReviews;
+  // Optimization: Cache variables for StreamBuilder memoization
+  List<Review>? _cachedInputList;
+  List<Review>? _cachedSortedList;
   _SortBy? _cachedSortBy;
-
-  // Memoization caches for _buildRatingSummary()
-  List<Review>? _cachedReviews;
-  double? _cachedAvg;
-  Map<int, int>? _cachedCounts;
 
   @override
   void initState() {
     super.initState();
+    // ⚡ Bolt: Initialize stream in initState to avoid redundant subscriptions on rebuilds.
     _reviewsStream = _reviewService.getReviews(widget.contentId);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
   }
@@ -58,6 +54,11 @@ class _ReviewsViewState extends State<ReviewsView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contentId != widget.contentId) {
       _reviewsStream = _reviewService.getReviews(widget.contentId);
+      setState(() {
+        _userReview = null;
+        _checkingUserReview = true;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkUserReview());
     }
   }
 
@@ -79,24 +80,26 @@ class _ReviewsViewState extends State<ReviewsView> {
   }
 
   List<Review> _sorted(List<Review> reviews) {
-    if (_sortBy == _SortBy.newest) {
-      // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
-      return reviews;
+    // ⚡ Bolt: Memoize expensive O(N) sorting operations using an O(1) identity check.
+    // This prevents redundant list allocations and sorting when the StreamBuilder rebuilds
+    // without new data (e.g. during typing in the review textfield or keyboard appearance).
+    if (identical(reviews, _cachedInputList) &&
+        _sortBy == _cachedSortBy &&
+        _cachedSortedList != null) {
+      return _cachedSortedList!;
     }
 
-    // ⚡ Bolt: Memoize O(N log N) sorting using O(1) identical check
-    if (identical(reviews, _cachedOriginalReviews) &&
-        _sortBy == _cachedSortBy) {
-      return _cachedSortedReviews;
-    }
-
-    final list = List<Review>.from(reviews);
-    list.sort((a, b) => b.rating.compareTo(a.rating));
-
-    _cachedOriginalReviews = reviews;
-    _cachedSortedReviews = list;
+    _cachedInputList = reviews;
     _cachedSortBy = _sortBy;
 
+    if (_sortBy == _SortBy.newest) {
+      // ⚡ Bolt: Prevent O(N) list allocation and copying when the default sort (Newest First) is already applied by the Firestore query.
+      _cachedSortedList = reviews;
+      return reviews;
+    }
+    final list = List<Review>.from(reviews);
+    list.sort((a, b) => b.rating.compareTo(a.rating));
+    _cachedSortedList = list;
     return list;
   }
 
@@ -154,15 +157,7 @@ class _ReviewsViewState extends State<ReviewsView> {
 
     if (confirm == true) {
       await _reviewService.deleteReview(widget.contentId, uid);
-      if (mounted) {
-        setState(() => _userReview = null);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Review deleted successfully'),
-            backgroundColor: AppTheme.success,
-          ),
-        );
-      }
+      if (mounted) setState(() => _userReview = null);
     }
   }
 
@@ -234,10 +229,7 @@ class _ReviewsViewState extends State<ReviewsView> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: AppTheme.primaryColor,
-                  semanticsLabel: 'Loading reviews',
-                ),
+                child: CircularProgressIndicator(color: AppTheme.primaryColor),
               );
             }
 
@@ -252,7 +244,7 @@ class _ReviewsViewState extends State<ReviewsView> {
             return ListView.builder(
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top + kToolbarHeight + 16,
+                MediaQuery.paddingOf(context).top + kToolbarHeight + 16,
                 20,
                 40,
               ),
@@ -335,26 +327,18 @@ class _ReviewsViewState extends State<ReviewsView> {
   // ── Rating summary ─────────────────────────────────────────────────────────
 
   Widget _buildRatingSummary(List<Review> reviews) {
-    // ⚡ Bolt: Use identical() to skip O(N) recalculations on normal widget rebuilds
-    if (!identical(reviews, _cachedReviews)) {
-      var sum = 0.0;
-      final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+    var sum = 0.0;
+    final counts = <int, int>{5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
 
-      // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
-      // and avoid creating closures inside the render loop via .fold()
-      for (final r in reviews) {
-        sum += r.rating;
-        final key = r.rating.round().clamp(1, 5);
-        counts[key] = (counts[key] ?? 0) + 1;
-      }
-
-      _cachedAvg = reviews.isEmpty ? 0.0 : sum / reviews.length;
-      _cachedCounts = counts;
-      _cachedReviews = reviews;
+    // ⚡ Bolt: Single pass loop for both avg and counts to eliminate redundant O(N) traversals
+    // and avoid creating closures inside the render loop via .fold()
+    for (final r in reviews) {
+      sum += r.rating;
+      final key = r.rating.round().clamp(1, 5);
+      counts[key] = (counts[key] ?? 0) + 1;
     }
 
-    final avg = _cachedAvg;
-    final counts = _cachedCounts;
+    final avg = reviews.isEmpty ? 0.0 : sum / reviews.length;
 
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -854,8 +838,8 @@ class _ReviewsViewState extends State<ReviewsView> {
               i < rating.floor()
                   ? Icons.star_rounded
                   : i < rating
-                      ? Icons.star_half_rounded
-                      : Icons.star_border_rounded,
+                  ? Icons.star_half_rounded
+                  : Icons.star_border_rounded,
               color: Colors.amber,
               size: size,
             ),
@@ -989,7 +973,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
     final isEditing = widget.existingReview != null;
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
       ),
       child: Container(
         decoration: const BoxDecoration(
@@ -1095,7 +1079,6 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                       controller: _commentController,
                       maxLines: 4,
                       maxLength: 500,
-                      textCapitalization: TextCapitalization.sentences,
                       textInputAction: TextInputAction.newline,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
@@ -1115,7 +1098,6 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: Colors.white,
-                                  semanticsLabel: 'Submitting review',
                                 ),
                               )
                             : Text(
