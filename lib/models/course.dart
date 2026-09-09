@@ -32,13 +32,13 @@ class Course {
       category: data?['category'] ?? 'General',
       studentCount: data?['studentCount'] ?? 0,
       lessons:
-          (data?['lessons'] as List<dynamic>?)
-              ?.map(
-                (lessonData) =>
+          // ⚡ Bolt: Use collection for loop to directly construct list avoiding intermediate Iterable allocation
+          data?['lessons'] != null
+              ? [
+                  for (final lessonData in data!['lessons'] as List<dynamic>)
                     Lesson.fromJson(lessonData as Map<String, dynamic>),
-              )
-              .toList() ??
-          [],
+                ]
+              : [],
     );
   }
 }

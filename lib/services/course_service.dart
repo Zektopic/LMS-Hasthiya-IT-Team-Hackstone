@@ -2,10 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/course.dart';
 
 class CourseService {
-  final FirebaseFirestore _db;
-
-  CourseService({FirebaseFirestore? db})
-      : _db = db ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Optimization: Added optional limit parameter to prevent unbounded reads
   Future<List<Course>> getRecommendedCourses({int? limit}) async {
@@ -15,8 +12,10 @@ class CourseService {
         query = query.limit(limit);
       }
       final snapshot = await query.get();
-      // ⚡ Bolt Optimization: Use collection for loop instead of .map().toList() to avoid allocating an intermediate MappedIterable and closure object.
-      return [for (final doc in snapshot.docs) Course.fromFirestore(doc)];
+      // ⚡ Bolt: Use collection for loop to directly construct list avoiding intermediate Iterable allocation
+      return [
+        for (final doc in snapshot.docs) Course.fromFirestore(doc),
+      ];
     } catch (e) {
       print('Error fetching courses: $e');
       return [];
