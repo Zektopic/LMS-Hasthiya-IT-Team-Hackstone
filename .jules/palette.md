@@ -33,6 +33,3 @@
 ## 2026-09-06 - Add tooltip to PopupMenuButton
 **Learning:** Icon-only interactive elements like `PopupMenuButton` default to generic screen reader announcements (e.g. 'Show menu'). This can be confusing for users relying on accessibility tools or needing context on desktop via hover states.
 **Action:** Always provide a descriptive `tooltip` attribute (e.g. `tooltip: 'Sort reviews'`) to `PopupMenuButton` and similar icon-only widgets to ensure screen readers announce the element's specific purpose clearly.
-## 2024-09-14 - Improve GlassCard Accessibility
-**Learning:** When creating custom tappable UI elements using `InkWell` surrounded by complex wrappers like `GlassCard` in Flutter, relying on implicit semantic traits often leads to poor or noisy screen reader announcements.
-**Action:** Always wrap the inner `InkWell` explicitly with a `Semantics(button: true, enabled: true, excludeSemantics: true, label: "Descriptive Text")` widget to ensure screen readers correctly interpret the element as a cohesive interactive button with a clear label.

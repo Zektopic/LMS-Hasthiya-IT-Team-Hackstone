@@ -195,28 +195,22 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
-        child: Semantics(
-          button: true,
-          enabled: true,
-          excludeSemantics: true,
-          label: 'Search courses and videos',
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            onTap: widget.onSearchTap,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Row(
-                children: [
-                  Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
-                  SizedBox(width: 12),
-                  Text(
-                    'Search courses, videos...',
-                    style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
-                  ),
-                ],
-              ),
+        child: InkWell(
+          focusColor: Colors.white.withValues(alpha: 0.1),
+          hoverColor: Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          onTap: widget.onSearchTap,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Icon(Icons.search_rounded, color: AppTheme.textMuted, size: 22),
+                SizedBox(width: 12),
+                Text(
+                  'Search courses, videos...',
+                  style: TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                ),
+              ],
             ),
           ),
         ),
