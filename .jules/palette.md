@@ -33,3 +33,6 @@
 ## 2026-09-06 - Add tooltip to PopupMenuButton
 **Learning:** Icon-only interactive elements like `PopupMenuButton` default to generic screen reader announcements (e.g. 'Show menu'). This can be confusing for users relying on accessibility tools or needing context on desktop via hover states.
 **Action:** Always provide a descriptive `tooltip` attribute (e.g. `tooltip: 'Sort reviews'`) to `PopupMenuButton` and similar icon-only widgets to ensure screen readers announce the element's specific purpose clearly.
+## 2026-09-17 - [Combine Text nodes for Screen Readers]
+**Learning:** In Flutter, when displaying paired text elements like a statistic value and its label (e.g. '15' and 'Courses') inside a `Column` or `Row`, screen readers will default to announcing them as separate, disconnected elements. This creates a disjointed user experience.
+**Action:** Always improve accessibility by wrapping related grouped text components in a `Semantics` widget with `excludeSemantics: true` and provide a combined `label` (e.g. `'$label: $value'`) so screen readers announce them as a single, cohesive statement.
