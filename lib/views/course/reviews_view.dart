@@ -97,7 +97,8 @@ class _ReviewsViewState extends State<ReviewsView> {
       _cachedSortedList = reviews;
       return reviews;
     }
-    final list = List<Review>.from(reviews);
+    // ⚡ Bolt: Use spread operator [...list] over List.from() for efficient list copying avoiding intermediate allocation and type checking overhead
+    final list = [...reviews];
     list.sort((a, b) => b.rating.compareTo(a.rating));
     _cachedSortedList = list;
     return list;
@@ -975,9 +976,7 @@ class _WriteReviewSheetState extends State<_WriteReviewSheet> {
   Widget build(BuildContext context) {
     final isEditing = widget.existingReview != null;
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Container(
         decoration: const BoxDecoration(
           color: AppTheme.surfaceColor,

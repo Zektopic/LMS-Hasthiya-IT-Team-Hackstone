@@ -57,3 +57,7 @@
 **Learning:** In Flutter build methods (especially inside StreamBuilder), evaluating expensive O(N) list operations like sorting every time the widget rebuilds causes redundant CPU cycles and increases garbage collection overhead. Since StreamBuilder rebuilds frequently during its lifecycle, and the list reference often remains unchanged between state updates (e.g. keyboard focus, unrelated setStates), repeating the sort is inefficient.
 **Action:** Memoize expensive O(N) list operations by caching the list reference and result. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations on widget rebuilds when the stream data instance hasn't changed.
 
+
+## 2026-09-17 - Dart Spread Operator vs List.from()
+**Learning:** In Dart, using `List.from(list)` to copy a list incurs runtime type checking overhead and allocates intermediate objects. The spread operator `[...list]` is more efficient because it avoids this overhead.
+**Action:** Prefer using the spread operator (e.g., `[...list]`) over `List.from(list)` or `.toList()` when copying lists for better performance.
