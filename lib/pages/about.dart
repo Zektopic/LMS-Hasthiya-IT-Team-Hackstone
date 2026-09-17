@@ -15,7 +15,21 @@ Future<String> getVersionNumber() async {
   return packageInfo.version;
 }
 
-class _AboutDialog extends StatelessWidget {
+class _AboutDialog extends StatefulWidget {
+  @override
+  State<_AboutDialog> createState() => _AboutDialogState();
+}
+
+class _AboutDialogState extends State<_AboutDialog> {
+  // ⚡ Bolt: Memoize the future to prevent redundant getVersionNumber() calls on every rebuild
+  late final Future<String> _versionFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _versionFuture = getVersionNumber();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -26,7 +40,7 @@ class _AboutDialog extends StatelessWidget {
 
     return AlertDialog(
       title: FutureBuilder<String>(
-        future: getVersionNumber(),
+        future: _versionFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text('App Version: ${snapshot.data}');

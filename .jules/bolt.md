@@ -58,6 +58,6 @@
 **Action:** Memoize expensive O(N) list operations by caching the list reference and result. Use Dart's `identical(newList, _cachedList)` for an O(1) identity check to quickly skip recalculations on widget rebuilds when the stream data instance hasn't changed.
 
 
-## 2026-09-17 - Dart Spread Operator vs List.from()
-**Learning:** In Dart, using `List.from(list)` to copy a list incurs runtime type checking overhead and allocates intermediate objects. The spread operator `[...list]` is more efficient because it avoids this overhead.
-**Action:** Prefer using the spread operator (e.g., `[...list]`) over `List.from(list)` or `.toList()` when copying lists for better performance.
+## 2026-09-17 - Flutter FutureBuilder Memoization
+**Learning:** In Flutter, passing a method call like `getVersionNumber()` directly into the `future` property of a `FutureBuilder` causes the asynchronous operation to re-trigger on every widget rebuild. This wastes resources and can cause UI flickering.
+**Action:** Always memoize Futures in a `StatefulWidget`'s `initState` and pass the cached Future variable to the `FutureBuilder`.
