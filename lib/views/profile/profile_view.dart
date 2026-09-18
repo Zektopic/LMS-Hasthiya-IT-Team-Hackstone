@@ -236,48 +236,52 @@ class ProfileView extends StatelessWidget {
                   children: [
                     Material(
                       color: Colors.transparent,
-                      child: InkWell(
-                        focusColor: Colors.white.withValues(alpha: 0.1),
-                        hoverColor: Colors.white.withValues(alpha: 0.1),
-                        borderRadius: index == 0 && items.length == 1
-                            ? BorderRadius.circular(16)
-                            : index == 0
-                            ? const BorderRadius.vertical(
-                                top: Radius.circular(16),
-                              )
-                            : index == items.length - 1
-                            ? const BorderRadius.vertical(
-                                bottom: Radius.circular(16),
-                              )
-                            : BorderRadius.zero,
-                        onTap: item.onTap,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 16,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                item.icon,
-                                color: AppTheme.textSecondary,
-                                size: 22,
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Text(
-                                  item.label,
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                              ),
-                              if (item.trailing != null) item.trailing!,
-                              if (item.trailing == null)
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: AppTheme.textMuted,
+                      child: Semantics(
+                        button: true,
+                        enabled: true,
+                        child: InkWell(
+                          focusColor: Colors.white.withValues(alpha: 0.1),
+                          hoverColor: Colors.white.withValues(alpha: 0.1),
+                          borderRadius: index == 0 && items.length == 1
+                              ? BorderRadius.circular(16)
+                              : index == 0
+                                  ? const BorderRadius.vertical(
+                                      top: Radius.circular(16),
+                                    )
+                                  : index == items.length - 1
+                                      ? const BorderRadius.vertical(
+                                          bottom: Radius.circular(16),
+                                        )
+                                      : BorderRadius.zero,
+                          onTap: item.onTap,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 16,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  item.icon,
+                                  color: AppTheme.textSecondary,
                                   size: 22,
                                 ),
-                            ],
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Text(
+                                    item.label,
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                if (item.trailing != null) item.trailing!,
+                                if (item.trailing == null)
+                                  const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: AppTheme.textMuted,
+                                    size: 22,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
