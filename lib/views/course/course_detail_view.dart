@@ -271,58 +271,65 @@ class CourseDetailView extends StatelessWidget {
         borderRadius: 14,
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            focusColor: Colors.white.withValues(alpha: 0.1),
-            hoverColor: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(14),
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '$index',
-                        style: const TextStyle(
-                          color: AppTheme.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+          child: Semantics(
+            button: true,
+            enabled: false,
+            excludeSemantics: true,
+            label:
+                'Lesson $index: ${lesson.title}${durationStr.isNotEmpty ? ', $durationStr' : ''}',
+            child: InkWell(
+              focusColor: Colors.white.withValues(alpha: 0.1),
+              hoverColor: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
+              onTap: null,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$index',
+                          style: const TextStyle(
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Text(
-                      lesson.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        lesson.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                  ),
-                  if (durationStr.isNotEmpty)
-                    Text(
-                      durationStr,
-                      style: const TextStyle(
-                        color: AppTheme.textMuted,
-                        fontSize: 13,
+                    if (durationStr.isNotEmpty)
+                      Text(
+                        durationStr,
+                        style: const TextStyle(
+                          color: AppTheme.textMuted,
+                          fontSize: 13,
+                        ),
                       ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.play_circle_outline_rounded,
+                      color: AppTheme.primaryColor,
+                      size: 22,
                     ),
-                  const SizedBox(width: 8),
-                  const Icon(
-                    Icons.play_circle_outline_rounded,
-                    color: AppTheme.primaryColor,
-                    size: 22,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
