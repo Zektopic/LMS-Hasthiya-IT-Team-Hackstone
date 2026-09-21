@@ -36,3 +36,7 @@
 ## 2026-09-17 - [Combine Text nodes for Screen Readers]
 **Learning:** In Flutter, when displaying paired text elements like a statistic value and its label (e.g. '15' and 'Courses') inside a `Column` or `Row`, screen readers will default to announcing them as separate, disconnected elements. This creates a disjointed user experience.
 **Action:** Always improve accessibility by wrapping related grouped text components in a `Semantics` widget with `excludeSemantics: true` and provide a combined `label` (e.g. `'$label: $value'`) so screen readers announce them as a single, cohesive statement.
+
+## 2026-09-21 - Fix Accessibility for Disabled Lesson Items
+**Learning:** When using an empty closure `onTap: () {}` on an InkWell to act as a placeholder or disabled state, it keeps the button functionally enabled in the semantic tree but unresponsive, frustrating screen reader users. Also, setting it to `null` drops the implicit button role entirely.
+**Action:** Always use `onTap: null` for disabled states and explicitly wrap the InkWell in `Semantics(button: true, enabled: false, excludeSemantics: true, label: ...)` to ensure the screen reader announces it correctly as a disabled button with a clean, unified label.
