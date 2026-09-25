@@ -144,6 +144,7 @@ class _HomeViewState extends State<HomeView> {
         Semantics(
           label: 'Profile settings',
           button: true,
+          enabled: false,
           child: Container(
             width: 48,
             height: 48,
@@ -157,7 +158,7 @@ class _HomeViewState extends State<HomeView> {
                 focusColor: Colors.white.withValues(alpha: 0.1),
                 hoverColor: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-                onTap: () {},
+                onTap: null,
                 child: auth.photoUrl != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
@@ -270,7 +271,10 @@ class _HomeViewState extends State<HomeView> {
               const SizedBox(height: 12),
               Text(
                 value,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 label,
@@ -332,132 +336,134 @@ class _HomeViewState extends State<HomeView> {
               focusColor: Colors.white.withValues(alpha: 0.1),
               hoverColor: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CourseDetailView(course: course),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseDetailView(course: course),
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 110,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: colors,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: -20,
-                        top: -20,
-                        child: Icon(
-                          Icons.auto_stories_rounded,
-                          size: 80,
-                          color: Colors.white.withValues(alpha: 0.15),
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 110,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: colors,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      if (course.thumbnailUrl.isNotEmpty)
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: course.thumbnailUrl,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 110,
-                            errorWidget: (_, __, ___) => const SizedBox(),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          right: -20,
+                          top: -20,
+                          child: Icon(
+                            Icons.auto_stories_rounded,
+                            size: 80,
+                            color: Colors.white.withValues(alpha: 0.15),
                           ),
                         ),
-                      Positioned(
-                        bottom: 8,
-                        left: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                        if (course.thumbnailUrl.isNotEmpty)
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: course.thumbnailUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 110,
+                              errorWidget: (_, __, ___) => const SizedBox(),
+                            ),
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.5),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Semantics(
-                            excludeSemantics: true,
-                            label:
-                                'Rating: ${course.rating.toStringAsFixed(1)} stars',
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.star_rounded,
-                                  color: Colors.amber,
-                                  size: 14,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  course.rating.toStringAsFixed(1),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                        Positioned(
+                          bottom: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Semantics(
+                              excludeSemantics: true,
+                              label:
+                                  'Rating: ${course.rating.toStringAsFixed(1)} stars',
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.star_rounded,
+                                    color: Colors.amber,
+                                    size: 14,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    course.rating.toStringAsFixed(1),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        course.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                  Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          course.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '${course.lessons.length} lessons',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppTheme.textSecondary,
+                        const SizedBox(height: 6),
+                        Text(
+                          '${course.lessons.length} lessons',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textSecondary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 
   Widget _buildVideoList() {
     return Column(
       // ⚡ Bolt: Replaced .take(5).indexed with an explicit for loop to avoid intermediate iterable allocations during rebuilds.
       children: [
-        for (var index = 0;
-            index < (_videos.length < 5 ? _videos.length : 5);
-            index++)
+        for (
+          var index = 0;
+          index < (_videos.length < 5 ? _videos.length : 5);
+          index++
+        )
           _buildVideoCard(
             _videos[index],
             AppTheme.cardGradients[index % AppTheme.cardGradients.length],
@@ -478,76 +484,78 @@ class _HomeViewState extends State<HomeView> {
               focusColor: Colors.white.withValues(alpha: 0.1),
               hoverColor: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerView(video: video)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: colors),
-                      borderRadius: BorderRadius.circular(14),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => VideoPlayerView(video: video),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: colors),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(
+                        Icons.play_arrow_rounded,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.play_arrow_rounded,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          video.title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            video.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          video.description,
-                          style: const TextStyle(
-                            color: AppTheme.textSecondary,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (video.duration != null) ...[
                           const SizedBox(height: 4),
                           Text(
-                            video.duration!,
+                            video.description,
                             style: const TextStyle(
-                              color: AppTheme.textMuted,
-                              fontSize: 12,
+                              color: AppTheme.textSecondary,
+                              fontSize: 13,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
+                          if (video.duration != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              video.duration!,
+                              style: const TextStyle(
+                                color: AppTheme.textMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                  const Icon(
-                    Icons.chevron_right_rounded,
-                    color: AppTheme.textMuted,
-                  ),
-                ],
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppTheme.textMuted,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 
   Widget _buildEmptyState() {

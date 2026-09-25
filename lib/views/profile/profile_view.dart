@@ -43,17 +43,17 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.person_outline_rounded,
                   label: 'Edit Profile',
-                  onTap: () {},
+                  onTap: null,
                 ),
                 _SettingItem(
                   icon: Icons.notifications_none_rounded,
                   label: 'Notifications',
-                  onTap: () {},
+                  onTap: null,
                 ),
                 _SettingItem(
                   icon: Icons.download_rounded,
                   label: 'Downloads',
-                  onTap: () {},
+                  onTap: null,
                 ),
               ]),
               const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class ProfileView extends StatelessWidget {
                     'Dark',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () {},
+                  onTap: null,
                 ),
                 _SettingItem(
                   icon: Icons.language_rounded,
@@ -74,7 +74,7 @@ class ProfileView extends StatelessWidget {
                     'English',
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
-                  onTap: () {},
+                  onTap: null,
                 ),
               ]),
               const SizedBox(height: 20),
@@ -82,12 +82,12 @@ class ProfileView extends StatelessWidget {
                 _SettingItem(
                   icon: Icons.help_outline_rounded,
                   label: 'Help Center',
-                  onTap: () {},
+                  onTap: null,
                 ),
                 _SettingItem(
                   icon: Icons.info_outline_rounded,
                   label: 'About',
-                  onTap: () {},
+                  onTap: null,
                 ),
               ]),
               const SizedBox(height: 28),
@@ -238,21 +238,21 @@ class ProfileView extends StatelessWidget {
                       color: Colors.transparent,
                       child: Semantics(
                         button: true,
-                        enabled: true,
+                        enabled: item.onTap != null,
                         child: InkWell(
                           focusColor: Colors.white.withValues(alpha: 0.1),
                           hoverColor: Colors.white.withValues(alpha: 0.1),
                           borderRadius: index == 0 && items.length == 1
                               ? BorderRadius.circular(16)
                               : index == 0
-                                  ? const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    )
-                                  : index == items.length - 1
-                                      ? const BorderRadius.vertical(
-                                          bottom: Radius.circular(16),
-                                        )
-                                      : BorderRadius.zero,
+                              ? const BorderRadius.vertical(
+                                  top: Radius.circular(16),
+                                )
+                              : index == items.length - 1
+                              ? const BorderRadius.vertical(
+                                  bottom: Radius.circular(16),
+                                )
+                              : BorderRadius.zero,
                           onTap: item.onTap,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -337,7 +337,7 @@ class _SettingItem {
   final IconData icon;
   final String label;
   final Widget? trailing;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _SettingItem({
     required this.icon,
