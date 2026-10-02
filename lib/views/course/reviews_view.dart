@@ -97,7 +97,8 @@ class _ReviewsViewState extends State<ReviewsView> {
       _cachedSortedList = reviews;
       return reviews;
     }
-    final list = List<Review>.from(reviews);
+    // ⚡ Bolt: Use spread operator for more efficient list copying, avoiding List.from() type checking overhead
+    final list = [...reviews];
     list.sort((a, b) => b.rating.compareTo(a.rating));
     _cachedSortedList = list;
     return list;
