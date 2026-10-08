@@ -40,3 +40,7 @@
 ## 2026-09-21 - Fix Accessibility for Disabled Lesson Items
 **Learning:** When using an empty closure `onTap: () {}` on an InkWell to act as a placeholder or disabled state, it keeps the button functionally enabled in the semantic tree but unresponsive, frustrating screen reader users. Also, setting it to `null` drops the implicit button role entirely.
 **Action:** Always use `onTap: null` for disabled states and explicitly wrap the InkWell in `Semantics(button: true, enabled: false, excludeSemantics: true, label: ...)` to ensure the screen reader announces it correctly as a disabled button with a clean, unified label.
+
+## 2026-10-27 - [Clear Filters Action in Empty States]
+**Learning:** When users encounter an empty state specifically caused by active filters or search queries (e.g. 'No results found'), presenting a static message without actionable recovery options creates a dead end and poor UX. Relying on them to manually clear the input field or reset dropdowns adds friction.
+**Action:** Always provide a prominent, one-click action (like a 'Clear Filters' button) directly within the empty state component to instantly reset the filter criteria and restore the default list view.
