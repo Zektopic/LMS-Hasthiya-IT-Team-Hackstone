@@ -145,6 +145,7 @@ class _HomeViewState extends State<HomeView> {
           label: 'Profile settings',
           button: true,
           enabled: false,
+          excludeSemantics: true,
           child: Container(
             width: 48,
             height: 48,
