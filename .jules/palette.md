@@ -44,3 +44,6 @@
 ## 2026-10-27 - [Clear Filters Action in Empty States]
 **Learning:** When users encounter an empty state specifically caused by active filters or search queries (e.g. 'No results found'), presenting a static message without actionable recovery options creates a dead end and poor UX. Relying on them to manually clear the input field or reset dropdowns adds friction.
 **Action:** Always provide a prominent, one-click action (like a 'Clear Filters' button) directly within the empty state component to instantly reset the filter criteria and restore the default list view.
+## 2026-10-10 - Add AutofillHints to TextFields
+**Learning:** Users often rely on password managers for authentication flows. Adding explicit `autofillHints` to TextFields (like email, password, and name) improves the UX by allowing seamless auto-filling on iOS and Android.
+**Action:** Always add `autofillHints` to forms dealing with authentication, profile updates, and standard data entry fields.
