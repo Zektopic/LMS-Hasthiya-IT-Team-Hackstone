@@ -138,6 +138,7 @@ class _SignupViewState extends State<SignupView>
                               const SizedBox(height: 32),
                               TextField(
                                 controller: _nameController,
+                                autofillHints: const [AutofillHints.name],
                                 textInputAction: TextInputAction.next,
                                 textCapitalization: TextCapitalization.words,
                                 style: const TextStyle(color: Colors.white),
@@ -149,6 +150,7 @@ class _SignupViewState extends State<SignupView>
                               const SizedBox(height: 16),
                               TextField(
                                 controller: _emailController,
+                                autofillHints: const [AutofillHints.email],
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 style: const TextStyle(color: Colors.white),
@@ -160,6 +162,9 @@ class _SignupViewState extends State<SignupView>
                               const SizedBox(height: 16),
                               TextField(
                                 controller: _passwordController,
+                                autofillHints: const [
+                                  AutofillHints.newPassword,
+                                ],
                                 obscureText: !_isPasswordVisible,
                                 textInputAction: TextInputAction.done,
                                 style: const TextStyle(color: Colors.white),
