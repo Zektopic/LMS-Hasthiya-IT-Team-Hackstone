@@ -131,6 +131,7 @@ class _LoginViewState extends State<LoginView>
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
+                                autofillHints: const [AutofillHints.email],
                                 style: const TextStyle(color: Colors.white),
                                 decoration: const InputDecoration(
                                   labelText: 'Email Address',
@@ -142,6 +143,7 @@ class _LoginViewState extends State<LoginView>
                                 controller: _passwordController,
                                 obscureText: !_isPasswordVisible,
                                 textInputAction: TextInputAction.done,
+                                autofillHints: const [AutofillHints.password],
                                 style: const TextStyle(color: Colors.white),
                                 onSubmitted: (_) {
                                   if (!auth.isLoading) _handleLogin(auth);

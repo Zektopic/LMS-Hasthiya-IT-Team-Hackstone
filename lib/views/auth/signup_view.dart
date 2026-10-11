@@ -140,6 +140,7 @@ class _SignupViewState extends State<SignupView>
                                 controller: _nameController,
                                 textInputAction: TextInputAction.next,
                                 textCapitalization: TextCapitalization.words,
+                                autofillHints: const [AutofillHints.name],
                                 style: const TextStyle(color: Colors.white),
                                 decoration: const InputDecoration(
                                   labelText: 'Full Name',
@@ -151,6 +152,7 @@ class _SignupViewState extends State<SignupView>
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
+                                autofillHints: const [AutofillHints.email],
                                 style: const TextStyle(color: Colors.white),
                                 decoration: const InputDecoration(
                                   labelText: 'Email Address',
@@ -162,6 +164,9 @@ class _SignupViewState extends State<SignupView>
                                 controller: _passwordController,
                                 obscureText: !_isPasswordVisible,
                                 textInputAction: TextInputAction.done,
+                                autofillHints: const [
+                                  AutofillHints.newPassword,
+                                ],
                                 style: const TextStyle(color: Colors.white),
                                 onSubmitted: (_) {
                                   if (!auth.isLoading) _handleSignup(auth);
