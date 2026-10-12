@@ -31,10 +31,10 @@ class _LoginViewState extends State<LoginView>
       duration: const Duration(milliseconds: 900),
     );
     _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
-    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
-        .animate(
-          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
-        );
+    _slideAnim =
+        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+    );
     _animController.forward();
   }
 
@@ -127,42 +127,59 @@ class _LoginViewState extends State<LoginView>
                                 ),
                               ),
                               const SizedBox(height: 32),
-                              TextField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  labelText: 'Email Address',
-                                  prefixIcon: Icon(Icons.email_outlined),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: !_isPasswordVisible,
-                                textInputAction: TextInputAction.done,
-                                style: const TextStyle(color: Colors.white),
-                                onSubmitted: (_) {
-                                  if (!auth.isLoading) _handleLogin(auth);
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    tooltip: _isPasswordVisible
-                                        ? 'Hide password'
-                                        : 'Show password',
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                              AutofillGroup(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    TextField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      autofillHints: const [
+                                        AutofillHints.email
+                                      ],
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Email Address',
+                                        prefixIcon: Icon(Icons.email_outlined),
+                                      ),
                                     ),
-                                    onPressed: () => setState(
-                                      () => _isPasswordVisible =
-                                          !_isPasswordVisible,
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      controller: _passwordController,
+                                      obscureText: !_isPasswordVisible,
+                                      textInputAction: TextInputAction.done,
+                                      autofillHints: const [
+                                        AutofillHints.password
+                                      ],
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      onSubmitted: (_) {
+                                        if (!auth.isLoading) _handleLogin(auth);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        prefixIcon:
+                                            const Icon(Icons.lock_outline),
+                                        suffixIcon: IconButton(
+                                          tooltip: _isPasswordVisible
+                                              ? 'Hide password'
+                                              : 'Show password',
+                                          icon: Icon(
+                                            _isPasswordVisible
+                                                ? Icons.visibility_off_outlined
+                                                : Icons.visibility_outlined,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _isPasswordVisible =
+                                                !_isPasswordVisible,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 8),

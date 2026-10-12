@@ -158,6 +158,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
+          autofillHints: const [AutofillHints.email],
           style: const TextStyle(color: Colors.white),
           onSubmitted: (_) {
             if (!auth.isLoading) _handleReset(auth);

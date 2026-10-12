@@ -44,3 +44,6 @@
 ## 2026-10-27 - [Clear Filters Action in Empty States]
 **Learning:** When users encounter an empty state specifically caused by active filters or search queries (e.g. 'No results found'), presenting a static message without actionable recovery options creates a dead end and poor UX. Relying on them to manually clear the input field or reset dropdowns adds friction.
 **Action:** Always provide a prominent, one-click action (like a 'Clear Filters' button) directly within the empty state component to instantly reset the filter criteria and restore the default list view.
+## 2024-05-18 - [Group Auth fields with AutofillGroup]
+**Learning:** Adding `autofillHints` to individual text fields is great for OS suggestions, but if the fields are related (like an email and a password field on a login page), the OS might not bundle them securely or prompt to save them together upon successful submission.
+**Action:** Always wrap related authentication text fields (like email and password) inside an `AutofillGroup` widget when providing `autofillHints`. This guarantees the underlying platform recognizes them as a single cohesive unit for saving and suggesting credentials.
