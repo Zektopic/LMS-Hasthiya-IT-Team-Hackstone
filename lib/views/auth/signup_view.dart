@@ -136,53 +136,78 @@ class _SignupViewState extends State<SignupView>
                                 ),
                               ),
                               const SizedBox(height: 32),
-                              TextField(
-                                controller: _nameController,
-                                textInputAction: TextInputAction.next,
-                                textCapitalization: TextCapitalization.words,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  labelText: 'Full Name',
-                                  prefixIcon: Icon(Icons.person_outline),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  labelText: 'Email Address',
-                                  prefixIcon: Icon(Icons.email_outlined),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: !_isPasswordVisible,
-                                textInputAction: TextInputAction.done,
-                                style: const TextStyle(color: Colors.white),
-                                onSubmitted: (_) {
-                                  if (!auth.isLoading) _handleSignup(auth);
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    tooltip: _isPasswordVisible
-                                        ? 'Hide password'
-                                        : 'Show password',
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                              AutofillGroup(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    TextField(
+                                      controller: _nameController,
+                                      textInputAction: TextInputAction.next,
+                                      textCapitalization:
+                                          TextCapitalization.words,
+                                      autofillHints: const [AutofillHints.name],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Full Name',
+                                        prefixIcon: Icon(Icons.person_outline),
+                                      ),
                                     ),
-                                    onPressed: () => setState(
-                                      () => _isPasswordVisible =
-                                          !_isPasswordVisible,
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      autofillHints: const [
+                                        AutofillHints.email,
+                                      ],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Email Address',
+                                        prefixIcon: Icon(Icons.email_outlined),
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      controller: _passwordController,
+                                      obscureText: !_isPasswordVisible,
+                                      textInputAction: TextInputAction.done,
+                                      autofillHints: const [
+                                        AutofillHints.newPassword,
+                                      ],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      onSubmitted: (_) {
+                                        if (!auth.isLoading)
+                                          _handleSignup(auth);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        prefixIcon: const Icon(
+                                          Icons.lock_outline,
+                                        ),
+                                        suffixIcon: IconButton(
+                                          tooltip: _isPasswordVisible
+                                              ? 'Hide password'
+                                              : 'Show password',
+                                          icon: Icon(
+                                            _isPasswordVisible
+                                                ? Icons.visibility_off_outlined
+                                                : Icons.visibility_outlined,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _isPasswordVisible =
+                                                !_isPasswordVisible,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 28),
