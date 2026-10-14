@@ -127,42 +127,60 @@ class _LoginViewState extends State<LoginView>
                                 ),
                               ),
                               const SizedBox(height: 32),
-                              TextField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: const InputDecoration(
-                                  labelText: 'Email Address',
-                                  prefixIcon: Icon(Icons.email_outlined),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: !_isPasswordVisible,
-                                textInputAction: TextInputAction.done,
-                                style: const TextStyle(color: Colors.white),
-                                onSubmitted: (_) {
-                                  if (!auth.isLoading) _handleLogin(auth);
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    tooltip: _isPasswordVisible
-                                        ? 'Hide password'
-                                        : 'Show password',
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                              AutofillGroup(
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: _emailController,
+                                      autofillHints: const [
+                                        AutofillHints.email,
+                                      ],
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Email Address',
+                                        prefixIcon: Icon(Icons.email_outlined),
+                                      ),
                                     ),
-                                    onPressed: () => setState(
-                                      () => _isPasswordVisible =
-                                          !_isPasswordVisible,
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      controller: _passwordController,
+                                      autofillHints: const [
+                                        AutofillHints.password,
+                                      ],
+                                      obscureText: !_isPasswordVisible,
+                                      textInputAction: TextInputAction.done,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      onSubmitted: (_) {
+                                        if (!auth.isLoading) _handleLogin(auth);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        prefixIcon: const Icon(
+                                          Icons.lock_outline,
+                                        ),
+                                        suffixIcon: IconButton(
+                                          tooltip: _isPasswordVisible
+                                              ? 'Hide password'
+                                              : 'Show password',
+                                          icon: Icon(
+                                            _isPasswordVisible
+                                                ? Icons.visibility_off_outlined
+                                                : Icons.visibility_outlined,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _isPasswordVisible =
+                                                !_isPasswordVisible,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 8),

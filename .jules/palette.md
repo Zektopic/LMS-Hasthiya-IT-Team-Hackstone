@@ -44,3 +44,6 @@
 ## 2026-10-27 - [Clear Filters Action in Empty States]
 **Learning:** When users encounter an empty state specifically caused by active filters or search queries (e.g. 'No results found'), presenting a static message without actionable recovery options creates a dead end and poor UX. Relying on them to manually clear the input field or reset dropdowns adds friction.
 **Action:** Always provide a prominent, one-click action (like a 'Clear Filters' button) directly within the empty state component to instantly reset the filter criteria and restore the default list view.
+## 2026-10-14 - Adding Autofill Hints
+**Learning:** Missing autofill hints in forms prevents OS-level credential managers from offering auto-complete options to users on iOS and Android.
+**Action:** Group form fields within an `AutofillGroup` and pass explicit `AutofillHints` to each input field to enable secure, OS-level credential management.
