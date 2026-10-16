@@ -154,17 +154,20 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           ),
         ),
         const SizedBox(height: 32),
-        TextField(
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.done,
-          style: const TextStyle(color: Colors.white),
-          onSubmitted: (_) {
-            if (!auth.isLoading) _handleReset(auth);
-          },
-          decoration: const InputDecoration(
-            labelText: 'Email Address',
-            prefixIcon: Icon(Icons.email_outlined),
+        AutofillGroup(
+          child: TextField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.done,
+            autofillHints: const [AutofillHints.email],
+            style: const TextStyle(color: Colors.white),
+            onSubmitted: (_) {
+              if (!auth.isLoading) _handleReset(auth);
+            },
+            decoration: const InputDecoration(
+              labelText: 'Email Address',
+              prefixIcon: Icon(Icons.email_outlined),
+            ),
           ),
         ),
         const SizedBox(height: 28),

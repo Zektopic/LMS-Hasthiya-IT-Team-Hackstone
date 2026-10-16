@@ -44,3 +44,7 @@
 ## 2026-10-27 - [Clear Filters Action in Empty States]
 **Learning:** When users encounter an empty state specifically caused by active filters or search queries (e.g. 'No results found'), presenting a static message without actionable recovery options creates a dead end and poor UX. Relying on them to manually clear the input field or reset dropdowns adds friction.
 **Action:** Always provide a prominent, one-click action (like a 'Clear Filters' button) directly within the empty state component to instantly reset the filter criteria and restore the default list view.
+
+## 2026-10-16 - Add AutofillHints to Auth Forms
+**Learning:** By default, Flutter text fields do not integrate with OS-level password managers or autofill services, which can cause friction during sign-in and sign-up flows. Wrapping related text fields in an `AutofillGroup` and assigning appropriate `autofillHints` (such as `AutofillHints.email` and `AutofillHints.newPassword`) resolves this issue.
+**Action:** Always include an `AutofillGroup` and relevant `autofillHints` on forms that handle user credentials or profile data to enable seamless OS-level autofill experiences.
