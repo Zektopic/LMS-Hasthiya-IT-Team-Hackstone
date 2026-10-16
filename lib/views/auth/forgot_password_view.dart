@@ -156,6 +156,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         const SizedBox(height: 32),
         TextField(
           controller: _emailController,
+          autofillHints: const [AutofillHints.email],
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
           style: const TextStyle(color: Colors.white),
