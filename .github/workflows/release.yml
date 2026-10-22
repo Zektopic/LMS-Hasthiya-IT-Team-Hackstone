@@ -12,12 +12,14 @@ jobs:
   # ── 1. Extract version from pubspec.yaml ──────────────────────────────────
   get-version:
     name: Get version from pubspec.yaml
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, manupa-hnx]
     outputs:
       version: ${{ steps.extract.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        - name: Configure Git safe directory
+          run: git config --global --add safe.directory '*'
 
       - name: Extract version
         id: extract
@@ -28,7 +30,7 @@ jobs:
   # ── 2. Build Android APK ──────────────────────────────────────────────────
   build-android:
     name: Build Android APK
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, manupa-hnx]
     needs: get-version
     steps:
       - name: Set up JDK 17
@@ -44,6 +46,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        - name: Configure Git safe directory
+          run: git config --global --add safe.directory '*'
 
       - run: flutter pub get
       - run: flutter build apk --release
@@ -57,7 +61,7 @@ jobs:
   # ── 3. Build Web ──────────────────────────────────────────────────────────
   build-web:
     name: Build Web
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, manupa-hnx]
     needs: get-version
     steps:
       - name: Clone Flutter repository with stable channel
@@ -67,6 +71,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        - name: Configure Git safe directory
+          run: git config --global --add safe.directory '*'
 
       - run: flutter pub get
       - run: flutter build web --release
@@ -83,7 +89,7 @@ jobs:
   # ── 4. Create GitHub Release and upload assets ───────────────────────────
   create-release:
     name: Create GitHub Release
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, manupa-hnx]
     needs: [get-version, build-android, build-web]
     permissions:
       contents: write
