@@ -18,8 +18,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        - name: Configure Git safe directory
-          run: git config --global --add safe.directory '*'
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
 
       - name: Extract version
         id: extract
@@ -46,8 +46,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        - name: Configure Git safe directory
-          run: git config --global --add safe.directory '*'
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
 
       - run: flutter pub get
       - run: flutter build apk --release
@@ -71,8 +71,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        - name: Configure Git safe directory
-          run: git config --global --add safe.directory '*'
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
 
       - run: flutter pub get
       - run: flutter build web --release
