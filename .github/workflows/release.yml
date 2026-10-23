@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -40,8 +41,9 @@ jobs:
           distribution: temurin
 
       - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.19.6"
           channel: stable
 
       - name: Checkout code
@@ -65,8 +67,9 @@ jobs:
     needs: get-version
     steps:
       - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.19.6"
           channel: stable
 
       - name: Checkout code
