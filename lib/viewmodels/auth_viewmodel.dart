@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
@@ -120,8 +121,7 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
-          .authenticate();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         _isLoading = false;
         notifyListeners();
@@ -163,7 +163,7 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await GoogleSignIn.instance.signOut();
+      await _googleSignIn.signOut();
     } catch (_) {}
     await _auth.signOut();
   }
