@@ -51,7 +51,7 @@ jobs:
         run: git config --global --add safe.directory '*'
 
       - run: flutter pub get
-      - run: flutter build apk --release
+      - run: flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7.0.1
