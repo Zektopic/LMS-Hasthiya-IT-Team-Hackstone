@@ -32,6 +32,7 @@ dev_dependencies:
 
 dependency_overrides:
   win32: ^5.14.0
+  google_sign_in_android: ^6.1.36
 
 flutter:
   uses-material-design: true
