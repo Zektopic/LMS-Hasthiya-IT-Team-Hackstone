@@ -69,7 +69,8 @@ class _ExploreViewState extends State<ExploreView> {
     final results = await Future.wait([
       _videoService.getVideos(limit: VideoService.defaultQueryLimit),
       _courseService.getRecommendedCourses(
-          limit: CourseService.defaultQueryLimit),
+        limit: CourseService.defaultQueryLimit,
+      ),
     ]);
 
     if (!mounted) return;
@@ -160,6 +161,7 @@ class _ExploreViewState extends State<ExploreView> {
                       builder: (context, value, child) {
                         return TextField(
                           controller: _searchController,
+                          textInputAction: TextInputAction.search,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Search courses and videos...',
@@ -458,7 +460,8 @@ class _ExploreViewState extends State<ExploreView> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => VideoPlayerView(video: video)),
+                  builder: (_) => VideoPlayerView(video: video),
+                ),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(14),
@@ -564,8 +567,10 @@ class _ExploreViewState extends State<ExploreView> {
                     setState(() => _selectedCategory = 'All');
                     _filterContent();
                   },
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
                   child: const Text(
                     'Clear Filters',
                     style: TextStyle(
