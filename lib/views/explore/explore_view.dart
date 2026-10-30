@@ -160,6 +160,7 @@ class _ExploreViewState extends State<ExploreView> {
                       builder: (context, value, child) {
                         return TextField(
                           controller: _searchController,
+                          textInputAction: TextInputAction.search,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Search courses and videos...',
