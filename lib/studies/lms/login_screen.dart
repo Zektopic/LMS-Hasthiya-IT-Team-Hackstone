@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hackston_lms/studies/lms/data_service.dart';
 
 class LmsLoginScreen extends StatefulWidget {
@@ -23,6 +24,10 @@ class _LmsLoginScreenState extends State<LmsLoginScreen> {
 
     try {
       await _dataService.login(_emailController.text, _passwordController.text);
+
+      // Tell the OS that the form submission was successful so it can prompt the user to save their credentials
+      TextInput.finishAutofillContext(shouldSave: true);
+
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/lms/videos');
       }
@@ -47,35 +52,40 @@ class _LmsLoginScreenState extends State<LmsLoginScreen> {
       appBar: AppBar(title: const Text('LMS Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              autofillHints: const [AutofillHints.email],
-              autocorrect: false,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              autocorrect: false,
-              autofillHints: const [AutofillHints.password],
-              onSubmitted: (_) => _login(),
-            ),
-            const SizedBox(height: 16),
-            if (_errorMessage != null)
-              Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
-            const SizedBox(height: 16),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(onPressed: _login, child: const Text('Login')),
-          ],
+        child: AutofillGroup(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.email],
+                autocorrect: false,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                textInputAction: TextInputAction.done,
+                autocorrect: false,
+                autofillHints: const [AutofillHints.password],
+                onSubmitted: (_) => _login(),
+              ),
+              const SizedBox(height: 16),
+              if (_errorMessage != null)
+                Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 16),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _login,
+                      child: const Text('Login'),
+                    ),
+            ],
+          ),
         ),
       ),
     );
