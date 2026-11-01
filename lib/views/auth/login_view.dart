@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../core/app_theme.dart';
@@ -67,6 +68,7 @@ class _LoginViewState extends State<LoginView>
     }
     try {
       await auth.login(email, password);
+      TextInput.finishAutofillContext(shouldSave: true);
     } catch (e) {
       _showError(e.toString());
     }
@@ -75,6 +77,7 @@ class _LoginViewState extends State<LoginView>
   Future<void> _handleGoogleSignIn(AuthViewModel auth) async {
     try {
       await auth.signInWithGoogle();
+      TextInput.finishAutofillContext(shouldSave: true);
     } catch (e) {
       _showError(e.toString());
     }

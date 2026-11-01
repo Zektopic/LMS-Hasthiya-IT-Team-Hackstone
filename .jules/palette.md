@@ -47,6 +47,9 @@
 ## 2024-10-15 - Add AutofillHints to authentication forms
 **Learning:** In Flutter, to trigger the OS password manager (especially important on iOS) for registration forms, it is critical to use `AutofillHints.newPassword` instead of just `AutofillHints.password`, and group related fields using an `AutofillGroup`.
 **Action:** Next time I work on a Flutter signup/registration form, I will verify that `AutofillHints.newPassword` is used to ensure proper password generation and saving behavior.
+## 2024-11-01 - [Save Credentials on Authentication]
+**Learning:** In Flutter forms, after successfully submitting credentials, the OS password manager may not automatically prompt the user to save them.
+**Action:** Explicitly import package:flutter/services.dart and call TextInput.finishAutofillContext(shouldSave: true); after successful authentication to signal the operating system to prompt the user to save their credentials.
 ## 2026-10-27 - [Trigger OS Save Password Prompt]
 **Learning:** Adding `AutofillHints` to a form and wrapping it in an `AutofillGroup` is not always enough to trigger the OS password manager to save new credentials upon successful submission. The OS needs an explicit signal that the autofill context is finished and the credentials are valid.
 **Action:** In Flutter forms, after successfully submitting credentials (e.g., login or signup), explicitly call `TextInput.finishAutofillContext(shouldSave: true);` from `package:flutter/services.dart` to signal the operating system to prompt the user to save their credentials.
