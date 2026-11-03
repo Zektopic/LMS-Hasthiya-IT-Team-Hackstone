@@ -241,6 +241,7 @@ class ProfileView extends StatelessWidget {
                         enabled: item.onTap != null,
                         excludeSemantics: true,
                         label: item.label,
+                        onTap: item.onTap,
                         child: InkWell(
                           focusColor: Colors.white.withValues(alpha: 0.1),
                           hoverColor: Colors.white.withValues(alpha: 0.1),
