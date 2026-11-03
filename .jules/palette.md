@@ -56,3 +56,6 @@
 ## 2025-02-12 - Explicit Semantics Tap Action on Custom Search Bar
 **Learning:** When using a `Semantics` widget with `excludeSemantics: true` to wrap a complex `InkWell` (e.g., a custom search bar mimicking a button), providing `button: true` and `label` is not enough. `excludeSemantics: true` entirely strips the semantic tree of the child, including the semantic tap action implicitly provided by the `InkWell`. This results in a button that is announced by screen readers but cannot be activated by them.
 **Action:** Always ensure that the `onTap` handler is directly passed to the `Semantics` widget (e.g., `Semantics(onTap: widget.onSearchTap, ...)`) when using `excludeSemantics: true` around an interactive element, or ensure the `Semantics` widget is placed *inside* the `InkWell` (if practical).
+## 2026-03-24 - Explicit Semantics Tap Action for Profile Items
+**Learning:** When using a `Semantics` widget with `excludeSemantics: true` to wrap an `InkWell` in the profile view, the `onTap` action of the `InkWell` is completely hidden from the semantic tree. This makes the button inaccessible to screen readers, even though it appears visually enabled.
+**Action:** Always ensure the `onTap` handler is directly passed to the `Semantics` widget (e.g., `Semantics(onTap: item.onTap, ...)`) when using `excludeSemantics: true`.
