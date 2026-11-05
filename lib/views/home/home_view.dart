@@ -146,6 +146,7 @@ class _HomeViewState extends State<HomeView> {
           button: true,
           enabled: false,
           excludeSemantics: true,
+          onTap: null,
           child: Container(
             width: 48,
             height: 48,
