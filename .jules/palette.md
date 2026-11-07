@@ -56,3 +56,6 @@
 ## 2025-02-12 - Explicit Semantics Tap Action on Custom Search Bar
 **Learning:** When using a `Semantics` widget with `excludeSemantics: true` to wrap a complex `InkWell` (e.g., a custom search bar mimicking a button), providing `button: true` and `label` is not enough. `excludeSemantics: true` entirely strips the semantic tree of the child, including the semantic tap action implicitly provided by the `InkWell`. This results in a button that is announced by screen readers but cannot be activated by them.
 **Action:** Always ensure that the `onTap` handler is directly passed to the `Semantics` widget (e.g., `Semantics(onTap: widget.onSearchTap, ...)`) when using `excludeSemantics: true` around an interactive element, or ensure the `Semantics` widget is placed *inside* the `InkWell` (if practical).
+## 2024-05-18 - InkWell Tap Actions Stripped by excludeSemantics
+**Learning:** In Flutter, when wrapping an `InkWell` inside a `Semantics(excludeSemantics: true)` widget to override the accessibility label of a complex button or card, the `excludeSemantics` flag strips the default button traits and semantic tap actions that `InkWell` usually provides implicitly.
+**Action:** Always explicitly pass the `onTap` handler directly to the `Semantics` widget (along with `button: true`) when using `excludeSemantics: true` around an `InkWell`.
