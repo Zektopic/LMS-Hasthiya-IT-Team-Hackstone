@@ -240,7 +240,6 @@ class ProfileView extends StatelessWidget {
                         button: true,
                         enabled: item.onTap != null,
                         excludeSemantics: true,
-                        onTap: item.onTap,
                         label: item.label,
                         onTap: item.onTap,
                         child: InkWell(
