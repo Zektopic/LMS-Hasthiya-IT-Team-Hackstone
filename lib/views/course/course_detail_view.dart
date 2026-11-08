@@ -279,6 +279,7 @@ class CourseDetailView extends StatelessWidget {
             button: true,
             enabled: false,
             excludeSemantics: true,
+            onTap: null,
             label:
                 'Lesson $index: ${lesson.title}${durationStr.isNotEmpty ? ', $durationStr' : ''}',
             child: InkWell(
