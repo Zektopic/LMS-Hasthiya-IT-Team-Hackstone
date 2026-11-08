@@ -59,3 +59,6 @@
 ## 2024-05-18 - InkWell Tap Actions Stripped by excludeSemantics
 **Learning:** In Flutter, when wrapping an `InkWell` inside a `Semantics(excludeSemantics: true)` widget to override the accessibility label of a complex button or card, the `excludeSemantics` flag strips the default button traits and semantic tap actions that `InkWell` usually provides implicitly.
 **Action:** Always explicitly pass the `onTap` handler directly to the `Semantics` widget (along with `button: true`) when using `excludeSemantics: true` around an `InkWell`.
+## 2026-03-24 - Explicit Semantics Tap Action for Profile Items
+**Learning:** When using a `Semantics` widget with `excludeSemantics: true` to wrap an `InkWell` in the profile view, the `onTap` action of the `InkWell` is completely hidden from the semantic tree. This makes the button inaccessible to screen readers, even though it appears visually enabled.
+**Action:** Always ensure the `onTap` handler is directly passed to the `Semantics` widget (e.g., `Semantics(onTap: item.onTap, ...)`) when using `excludeSemantics: true`.
