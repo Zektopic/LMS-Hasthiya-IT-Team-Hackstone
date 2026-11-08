@@ -162,21 +162,25 @@ class CourseDetailView extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Course Content
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Course Content',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${course.lessons.length} lessons',
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 14,
+          Semantics(
+            excludeSemantics: true,
+            label: 'Course Content: ${course.lessons.length} lessons',
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Course Content',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                Text(
+                  '${course.lessons.length} lessons',
+                  style: const TextStyle(
+                    color: AppTheme.textSecondary,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
         ],
