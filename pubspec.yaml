@@ -31,7 +31,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
 
 dependency_overrides:
-  win32: 5.14.0
+  win32: ^6.0.1
   google_sign_in_android: ^6.1.36
 
 flutter:
