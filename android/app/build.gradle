@@ -66,10 +66,9 @@ android {
     }
     buildTypes {
         release {
-            // Uncomment to run flutter run --release locally
-            // signingConfig signingConfigs.debug
-
-            signingConfig signingConfigs.release
+            // Fall back to debug signing when no release keystore file is configured.
+            def hasReleaseKeystore = keystoreProperties['storeFile'] && file(keystoreProperties['storeFile']).exists()
+            signingConfig = hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
         }
     }
 }
